@@ -23,7 +23,8 @@
           "sources": [
             "https://www.cna.com.tw/news/aipl/202609290204.aspx",
             "https://udn.com/vote2026/story/124652/9783730"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "沈伯洋",
@@ -44,7 +45,44 @@
           "sources": [
             "https://www.gvm.com.tw/article/133387",
             "https://www.bnext.com.tw/article/92509/taipei-mayor-2026-shen-chiang-tech-policy"
-          ]
+          ],
+          "party": "民主進步黨"
+        },
+        {
+          "name": "郭璽",
+          "party": "台灣麻將最大黨",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
+        },
+        {
+          "name": "蕭文乾",
+          "party": "臺灣SoR無法黨",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
+        },
+        {
+          "name": "唐新民",
+          "party": "三勢團結促進聯盟",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
+        },
+        {
+          "name": "林志成",
+          "party": "無黨籍",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
         }
       ]
     },
@@ -70,7 +108,8 @@
           "sources": [
             "https://udn.com/news/story/124652/9666834",
             "https://news.tvbs.com.tw/politics/3181771"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "蘇巧慧",
@@ -91,7 +130,17 @@
           "sources": [
             "https://www.fountmedia.io/article/430570",
             "https://news.ltn.com.tw/news/NewTaipei/breakingnews/5593718"
-          ]
+          ],
+          "party": "民主進步黨"
+        },
+        {
+          "name": "蘇輝湟",
+          "party": "無黨籍",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
         }
       ]
     },
@@ -117,7 +166,8 @@
           "sources": [
             "https://news.cts.com.tw/cts/politics/202610/202610043085956.html",
             "https://udn.com/news/story/124652/9792945"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "黃世杰",
@@ -138,7 +188,8 @@
           "sources": [
             "https://news.ltn.com.tw/news/politics/breakingnews/5601536",
             "https://news.cts.com.tw/cts/politics/202610/202610163090724.html"
-          ]
+          ],
+          "party": "民主進步黨"
         }
       ]
     },
@@ -164,7 +215,8 @@
           "sources": [
             "https://udn.com/news/story/7325/9791625",
             "https://rti.org.tw/news?pid=230983&uid=3"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "何欣純",
@@ -184,7 +236,17 @@
           ],
           "sources": [
             "https://www.cna.com.tw/news/aipl/202610140288.aspx"
-          ]
+          ],
+          "party": "民主進步黨"
+        },
+        {
+          "name": "洪麗華",
+          "party": "司法正義黨",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
         }
       ]
     },
@@ -210,7 +272,8 @@
           "sources": [
             "https://rti.org.tw/news?pid=230656&uid=3",
             "https://www.chinatimes.com/realtimenews/20260920001973-260407"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "陳亭妃",
@@ -230,7 +293,26 @@
           "sources": [
             "https://udn.com/news/story/124652/9738173",
             "https://udn.com/news/story/124652/9770764"
-          ]
+          ],
+          "party": "民主進步黨"
+        },
+        {
+          "name": "蕭燐洪",
+          "party": "臺灣SoR無法黨",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
+        },
+        {
+          "name": "葉人文",
+          "party": "無黨籍",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
         }
       ]
     },
@@ -255,7 +337,8 @@
           "sources": [
             "https://udn.com/news/story/124652/9807165",
             "https://udn.com/news/story/124652/9672080"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "賴瑞隆",
@@ -276,7 +359,35 @@
           "sources": [
             "https://udn.com/news/story/124652/9819224",
             "https://udn.com/news/story/124652/9807466"
-          ]
+          ],
+          "party": "民主進步黨"
+        },
+        {
+          "name": "張靜",
+          "party": "司法改革黨",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
+        },
+        {
+          "name": "王肇民",
+          "party": "無黨籍",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
+        },
+        {
+          "name": "洪方隆",
+          "party": "無黨籍",
+          "slogan": "未見正式競選口號",
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": []
         }
       ]
     },
@@ -302,7 +413,8 @@
           "sources": [
             "https://www.chinatimes.com/realtimenews/20261013002830-260407",
             "https://news.ltn.com.tw/news/Pingtung/breakingnews/5609807"
-          ]
+          ],
+          "party": "民主進步黨"
         },
         {
           "name": "蘇清泉",
@@ -322,7 +434,8 @@
           ],
           "sources": [
             "https://news.ltn.com.tw/news/politics/breakingnews/5332655"
-          ]
+          ],
+          "party": "中國國民黨"
         }
       ]
     },
@@ -337,7 +450,8 @@
           "events": [],
           "sources": [
             "https://udn.com/news/story/124652/9735138"
-          ]
+          ],
+          "party": "中國國民黨"
         },
         {
           "name": "梁育慈",
@@ -349,7 +463,8 @@
           "events": [],
           "sources": [
             "https://news.ltn.com.tw/news/politics/breakingnews/5571638"
-          ]
+          ],
+          "party": "民主進步黨"
         }
       ]
     }
