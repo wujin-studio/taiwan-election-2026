@@ -52,4 +52,36 @@ ex.innerHTML='<strong>'+title+'</strong><p>'+explain+'</p>';
 chartInstance=new Chart(document.getElementById('researchChart'),{type:type==='poll'?'line':'bar',data:{labels,datasets:[{label:type==='topics'?'研究主題標記':type==='media'?'已驗證紀錄數':'民調觀測',data:values,backgroundColor:['#e98770','#a99bdf','#a5bcb4'],borderColor:'#e98770',borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>type==='topics'?'待研究議題（非數量）':type==='media'?'已驗證資料 0 筆':'尚無已驗證序列'}}},scales:{y:{display:type!=='topics',beginAtZero:true,grid:{color:'#f0eeeb'}},x:{grid:{display:false},ticks:{color:'#70757c'}}}}});
 }
 const previousDraw=draw;draw=function(){if(chartInstance){chartInstance.destroy();chartInstance=null}previousDraw();if(tab===3)chartPanel()};
+</script><style>
+#sloganScene{position:fixed;inset:0;z-index:40;display:none;overflow:hidden;background:#faf8f5;align-items:center;justify-content:center}
+#sloganScene.show{display:flex}
+#sloganScene:before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 20% 25%,#f9d7c9 0%,transparent 45%),radial-gradient(circle at 85% 70%,#d9d5fb 0%,transparent 42%);animation:ambient 7s ease-in-out infinite alternate}
+#sloganScene .sceneHead{position:absolute;top:6%;left:7%;font-size:12px;font-weight:800;letter-spacing:2px;color:#9b675a}
+#sloganScene .sceneTitle{position:absolute;top:11%;left:7%;font-size:clamp(35px,5vw,70px);font-weight:900;letter-spacing:-3px}
+#sloganCards{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,32px);width:92%;height:70%;flex-wrap:wrap}
+.sloganCard{width:min(350px,42vw);min-height:200px;padding:27px 25px;background:#fff;border:1px solid #ece4dd;border-radius:26px;box-shadow:0 25px 65px #514c4920;transform:translateY(120vh) rotate(-9deg) scale(.7);opacity:0;animation:cardArrive .8s cubic-bezier(.2,.9,.25,1.15) forwards;display:flex;flex-direction:column;justify-content:space-between}
+.sloganCard:nth-child(2n){transform:translateY(120vh) rotate(9deg) scale(.7)}
+.sloganCard .candidateName{font-size:15px;font-weight:800;color:#656975}
+.sloganCard .partyName{font-size:11px;color:#a7a4a4}
+.sloganCard .sloganText{font-size:clamp(23px,3.5vw,43px);line-height:1.32;font-weight:900;letter-spacing:-1px;color:#292b34;overflow-wrap:anywhere}
+.sloganCard .sloganType{font-size:11px;color:#c36e58;margin-top:15px}
+#sceneSkip{position:absolute;right:5%;bottom:5%;border:1px solid #d7d0c9;background:#fff;border-radius:30px;padding:12px 20px;font-weight:800;z-index:2}
+@keyframes cardArrive{to{transform:translateY(0) rotate(0deg) scale(1);opacity:1}}@keyframes ambient{to{transform:translate(3%,2%) scale(1.08)}}
+@media(max-width:650px){#sloganCards{align-content:center;gap:10px;height:75%;padding-top:50px}.sloganCard{width:44%;min-height:130px;padding:14px;border-radius:17px}.sloganCard .sloganText{font-size:clamp(16px,4.5vw,26px)}.sloganCard .candidateName{font-size:12px}.sloganCard .partyName,.sloganCard .sloganType{font-size:9px}#sloganScene .sceneTitle{top:9%;font-size:35px}#sloganScene .sceneHead{top:5%}}
+@media(prefers-reduced-motion:reduce){.sloganCard{animation:none;transform:none;opacity:1}#sloganScene:before{animation:none}}
+</style>
+<div id="sloganScene" role="dialog" aria-modal="true" aria-label="候選人口號轉場"><div class="sceneHead">ELECTION DECODE / THE VOICES OF A CITY</div><div class="sceneTitle" id="sceneTitle"></div><div id="sloganCards"></div><button id="sceneSkip" onclick="finishScene()">進入城市分析 ↗</button></div>
+<script>
+const roster=[
+[['蔣萬安','國民黨','讓每一個人在台北實現自我','媒體列示競選主張'],['沈伯洋','民進黨','台北順起來','官方社群競選標籤'],['郭璽','台灣麻將最大黨',null,null],['蕭文乾','台灣SoR無法黨',null,null],['唐新民','三勢團結促進聯盟',null,null],['林志成','無黨籍',null,null]],
+[['李四川','國民黨','我就是一個做事的人','媒體列示競選主張'],['蘇巧慧','民進黨','新時代新市長','官方社群競選標籤'],['蘇輝湟','無黨籍',null,null]],
+[['張善政','國民黨',null,null],['黃世杰','民進黨',null,null]],
+[['江啟臣','國民黨',null,null],['何欣純','民進黨',null,null],['洪麗華','司法正義黨',null,null]],
+[['謝龍介','國民黨',null,null],['陳亭妃','民進黨',null,null],['蕭燐洪','台灣SoR無法黨',null,null],['葉人文','無黨籍',null,null]],
+[['柯志恩','國民黨',null,null],['賴瑞隆','民進黨',null,null],['張靜','司法改革黨',null,null],['王肇民','無黨籍',null,null],['洪方隆','無黨籍',null,null]]
+];let pendingCity=null,sceneTimer=null;const enterCity=openCity;
+function finishScene(){if(sceneTimer)clearTimeout(sceneTimer);document.getElementById('sloganScene').classList.remove('show');if(pendingCity!==null){enterCity(pendingCity);pendingCity=null}}
+function startCityScene(i){pendingCity=i;const scene=document.getElementById('sloganScene');document.getElementById('sceneTitle').textContent=C[i][0]+'｜選戰發聲';const cards=document.getElementById('sloganCards');cards.innerHTML='';roster[i].forEach((p,j)=>{const d=document.createElement('div');d.className='sloganCard';d.style.animationDelay=(j*.15)+'s';const title=document.createElement('div');title.className='candidateName';title.textContent=p[0];const party=document.createElement('div');party.className='partyName';party.textContent=p[1];const slogan=document.createElement('div');slogan.className='sloganText';slogan.textContent=p[2]||'競選口號待核實';const kind=document.createElement('div');kind.className='sloganType';kind.textContent=p[3]||'尚未取得可核實口號';d.append(title,party,slogan,kind);cards.appendChild(d)});scene.classList.add('show');if(sceneTimer)clearTimeout(sceneTimer);sceneTimer=setTimeout(finishScene,Math.max(3200,roster[i].length*500+1600))}
+openCity=startCityScene;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('sloganScene').classList.contains('show'))finishScene()});
 </script></body></html>
