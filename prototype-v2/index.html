@@ -388,4 +388,35 @@ const foot=document.createElement('p');foot.style.fontSize='11px';foot.style.col
 root.prepend(section);
 };
 })();
+</script><style>
+#visualLab{padding:20px;margin:15px 0 35px;background:#fff;border:1px solid #e9e0d8;border-radius:20px}
+#visualLab h4{font-size:clamp(24px,3vw,36px);margin:8px 0 18px}
+#visualLab .visualGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#visualLab .visualCard{border:1px solid #eae2db;border-radius:15px;padding:17px;background:#faf8f4}
+#visualLab .visualCard strong{font-size:20px;display:block;margin:9px 0}
+#visualLab .visualCard .visualSlogan{font-size:clamp(21px,2.6vw,35px);font-weight:900;line-height:1.2;letter-spacing:-1px;margin:14px 0}
+#visualLab .visualCard p{font-size:13px;color:#717781;line-height:1.75}
+#visualLab .visualCard a{color:#b96a52;font-size:12px}
+#visualLab .visualCard .swatches{display:flex;gap:5px}
+#visualLab .visualCard .swatches i{width:29px;height:10px;border-radius:3px}
+#visualLab .visualNote{font-size:11px;color:#99939a;margin-top:15px;line-height:1.7}
+@media(max-width:700px){#visualLab .visualGrid{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+let visualData=null;
+fetch('./campaign-visuals.json').then(r=>r.ok?r.json():Promise.reject(Error('visuals'))).then(d=>visualData=d).catch(()=>{});
+const prior=render;
+render=function(){
+prior();if(!visualData||tab!==1)return;
+const city=visualData.visuals.filter(v=>v.city===C[selected][0]);if(!city.length)return;
+const root=document.getElementById('content'),section=document.createElement('section');section.id='visualLab';
+const eyebrow=document.createElement('small');eyebrow.textContent='CAMPAIGN IDENTITY / BRAND LANGUAGE';
+const heading=document.createElement('h4');heading.textContent='競選主視覺與品牌語言';section.append(eyebrow,heading);
+const grid=document.createElement('div');grid.className='visualGrid';
+const paletteMap={'亮藍＋黃色':['#2f83ef','#ffd348'],'黑、橘、綠':['#222222','#f68b42','#65a16b'],'綠底白字':['#23845b','#ffffff'],'白底、簡潔文字':['#ffffff','#292929'],'粉紅＋紫色':['#f0a3cc','#8e72c7'],'綠＋桃紅':['#318960','#ee4f9b'],'桃紅色':['#f05196','#f7b8d2'],'科技藍、豐收黃、豔陽紅、海洋青':['#3d8cda','#f3c74e','#ed715a','#59c5c6']};
+city.forEach(v=>{const card=document.createElement('article');card.className='visualCard';const name=document.createElement('strong');name.textContent=v.name;const swatches=document.createElement('div');swatches.className='swatches';(paletteMap[v.palette]||['#d4d1ca','#ede7e0']).forEach(color=>{const i=document.createElement('i');i.style.background=color;swatches.append(i)});const slogan=document.createElement('div');slogan.className='visualSlogan';slogan.textContent=v.slogan||'正式主視覺待查';const info=document.createElement('p');info.textContent='設計元素：'+v.imagery+'｜視覺描述：'+v.palette;const source=document.createElement('a');source.href=v.source;source.target='_blank';source.rel='noopener';source.textContent='查看新聞原始素材 ↗';card.append(name,swatches,slogan,info,source);grid.append(card)});section.append(grid);
+const note=document.createElement('p');note.className='visualNote';note.textContent='目前呈現競選主視覺的設計語彙與新聞來源，並非原始競選海報。待取得可重用原圖後，才以實際主視覺取代研究卡片。';section.append(note);root.prepend(section);
+};
+})();
 </script></html>
