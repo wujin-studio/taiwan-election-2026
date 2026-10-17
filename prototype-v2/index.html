@@ -89,4 +89,29 @@ render=function(){
 };
 const previousOpen=openCity;
 openCity=function(i){previousOpen(i)};
+</script><style>
+#map .taipeiTouch{fill:transparent;stroke:transparent;stroke-width:26;pointer-events:stroke;cursor:pointer}
+#map .taipeiTarget{fill:#ef7457;stroke:#fff;stroke-width:2;cursor:pointer}
+#map .taipeiLeader{stroke:#c76c50;stroke-width:1.8;stroke-dasharray:4 4;pointer-events:none}
+#map .taipeiLabel{font-size:14px;font-weight:900;fill:#282a31;paint-order:stroke;stroke:#fff;stroke-width:5;cursor:pointer}
+@media(max-width:750px){#map .taipeiLabel{font-size:17px}}
+</style>
+<script>
+(function(){
+const map=document.getElementById('map');
+if(!map)return;
+const wait=setInterval(()=>{
+const paths=map.querySelectorAll('path.metro');if(!paths.length)return;
+clearInterval(wait);
+const taipei=[...paths].find(p=>p.__data__?.properties?.id==='63000');
+if(!taipei)return;
+const svgNS='http://www.w3.org/2000/svg',box=taipei.getBBox(),cx=box.x+box.width/2,cy=box.y+box.height/2;
+const group=document.createElementNS(svgNS,'g');group.setAttribute('aria-label','點擊台北市');
+const circle=document.createElementNS(svgNS,'circle');circle.setAttribute('class','taipeiTouch');circle.setAttribute('cx',cx);circle.setAttribute('cy',cy);circle.setAttribute('r',26);
+const dot=document.createElementNS(svgNS,'circle');dot.setAttribute('class','taipeiTarget');dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r',5);
+const label=document.createElementNS(svgNS,'text');label.setAttribute('class','taipeiLabel');label.setAttribute('x',cx+35);label.setAttribute('y',cy-16);label.textContent='臺北市 ↗';
+const line=document.createElementNS(svgNS,'line');line.setAttribute('class','taipeiLeader');line.setAttribute('x1',cx+6);line.setAttribute('y1',cy-6);line.setAttribute('x2',cx+30);line.setAttribute('y2',cy-20);
+group.append(circle,dot,line,label);group.addEventListener('click',e=>{e.stopPropagation();openCity(0)});map.append(group);
+},250);setTimeout(()=>clearInterval(wait),12000);
+})();
 </script></html>
