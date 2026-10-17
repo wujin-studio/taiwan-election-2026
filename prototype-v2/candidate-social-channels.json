@@ -1,0 +1,208 @@
+{
+  "asOf": "2026-10-18",
+  "note": "All links are user-provided search entry points, not verified candidate-owned accounts. No API reach or engagement metrics inferred.",
+  "regions": [
+    {
+      "city": "臺北",
+      "people": [
+        {
+          "name": "蔣萬安",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E8%94%A3%E8%90%AC%E5%AE%89",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E8%94%A3%E8%90%AC%E5%AE%89",
+            "threads": "https://www.threads.com/search?q=%E8%94%A3%E8%90%AC%E5%AE%89",
+            "youtube": "https://www.youtube.com/results?search_query=%E8%94%A3%E8%90%AC%E5%AE%89"
+          },
+          "verified": false
+        },
+        {
+          "name": "沈伯洋",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E6%B2%88%E4%BC%AF%E6%B4%8B",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E6%B2%88%E4%BC%AF%E6%B4%8B",
+            "threads": "https://www.threads.com/search?q=%E6%B2%88%E4%BC%AF%E6%B4%8B",
+            "youtube": "https://www.youtube.com/results?search_query=%E6%B2%88%E4%BC%AF%E6%B4%8B"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "新北",
+      "people": [
+        {
+          "name": "李四川",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E6%9D%8E%E5%9B%9B%E5%B7%9D",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E6%9D%8E%E5%9B%9B%E5%B7%9D",
+            "threads": "https://www.threads.com/search?q=%E6%9D%8E%E5%9B%9B%E5%B7%9D",
+            "youtube": "https://www.youtube.com/results?search_query=%E6%9D%8E%E5%9B%9B%E5%B7%9D"
+          },
+          "verified": false
+        },
+        {
+          "name": "蘇巧慧",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E8%98%87%E5%B7%A7%E6%85%A7",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E8%98%87%E5%B7%A7%E6%85%A7",
+            "threads": "https://www.threads.com/search?q=%E8%98%87%E5%B7%A7%E6%85%A7",
+            "youtube": "https://www.youtube.com/results?search_query=%E8%98%87%E5%B7%A7%E6%85%A7",
+            "podcast": "https://www.google.com/search?q=%E6%B0%B4%E7%8D%BA%E5%AA%BD%E5%AA%BD%E5%B7%A7%E5%B7%A7%E8%A9%B1"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "桃園",
+      "people": [
+        {
+          "name": "張善政",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E5%BC%B5%E5%96%84%E6%94%BF",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E5%BC%B5%E5%96%84%E6%94%BF",
+            "threads": "https://www.threads.com/search?q=%E5%BC%B5%E5%96%84%E6%94%BF",
+            "youtube": "https://www.youtube.com/results?search_query=%E5%BC%B5%E5%96%84%E6%94%BF"
+          },
+          "verified": false
+        },
+        {
+          "name": "黃世杰",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E9%BB%83%E4%B8%96%E6%9D%B0",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E9%BB%83%E4%B8%96%E6%9D%B0",
+            "threads": "https://www.threads.com/search?q=%E9%BB%83%E4%B8%96%E6%9D%B0",
+            "youtube": "https://www.youtube.com/results?search_query=%E9%BB%83%E4%B8%96%E6%9D%B0"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "臺中",
+      "people": [
+        {
+          "name": "江啟臣",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E6%B1%9F%E5%95%9F%E8%87%A3",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E6%B1%9F%E5%95%9F%E8%87%A3",
+            "threads": "https://www.threads.com/search?q=%E6%B1%9F%E5%95%9F%E8%87%A3",
+            "youtube": "https://www.youtube.com/results?search_query=%E6%B1%9F%E5%95%9F%E8%87%A3"
+          },
+          "verified": false
+        },
+        {
+          "name": "何欣純",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E4%BD%95%E6%AC%A3%E7%B4%94",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E4%BD%95%E6%AC%A3%E7%B4%94",
+            "threads": "https://www.threads.com/search?q=%E4%BD%95%E6%AC%A3%E7%B4%94",
+            "youtube": "https://www.youtube.com/results?search_query=%E4%BD%95%E6%AC%A3%E7%B4%94"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "臺南",
+      "people": [
+        {
+          "name": "謝龍介",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E8%AC%9D%E9%BE%8D%E4%BB%8B",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E8%AC%9D%E9%BE%8D%E4%BB%8B",
+            "threads": "https://www.threads.com/search?q=%E8%AC%9D%E9%BE%8D%E4%BB%8B",
+            "youtube": "https://www.youtube.com/results?search_query=%E8%AC%9D%E9%BE%8D%E4%BB%8B"
+          },
+          "verified": false
+        },
+        {
+          "name": "陳亭妃",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E9%99%B3%E4%BA%AD%E5%A6%83",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E9%99%B3%E4%BA%AD%E5%A6%83",
+            "threads": "https://www.threads.com/search?q=%E9%99%B3%E4%BA%AD%E5%A6%83",
+            "youtube": "https://www.youtube.com/results?search_query=%E9%99%B3%E4%BA%AD%E5%A6%83"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "高雄",
+      "people": [
+        {
+          "name": "柯志恩",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E6%9F%AF%E5%BF%97%E6%81%A9",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E6%9F%AF%E5%BF%97%E6%81%A9",
+            "threads": "https://www.threads.com/search?q=%E6%9F%AF%E5%BF%97%E6%81%A9",
+            "youtube": "https://www.youtube.com/results?search_query=%E6%9F%AF%E5%BF%97%E6%81%A9",
+            "website": "https://kochihen2026.tw/"
+          },
+          "verified": false
+        },
+        {
+          "name": "賴瑞隆",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E8%B3%B4%E7%91%9E%E9%9A%86",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E8%B3%B4%E7%91%9E%E9%9A%86",
+            "threads": "https://www.threads.com/search?q=%E8%B3%B4%E7%91%9E%E9%9A%86",
+            "youtube": "https://www.youtube.com/results?search_query=%E8%B3%B4%E7%91%9E%E9%9A%86"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "屏東",
+      "people": [
+        {
+          "name": "周春米",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E5%91%A8%E6%98%A5%E7%B1%B3",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E5%91%A8%E6%98%A5%E7%B1%B3",
+            "threads": "https://www.threads.com/search?q=%E5%91%A8%E6%98%A5%E7%B1%B3",
+            "youtube": "https://www.youtube.com/results?search_query=%E5%91%A8%E6%98%A5%E7%B1%B3"
+          },
+          "verified": false
+        },
+        {
+          "name": "蘇清泉",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E8%98%87%E6%B8%85%E6%B3%89",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E8%98%87%E6%B8%85%E6%B3%89",
+            "threads": "https://www.threads.com/search?q=%E8%98%87%E6%B8%85%E6%B3%89",
+            "youtube": "https://www.youtube.com/results?search_query=%E8%98%87%E6%B8%85%E6%B3%89"
+          },
+          "verified": false
+        }
+      ]
+    },
+    {
+      "city": "屏東市",
+      "people": [
+        {
+          "name": "周佳琪",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E5%91%A8%E4%BD%B3%E7%90%AA",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E5%91%A8%E4%BD%B3%E7%90%AA",
+            "threads": "https://www.threads.com/search?q=%E5%91%A8%E4%BD%B3%E7%90%AA",
+            "youtube": "https://www.youtube.com/results?search_query=%E5%91%A8%E4%BD%B3%E7%90%AA"
+          },
+          "verified": false
+        },
+        {
+          "name": "梁育慈",
+          "channels": {
+            "facebook": "https://www.facebook.com/search/pages?q=%E6%A2%81%E8%82%B2%E6%85%88",
+            "instagram": "https://www.instagram.com/explore/search/keyword/?q=%E6%A2%81%E8%82%B2%E6%85%88",
+            "threads": "https://www.threads.com/search?q=%E6%A2%81%E8%82%B2%E6%85%88",
+            "youtube": "https://www.youtube.com/results?search_query=%E6%A2%81%E8%82%B2%E6%85%88"
+          },
+          "verified": false
+        }
+      ]
+    }
+  ]
+}
