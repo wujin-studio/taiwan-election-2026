@@ -14,7 +14,7 @@ header b{letter-spacing:-.7px}.mapstage{background:radial-gradient(ellipse at 52
 .sourceLine{font-size:11px;color:#8a8c92;line-height:1.8}
 .sourceLine a{color:#bf6c54}
 </style></head><body><header><b>選戰解碼 <span>2026</span></b><span>ELECTION DECODE / RESEARCH PREVIEW</span></header><div class="layout"><section class="intro"><div class="ey">YOUTHFUL GEOGRAPHIC STORYTELLING</div><h1>選戰，<br>從<em>城市</em><br>開始。</h1><p>六都不只是六組民調，而是六種城市命題。點擊六都及屏東，行政區抬升，立即探索候選人如何透過口號、政見與媒體回應選民需求。</p><div class="small">CLICK A CITY / RAISE THE MAP / READ THE STORY</div></section><div class="mapstage"><svg id="map" role="img" aria-label="真實台灣縣市行政區互動立體地圖"></svg><div class="status" id="status">正在載入真實行政區界線…</div></div></div><aside class="sheet" id="sheet"><div class="sheethead"><div class="top"><span class="ey">CITY FOCUS / POLITICAL MARKETING</span><button class="close" onclick="closeCity()" aria-label="關閉">×</button></div><h2 id="title"></h2><span class="hint">城市條件 → 政治品牌 → 媒體布局 → 數據佐證</span></div><div class="tabs" id="tabs"></div><div class="body" id="body"></div><div class="switch" id="switch"></div></aside><script>
-const C=[['臺北','63000',['蔣萬安','沈伯洋'],['住宅負擔','城市治理','交通通勤']],['新北','65000',['李四川','蘇巧慧'],['跨區通勤','都市更新','公共建設']],['桃園','68000',['張善政','黃世杰'],['航空城','產業聚落','人口成長']],['臺中','66000',['江啟臣','何欣純'],['交通路網','空氣品質','產業發展']],['臺南','67000',['謝龍介','陳亭妃'],['南科擴張','文化觀光','城鄉均衡']],['高雄','64000',['柯志恩','賴瑞隆'],['半導體產業','亞灣轉型','交通建設']],['屏東','10013',['周春米'],['農漁產業','科技產業轉型','交通與青年就業']]];
+const C=[['臺北','63000',['蔣萬安','沈伯洋'],['住宅負擔','城市治理','交通通勤']],['新北','65000',['李四川','蘇巧慧'],['跨區通勤','都市更新','公共建設']],['桃園','68000',['張善政','黃世杰'],['航空城','產業聚落','人口成長']],['臺中','66000',['江啟臣','何欣純'],['交通路網','空氣品質','產業發展']],['臺南','67000',['謝龍介','陳亭妃'],['南科擴張','文化觀光','城鄉均衡']],['高雄','64000',['柯志恩','賴瑞隆'],['半導體產業','亞灣轉型','交通建設']],['屏東','10013',['周春米','蘇清泉'],['農漁產業','科技產業轉型','交通與青年就業']]];
 const tabs=['城市脈絡','政治品牌','媒體布局','資料分析','歷屆比較'];let current=0,tab=0,features=[],layer,path,svg=d3.select('#map');const code=f=>String(f.properties.id||f.properties.COUNTYCODE||'');
 function draw(){let c=C[current];document.getElementById('title').textContent=c[0];document.getElementById('tabs').innerHTML=tabs.map((t,i)=>'<button class="'+(tab===i?'active':'')+'" onclick="tab='+i+';draw()">'+t+'</button>').join('');document.getElementById('switch').innerHTML=C.map((x,i)=>'<button class="'+(i===current?'active':'')+'" onclick="openCity('+i+')">'+x[0]+'</button>').join('');const b=document.getElementById('body');
 if(tab===0)b.innerHTML='<div class="ey">CONTEXT / NEEDS / RESPONSE</div><h3>城市需求，如何成為政治訴求？</h3>'+c[3].map((v,i)=>'<div class="story"><strong>0'+(i+1)+' / '+v+'</strong><p>以城市客觀條件、公開統計與候選人正式政策逐項對照；此處為研究主題，尚未將推論視為候選人主張。</p></div>').join('');
@@ -98,5 +98,19 @@ const scene=document.getElementById('sloganScene');
 if(scene&&!document.getElementById('sceneSource')){let el=document.createElement('div');el.id='sceneSource';el.textContent='競選口號僅列已查到來源的文字；未查證者明確標示。';scene.appendChild(el)}
 const oldScene=window.startCityScene;
 if(typeof oldScene==='function'){window.startCityScene=function(i){oldScene(i);let src=document.getElementById('sceneSource');src.innerHTML=i===6?'周春米競選主軸，2026/10/13：<a href="https://udn.com/news/story/124652/9812083" target="_blank" rel="noopener">查閱報導來源 ↗</a>':'候選人口號依公開資料整理，未核實者不代填。';};window.openCity=window.startCityScene}
+})();
+</script><style>
+.sloganCard .candidateVisual{height:72px;display:flex;align-items:center;justify-content:center;font-size:29px;font-weight:900;letter-spacing:2px;border-radius:14px;margin:10px 0;background:linear-gradient(120deg,#f7ede8,#eae6f9);color:#8b7a85}
+#sourcePane{margin-top:16px;padding:14px;border-top:1px solid #eee6df}
+#sourcePane a{color:#b86550;font-weight:700}
+@media(max-width:650px){.sloganCard .candidateVisual{height:42px;font-size:17px;margin:5px 0}}
+</style>
+<script>
+(function(){
+const base=window.startCityScene;
+if(typeof base==='function'){window.startCityScene=function(i){base(i);document.querySelectorAll('#sloganCards .sloganCard').forEach((card,j)=>{const p=roster[i][j];if(!p)return;const visual=document.createElement('div');visual.className='candidateVisual';visual.textContent=p[0];const title=card.querySelector('.candidateName');if(title)title.after(visual)});};window.openCity=window.startCityScene}
+const priorDraw=window.draw;
+if(typeof priorDraw==='function'){window.draw=function(){priorDraw();const b=document.getElementById('body');if(!b)return;if(tab===0&&current===6){const d=document.createElement('div');d.id='sourcePane';d.innerHTML='<div class="ey">VERIFIED CAMPAIGN CASE / 2026.10.13</div><h3>「屏東亮起來」如何連結產業轉型？</h3><p>周春米以太陽、晶片與「米」字組成競選識別，連結屏東農漁產業、半導體進駐及人才發展。這是把城市產業敘事轉譯為視覺符號的案例。蘇清泉亦已登記參選，但其主推口號仍需原始素材查核。</p><a href="https://udn.com/vote2026/story/124652/9811912" target="_blank" rel="noopener">來源：聯合新聞網 2026/10/13 ↗</a>';b.appendChild(d)}};
+}
 })();
 </script></body></html>
