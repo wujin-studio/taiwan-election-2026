@@ -55,4 +55,38 @@ openCity=function(i){
  if(filename){const credit=document.createElement('div');credit.className='photoCredit';credit.textContent='立法院歷史肖像／Wikimedia Commons，非2026競選主視覺';portrait.after(credit)}
  });
 };
+</script><style>
+#map .metro,#map .label{cursor:pointer}
+#map .metro:focus{outline:none;filter:drop-shadow(0 0 8px #ee8262)}
+#map .hit{fill:transparent;stroke:transparent;cursor:pointer;pointer-events:all}
+#map .hit:hover{fill:#ef98772a}
+.cityview .sourceLinks{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.cityview .sourceLinks a{font-size:12px;padding:8px 11px;border-radius:20px;background:#fff;border:1px solid #e8ded5;color:#af654c;text-decoration:none}
+.cityview .mini{font-size:11px;color:#99919a}
+</style><script>
+let research=null;
+fetch('./campaign-research.json').then(r=>r.ok?r.json():Promise.reject(Error('research'))).then(d=>research=d).catch(()=>{});
+const previousRender=render;
+render=function(){
+ previousRender();
+ if(!research)return;
+ const region=research.regions.find(r=>r.city===C[selected][0]);
+ if(!region)return;
+ const root=document.getElementById('content');
+ const title=root.querySelector('h3');
+ if(!title)return;
+ root.replaceChildren(title);
+ const type=tab===0?'policies':tab===1?'slogan':tab===2?'media':tab===3?'events':'sources';
+ region.people.forEach(p=>{
+ const section=document.createElement('section');section.className='entry';
+ const heading=document.createElement('h3');heading.textContent=p.name;heading.style.fontSize='24px';section.append(heading);
+ const items=type==='slogan'?[p.slogan||'尚未確認正式競選口號']:type==='sources'?['公開報導來源']:p[type]||[];
+ items.forEach(x=>{const el=document.createElement('p');el.textContent='╱ '+x;section.append(el)});
+ if(tab!==3&&p.sources?.length){const sources=document.createElement('div');sources.className='sourceLinks';p.sources.forEach((url,i)=>{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.textContent='來源 '+(i+1)+' ↗';sources.append(a)});section.append(sources)}
+ root.append(section);
+ });
+ const note=document.createElement('p');note.className='mini';note.textContent='資料整理截至2026/10/17。來源由使用者提供，尚未完成逐筆獨立查核；政策主張與分析不可視為已證實的實際成效。';root.append(note);
+};
+const previousOpen=openCity;
+openCity=function(i){previousOpen(i)};
 </script></html>
