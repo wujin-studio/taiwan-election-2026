@@ -1,0 +1,357 @@
+{
+  "asOf": "2026-10-17",
+  "status": "user-provided claims; links pending independent verification",
+  "regions": [
+    {
+      "city": "臺北",
+      "people": [
+        {
+          "name": "蔣萬安",
+          "slogan": "台北安可",
+          "policies": [
+            "捷運路網、都市更新、AI產業",
+            "松山機場遷移議題"
+          ],
+          "media": [
+            "年輕化競辦、社群組長",
+            "9款募款小物，四組視覺主題"
+          ],
+          "events": [
+            "9/29競辦及主視覺發表",
+            "10/26競總成立（預定）"
+          ],
+          "sources": [
+            "https://www.cna.com.tw/news/aipl/202609290204.aspx",
+            "https://udn.com/vote2026/story/124652/9783730"
+          ]
+        },
+        {
+          "name": "沈伯洋",
+          "slogan": "台北順起來",
+          "policies": [
+            "HEART五大主軸",
+            "青年AI使用支持方案",
+            "內湖交通五主張"
+          ],
+          "media": [
+            "洋流民間二創、LINE互動",
+            "洋流號、奔奔與抱抱角色IP"
+          ],
+          "events": [
+            "六大選區車掃",
+            "市長你給我聽好意見蒐集"
+          ],
+          "sources": [
+            "https://www.gvm.com.tw/article/133387",
+            "https://www.bnext.com.tw/article/92509/taipei-mayor-2026-shen-chiang-tech-policy"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "新北",
+      "people": [
+        {
+          "name": "李四川",
+          "slogan": "新北世界級，新北創新局",
+          "policies": [
+            "新北大巨蛋與淡海科學城",
+            "居住新五箭",
+            "雙北30分鐘生活圈"
+          ],
+          "media": [
+            "工程人設與台語腔廣告",
+            "川伯給推與川好勢主題曲"
+          ],
+          "events": [
+            "市場廟宇、同鄉會掃街",
+            "大型造勢及政治人物站台"
+          ],
+          "sources": [
+            "https://udn.com/news/story/124652/9666834",
+            "https://news.tvbs.com.tw/politics/3181771"
+          ]
+        },
+        {
+          "name": "蘇巧慧",
+          "slogan": "溫暖、創新、會做事",
+          "policies": [
+            "青年育兒宅與托育長照",
+            "AI簡政",
+            "新皇冠計畫"
+          ],
+          "media": [
+            "水獺媽媽Podcast IP",
+            "新北百寶箱、迷因、動態視覺"
+          ],
+          "events": [
+            "9/5競總成立",
+            "水獺媽媽樂園與許願牆"
+          ],
+          "sources": [
+            "https://www.fountmedia.io/article/430570",
+            "https://news.ltn.com.tw/news/NewTaipei/breakingnews/5593718"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "桃園",
+      "people": [
+        {
+          "name": "張善政",
+          "slogan": "桃園前進，繼續挺善良",
+          "policies": [
+            "可負擔住宅",
+            "通學廊道",
+            "捷運綠線"
+          ],
+          "media": [
+            "以施政成果為核心",
+            "發言人議題攻防"
+          ],
+          "events": [
+            "南區競總與跨黨站台",
+            "小額募款"
+          ],
+          "sources": [
+            "https://news.cts.com.tw/cts/politics/202610/202610043085956.html",
+            "https://udn.com/news/story/124652/9792945"
+          ]
+        },
+        {
+          "name": "黃世杰",
+          "slogan": "心桃園，動起來",
+          "policies": [
+            "三心六線軌道建設",
+            "市營公車",
+            "桃竹苗大矽谷"
+          ],
+          "media": [
+            "政見圖文、青年社群",
+            "四姐諧音自嘲"
+          ],
+          "events": [
+            "南北區競總",
+            "路口拜票與客家後援會"
+          ],
+          "sources": [
+            "https://news.ltn.com.tw/news/politics/breakingnews/5601536",
+            "https://news.cts.com.tw/cts/politics/202610/202610163090724.html"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "臺中",
+      "people": [
+        {
+          "name": "江啟臣",
+          "slogan": "打造臺中旗艦城",
+          "policies": [
+            "20項交通政見",
+            "台中智造AI機器人",
+            "州廳觀光廊帶"
+          ],
+          "media": [
+            "圍棋意象形象影片",
+            "實用型募款小物"
+          ],
+          "events": [
+            "8/1旗艦城市工作站",
+            "10/4三子合體造勢"
+          ],
+          "sources": [
+            "https://udn.com/news/story/7325/9791625",
+            "https://rti.org.tw/news?pid=230983&uid=3"
+          ]
+        },
+        {
+          "name": "何欣純",
+          "slogan": "六星市政168",
+          "policies": [
+            "山線三三三創新",
+            "中火以氣換煤",
+            "10分鐘綠蔭生活圈"
+          ],
+          "media": [
+            "欣潮、純派與洋流聯名語彙",
+            "粉紫飄帶與純字商品"
+          ],
+          "events": [
+            "大里車隊掃街",
+            "10/18太平大會師（預定）"
+          ],
+          "sources": [
+            "https://www.cna.com.tw/news/aipl/202610140288.aspx"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "臺南",
+      "people": [
+        {
+          "name": "謝龍介",
+          "slogan": "翻轉大台南，人民贏一次",
+          "policies": [
+            "十大新政",
+            "婚育宅及育兒津貼",
+            "藍白共治"
+          ],
+          "media": [
+            "直播與庶民語言",
+            "鐵皮屋競總形象"
+          ],
+          "events": [
+            "市場掃街、議員站台",
+            "競總泡茶活動"
+          ],
+          "sources": [
+            "https://rti.org.tw/news?pid=230656&uid=3",
+            "https://www.chinatimes.com/realtimenews/20260920001973-260407"
+          ]
+        },
+        {
+          "name": "陳亭妃",
+          "slogan": "妃常幸福",
+          "policies": [
+            "五大觀光軸",
+            "交通七彩行"
+          ],
+          "media": [
+            "AI動畫政見影片",
+            "妃行員證、泰迪熊IP"
+          ],
+          "events": [
+            "貨櫃屋競總",
+            "市場掃街、議員聯合拜票"
+          ],
+          "sources": [
+            "https://udn.com/news/story/124652/9738173",
+            "https://udn.com/news/story/124652/9770764"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "高雄",
+      "people": [
+        {
+          "name": "柯志恩",
+          "slogan": "夢想海港・世界雄心",
+          "policies": [
+            "九大政策藍圖",
+            "涼感城市"
+          ],
+          "media": [
+            "四色競選主視覺",
+            "恩+1社群、闢謠與募款"
+          ],
+          "events": [
+            "旗津起跑、岡山造勢",
+            "小港廟口開講"
+          ],
+          "sources": [
+            "https://udn.com/news/story/124652/9807165",
+            "https://udn.com/news/story/124652/9672080"
+          ]
+        },
+        {
+          "name": "賴瑞隆",
+          "slogan": "南方崛起、邁向國際",
+          "policies": [
+            "AI算力中心",
+            "半導體封測中心",
+            "高階人才中心"
+          ],
+          "media": [
+            "百變隆隆16角形象廣告",
+            "隆捲風、隆貓民間二創"
+          ],
+          "events": [
+            "11選區陸空戰",
+            "百工百業後援會"
+          ],
+          "sources": [
+            "https://udn.com/news/story/124652/9819224",
+            "https://udn.com/news/story/124652/9807466"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "屏東",
+      "people": [
+        {
+          "name": "周春米",
+          "slogan": "做事拚未來！屏東亮起來！",
+          "policies": [
+            "半導體S廊帶、火箭場",
+            "冷鏈與智慧農業",
+            "育兒與長照"
+          ],
+          "media": [
+            "太陽＋晶片＋米字識別",
+            "洋流借勢與網路互動"
+          ],
+          "events": [
+            "廟口開唱",
+            "10/17競總成立"
+          ],
+          "sources": [
+            "https://www.chinatimes.com/realtimenews/20261013002830-260407",
+            "https://news.ltn.com.tw/news/Pingtung/breakingnews/5609807"
+          ]
+        },
+        {
+          "name": "蘇清泉",
+          "slogan": null,
+          "policies": [
+            "敬老卡與假牙補助",
+            "0–6歲醫療及營養午餐",
+            "能源供應"
+          ],
+          "media": [
+            "仁醫形象",
+            "低看板曝光的街頭對比"
+          ],
+          "events": [
+            "10/17屏東好未來音樂會",
+            "南高屏政治人物站台"
+          ],
+          "sources": [
+            "https://news.ltn.com.tw/news/politics/breakingnews/5332655"
+          ]
+        }
+      ]
+    },
+    {
+      "city": "屏東市",
+      "people": [
+        {
+          "name": "周佳琪",
+          "slogan": null,
+          "policies": [],
+          "media": [],
+          "events": [],
+          "sources": [
+            "https://udn.com/news/story/124652/9735138"
+          ]
+        },
+        {
+          "name": "梁育慈",
+          "slogan": null,
+          "policies": [],
+          "media": [
+            "健康按摩梳話題"
+          ],
+          "events": [],
+          "sources": [
+            "https://news.ltn.com.tw/news/politics/breakingnews/5571638"
+          ]
+        }
+      ]
+    }
+  ]
+}
