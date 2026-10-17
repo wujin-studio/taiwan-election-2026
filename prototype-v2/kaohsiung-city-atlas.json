@@ -1,0 +1,139 @@
+{
+  "asOf": "2026-10-17",
+  "city": "高雄",
+  "title": "從工業港都到先進製程聚落",
+  "eras": [
+    {
+      "year": "1980s",
+      "label": "港口與重化工業",
+      "note": "歷史研究階段；需補工業產值、就業結構與原始統計。"
+    },
+    {
+      "year": "1990s",
+      "label": "加工出口與產業轉型",
+      "note": "歷史研究階段；需補正式產業統計與交通建設時間。"
+    },
+    {
+      "year": "2000s",
+      "label": "路竹科學園區發展",
+      "note": "高雄園區（路竹）成為半導體材料與設備等產業基地。"
+    },
+    {
+      "year": "2020s",
+      "label": "楠梓晶圓製造與S廊帶",
+      "note": "楠梓園區、路竹、橋頭與亞灣形成不同技術分工。"
+    },
+    {
+      "year": "2026",
+      "label": "晶圓22廠P1量產",
+      "note": "P2規劃2026 Q4營運；P3規劃2027 Q1投產；P4、P5已動工，預計2027 Q4陸續營運。"
+    }
+  ],
+  "zones": [
+    {
+      "name": "楠梓園區",
+      "role": "先進晶圓製造",
+      "detail": "台積電晶圓22廠P1–P5；此處是先進製程晶圓製造，不應把P1–P5稱作封測廠。",
+      "sources": [
+        "https://urban-web.kcg.gov.tw/KDA/web_page/KDAN030201.jsp?PK01=KDA070000001202608015"
+      ]
+    },
+    {
+      "name": "路竹高雄園區",
+      "role": "半導體材料與設備",
+      "detail": "半導體先進材料、設備製造等供應鏈。",
+      "sources": [
+        "https://orgws.kcg.gov.tw/001/KcgOrgUploadFiles/458/relfile/76950/63498/65f78e8b-3c66-4152-ba1f-b732f9c4af78.pdf"
+      ]
+    },
+    {
+      "name": "楠梓科技產業園區",
+      "role": "封裝與測試",
+      "detail": "日月光等封裝測試聚落；與台積電晶圓製造區分。",
+      "sources": [
+        "https://semirai.com/tw/parks/kaohsiung-cluster"
+      ]
+    },
+    {
+      "name": "橋頭科學園區",
+      "role": "智慧機械與跨域應用",
+      "detail": "精準健康、智慧機械、電動車關聯。",
+      "sources": [
+        "https://orgws.kcg.gov.tw/001/KcgOrgUploadFiles/458/relfile/76950/63498/65f78e8b-3c66-4152-ba1f-b732f9c4af78.pdf"
+      ]
+    },
+    {
+      "name": "亞洲新灣區",
+      "role": "IC設計與AIoT",
+      "detail": "IC設計、5G AIoT及軟體服務聚落。",
+      "sources": [
+        "https://orgws.kcg.gov.tw/001/KcgOrgUploadFiles/458/relfile/76950/63498/65f78e8b-3c66-4152-ba1f-b732f9c4af78.pdf"
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "label": "楠梓園區面積",
+      "value": 182.57,
+      "unit": "公頃",
+      "source": "https://urban-web.kcg.gov.tw/KDA/web_page/KDAN030201.jsp?PK01=KDA070000001202608015"
+    },
+    {
+      "label": "聯外交通計畫",
+      "value": 155.91,
+      "unit": "億元",
+      "source": "https://urban-web.kcg.gov.tw/KDA/web_page/KDAN030201.jsp?PK01=KDA070000001202608015"
+    },
+    {
+      "label": "楠梓台積電規劃廠期",
+      "value": 5,
+      "unit": "期（P1–P5）",
+      "source": "https://urban-web.kcg.gov.tw/KDA/web_page/KDAN030201.jsp?PK01=KDA070000001202608015"
+    }
+  ],
+  "questions": [
+    {
+      "question": "產業投資如何轉化為居住品質？",
+      "evidence": "通勤時間、住宅供給、租金與青年家庭遷入",
+      "candidates": [
+        "柯志恩",
+        "賴瑞隆"
+      ]
+    },
+    {
+      "question": "晶圓製造與封測如何連成供應鏈？",
+      "evidence": "產業用地、人才培育、能源與水資源",
+      "candidates": [
+        "柯志恩",
+        "賴瑞隆"
+      ]
+    },
+    {
+      "question": "園區外交通如何分流？",
+      "evidence": "楠梓匝道、台1線匝道、園區聯絡道",
+      "candidates": [
+        "柯志恩",
+        "賴瑞隆"
+      ]
+    }
+  ],
+  "sourceCatalog": [
+    {
+      "label": "高雄市都發局：楠梓園區進度",
+      "url": "https://urban-web.kcg.gov.tw/KDA/web_page/KDAN030201.jsp?PK01=KDA070000001202608015"
+    },
+    {
+      "label": "高雄市半導體S廊帶",
+      "url": "https://orgws.kcg.gov.tw/001/KcgOrgUploadFiles/458/relfile/76950/63498/65f78e8b-3c66-4152-ba1f-b732f9c4af78.pdf"
+    },
+    {
+      "label": "高雄114年統計年報",
+      "url": "https://bas.kcg.gov.tw/News_Content.aspx?n=DFA2E6E21E2F56AC&s=3D16D2D0F6A456F0&sms=210F1CD2DBBB0267"
+    },
+    {
+      "label": "主計總處三大普查",
+      "url": "https://census.dgbas.gov.tw/entrance"
+    }
+  ],
+  "caveat": "人口職業占比、行政區人口、1980年代產業數據尚未取得一致口徑，暫不填入虛構值；歷史節點為研究框架，並非各年份精確統計。"
+}
