@@ -1,0 +1,63 @@
+{
+  "asOf": "2026-10-17",
+  "city": "高雄",
+  "events": [
+    {
+      "date": "2026-05-12",
+      "candidate": "賴瑞隆",
+      "type": "品牌發布",
+      "title": "公布桃紅主視覺與南方崛起敘事",
+      "detail": "旭日與動態斜線傳達新時代、突破與國際化；提出AI算力及半導體產業布局。",
+      "source": "https://www.cna.com.tw/news/aloc/202605120165.aspx"
+    },
+    {
+      "date": "2026-09-22",
+      "candidate": "柯志恩",
+      "type": "交通政策",
+      "title": "交通五大政策",
+      "detail": "從步行、自行車、大眾運輸與道路安全切入日常生活。",
+      "source": "https://kochihen2026.tw/policy/%E4%BA%A4%E9%80%9A%E5%BB%BA%E8%A8%AD"
+    },
+    {
+      "date": "2026-10-01",
+      "candidate": "賴瑞隆",
+      "type": "影音行銷",
+      "title": "百變隆隆競選影片",
+      "detail": "以一人多角呈現百工百業，搭配11個議員選區陸空戰。",
+      "source": "https://www.cna.com.tw/news/aloc/202610010129.aspx"
+    },
+    {
+      "date": "2026-10-01",
+      "candidate": "柯志恩",
+      "type": "實體動員",
+      "title": "市場掃街與基層接觸",
+      "detail": "密集市場、夜市拜票，強調直接接觸攤商與市民。",
+      "source": "https://www.cna.com.tw/news/aloc/202610010129.aspx"
+    },
+    {
+      "date": "2026-10-12",
+      "candidate": "賴瑞隆",
+      "type": "產業政策",
+      "title": "亞洲新灣區AI產業聚落",
+      "detail": "以腹地、電力與人才生態系三個優勢論述高雄AI布局。",
+      "source": "https://www.cna.com.tw/news/aipl/202610120149.aspx"
+    },
+    {
+      "date": "2026-10-12",
+      "candidate": "柯志恩",
+      "type": "產業政策",
+      "title": "完整AI產業生態系與全民AI教育",
+      "detail": "主張從AI園區、無人機、飛控、空間資訊到AI教育與產業實證應用。",
+      "source": "https://www.cna.com.tw/news/aipl/202610120149.aspx"
+    },
+    {
+      "date": "2026-10-15",
+      "candidate": "柯志恩",
+      "type": "專訪議題",
+      "title": "傳產升級、能源與社會安全網",
+      "detail": "主張讓傳產中小企業導入AI與國際認證，並提出喘息券等措施。",
+      "source": "https://www.businesstoday.com.tw/article/category/183027/post/202610120035/"
+    }
+  ],
+  "note": "事件日期為報導或政策發布日期；無法據此推定民調變動由該事件造成。"
+}
