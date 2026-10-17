@@ -542,4 +542,19 @@ if(marketing){
 }
 };
 })();
-</script></html>
+</script><style>
+/* V8: actual compact editorial layout, no giant empty photo block */
+#scene .cards{height:calc(100dvh - 185px)!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:start!important;align-items:stretch!important;gap:10px!important;overflow-y:auto!important;padding:8px 3% 80px!important}
+#scene .card{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;position:relative!important;min-height:0!important;height:auto!important;max-height:none!important;padding:14px!important;gap:7px!important}
+#scene .card .party,#scene .card .name{position:relative!important;z-index:2}
+#scene .card .portraitPhoto{position:absolute!important;top:15px!important;right:14px!important;width:64px!important;height:76px!important;max-height:none!important;object-fit:cover!important;border-radius:12px!important;grid-row:auto!important}
+#scene .card .portraitMissing{position:absolute!important;top:18px!important;right:12px!important;max-width:60px!important;min-height:0!important}
+#scene .card .slogan{position:relative!important;display:block!important;flex:none!important;order:3!important;grid-row:auto!important;align-self:stretch!important;margin:clamp(48px,6vh,75px) 0 4px!important;padding:0!important;font-size:clamp(29px,4.1vw,62px)!important;line-height:1.13!important;letter-spacing:-1.3px!important;overflow-wrap:anywhere}
+#scene .card .ticker{position:relative!important;order:4!important;align-self:stretch!important;margin:4px 0!important;font-size:clamp(12px,1.3vw,17px)!important}
+#scene .card .source{order:5!important;font-size:10px!important}
+#scene .card .photoCredit{display:none!important}
+#scene .card:nth-child(n+3){padding:10px!important}
+#scene .card:nth-child(n+3) .slogan{margin:12px 0!important;font-size:18px!important}
+#scene .card:nth-child(n+3) .portraitPhoto,#scene .card:nth-child(n+3) .portraitMissing{display:none!important}
+@media(max-width:700px){#scene .cards{height:calc(100dvh - 165px)!important;gap:7px!important}#scene .card{padding:10px!important}#scene .card .name{font-size:18px!important}#scene .card .portraitPhoto{top:52px!important;right:9px!important;width:53px!important;height:63px!important}#scene .card .portraitMissing{top:52px!important;right:8px!important}#scene .card .slogan{margin:78px 0 0!important;font-size:clamp(23px,6vw,34px)!important;letter-spacing:-.6px!important}#scene .card .ticker{font-size:11px!important}}
+</style></html>
