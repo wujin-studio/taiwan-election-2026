@@ -419,4 +419,49 @@ city.forEach(v=>{const card=document.createElement('article');card.className='vi
 const note=document.createElement('p');note.className='visualNote';note.textContent='目前呈現競選主視覺的設計語彙與新聞來源，並非原始競選海報。待取得可重用原圖後，才以實際主視覺取代研究卡片。';section.append(note);root.prepend(section);
 };
 })();
+</script><style>
+#marketingPanel{padding:14px 0 40px}
+#marketingPanel .mTitle{font-size:clamp(27px,4vw,46px);line-height:1.2;letter-spacing:-1px}
+#marketingPanel .mIntro{color:#767982;line-height:1.75;font-size:14px}
+#marketingPanel .mGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+#marketingPanel .mCandidate{background:#fff;border:1px solid #e8e2da;border-radius:18px;padding:19px;min-width:0}
+#marketingPanel .mCandidate:nth-child(even){background:#f0ecff}
+#marketingPanel .mCandidate h4{font-size:23px;margin:8px 0}
+#marketingPanel .mCandidate .mSlogan{font-size:clamp(23px,3.2vw,41px);line-height:1.15;font-weight:900;letter-spacing:-1px;margin:18px 0}
+#marketingPanel .mCandidate .mBlock{border-top:1px solid #ded8d1;padding:12px 0;font-size:13px;line-height:1.7}
+#marketingPanel .mCandidate .mBlock b{display:block;color:#b36a54;margin-bottom:4px}
+#marketingPanel .mCandidate .mBlock p{margin:0;color:#676b75}
+#marketingPanel .mGraph{background:#fff;border:1px solid #e8e2da;border-radius:18px;padding:20px;margin:18px 0}
+#marketingPanel .mGraph h4{font-size:19px;margin:0 0 14px}
+#marketingPanel .mBar{margin:13px 0}
+#marketingPanel .mBar .mBarLabel{display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-bottom:5px}
+#marketingPanel .mBar .track{height:14px;border-radius:8px;background:#e9e6e0;overflow:hidden}
+#marketingPanel .mBar .fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#eab293,#d86f59)}
+#marketingPanel .mFoot{font-size:11px;line-height:1.7;color:#858890}
+#tabs button.marketingTab{color:#d26e52;font-weight:900;border-bottom:2px solid #d26e52}
+@media(max-width:700px){#marketingPanel .mGrid{grid-template-columns:1fr}#marketingPanel .mCandidate .mSlogan{font-size:30px}}
+</style>
+<script>
+(function(){
+let deepData=null,campaignData=null,visualData=null;
+Promise.all([fetch('./city-deep-research.json').then(r=>r.json()),fetch('./campaign-research.json').then(r=>r.json()),fetch('./campaign-visuals.json').then(r=>r.json())]).then(([a,b,c])=>{deepData=a;campaignData=b;visualData=c;}).catch(()=>{});
+const oldEnter=enter;
+enter=function(){oldEnter();tab=5;render()};
+const oldRender=render;
+render=function(){
+if(tab!==5){oldRender();injectTab();return}
+const city=C[selected],root=document.getElementById('content'),tabs=document.getElementById('tabs');
+document.getElementById('cityTitle').textContent=city[0];root.replaceChildren();tabs.replaceChildren();
+const labels=['行銷橫切面','城市需求','候選人口號','媒體布局','民調證據','歷屆對照'];
+labels.forEach((s,i)=>{const b=document.createElement('button');b.textContent='╱ '+s;b.className=i===0?'active marketingTab':'';b.onclick=()=>{tab=i===0?5:i-1;render()};tabs.append(b)});
+const wrap=document.createElement('div');wrap.id='marketingPanel';const title=document.createElement('h3');title.className='mTitle';title.textContent=city[0]+'｜選戰行銷橫切面';const intro=document.createElement('p');intro.className='mIntro';intro.textContent='從城市需求、候選人品牌定位、口號與媒體策略，分析各自希望建立的選民認知。以下為研究性判讀，不等於已驗證的投票效果。';wrap.append(title,intro);
+const region=deepData?.regions.find(r=>r.city===city[0]);const campaign=campaignData?.regions.find(r=>r.city===city[0]);const visuals=visualData?.visuals.filter(v=>v.city===city[0])||[];
+const grid=document.createElement('div');grid.className='mGrid';
+city[3].forEach(p=>{const d=region?.candidates.find(c=>c.name===p[0]),c=campaign?.people.find(c=>c.name===p[0]),v=visuals.find(v=>v.name===p[0]);const card=document.createElement('article');card.className='mCandidate';const name=document.createElement('h4');name.textContent=p[0]+'｜'+p[1];const slogan=document.createElement('div');slogan.className='mSlogan';slogan.textContent=p[2]?.[0]||'正式口號待查';card.append(name,slogan);
+[['品牌定位',d?.theme||'未見足夠資料'],['回應的城市需求',d?.need||'待查'],['具體政策',d?.details||'未見具體政見報導'],['傳播與媒體',c?.media?.join('；')||'尚未建立完整媒體資料'],['主視覺語言',v?(v.palette+'｜'+v.imagery):'原始主視覺待補'],['行銷分析（研究假說）',d?.marketing||'目前證據不足，暫不評分']].forEach(([label,value])=>{const row=document.createElement('div');row.className='mBlock';const b=document.createElement('b');b.textContent=label;const t=document.createElement('p');t.textContent=value;row.append(b,t);card.append(row)});grid.append(card)});wrap.append(grid);
+if(region){const graph=document.createElement('section');graph.className='mGraph';const heading=document.createElement('h4');heading.textContent='城市需求 × 候選人政策覆蓋（文字分類，不是支持率）';graph.append(heading);const issues=[...new Set(region.candidates.map(c=>c.need).filter(x=>x&&x!=='待查'))];issues.slice(0,8).forEach(need=>{const count=region.candidates.filter(c=>c.need===need).length;const item=document.createElement('div');item.className='mBar';const label=document.createElement('div');label.className='mBarLabel';const left=document.createElement('span');left.textContent=need;const right=document.createElement('span');right.textContent=count+' 位候選人主張涉及';label.append(left,right);const track=document.createElement('div');track.className='track';const fill=document.createElement('div');fill.className='fill';fill.style.width=(count/Math.max(1,region.candidates.length)*100)+'%';track.append(fill);item.append(label,track);graph.append(item)});const note=document.createElement('p');note.className='mFoot';note.textContent='圖表依現有文字研究標籤計數，非選民調查，也不能據此評估政策完整性。';graph.append(note);wrap.append(graph)}
+const foot=document.createElement('p');foot.className='mFoot';foot.textContent='截至2026/10/17。資料由使用者提供並逐步補充；部分新聞來源與政見尚待獨立核實。未經查證的曝光量、互動率、民調或ROI不以推測數值呈現。';wrap.append(foot);root.append(wrap);
+};
+function injectTab(){const tabs=document.getElementById('tabs');if(!tabs||tabs.querySelector('.marketingTab'))return;const b=document.createElement('button');b.className='marketingTab';b.textContent='╱ 行銷橫切面';b.onclick=()=>{tab=5;render()};tabs.prepend(b)}
+})();
 </script></html>
