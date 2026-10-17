@@ -250,12 +250,12 @@ function draw(){tabs.replaceChildren();grid.replaceChildren();categories.forEach
 draw();
 }
 function city3d(){
-if(selected!==5||tab!==0||!window.THREE)return;
+if(selected!==5||tab!==0)return;if(!window.THREE){const error=document.createElement('p');error.textContent='3D 引擎載入失敗，請重新整理。';document.getElementById('content').prepend(error);return;}
 const root=document.getElementById('content'),wrap=document.createElement('section');wrap.id='city3d';wrap.innerHTML='<div class="head"><strong>高雄｜3D 行政區輪廓</strong><small>拖曳旋轉／縮放</small></div><div class="canvasHost"></div><div class="legend">真實高雄市縣市邊界擠出模型（非建築物實景）；城市園區位置與真實建物模型待補 GIS 資料。</div>';root.prepend(wrap);
 const host=wrap.querySelector('.canvasHost');const width=host.clientWidth||500,height=330;
 const scene=new THREE.Scene();scene.background=new THREE.Color(0xf5f2ed);
 const camera=new THREE.PerspectiveCamera(42,width/height,.1,500);camera.position.set(0,17,27);camera.lookAt(0,0,0);
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(width,height);host.append(renderer.domElement);
+let renderer;try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});}catch(e){wrap.querySelector('.legend').textContent='裝置無法啟用 WebGL：'+e.message;return;}renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(width,height);host.append(renderer.domElement);
 scene.add(new THREE.AmbientLight(0xffffff,2));const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(6,15,10);scene.add(light);
 const mat=new THREE.MeshStandardMaterial({color:0xe89472,roughness:.8,metalness:.05,side:THREE.DoubleSide});
 let mesh=null,drag=false,lastX=0,lastY=0,rotY=-.25,rotX=-.7,auto=true;
@@ -264,7 +264,7 @@ const f=topojson.feature(t,t.objects.map).features.find(x=>x.properties.id==='64
 const polys=f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[f.geometry.coordinates];
 const group=new THREE.Group();
 polys.forEach(poly=>{const outer=poly[0];if(outer.length<3)return;const shape=new THREE.Shape();outer.forEach(([lon,lat],i)=>{const x=(lon-120.55)*20,y=(lat-22.95)*20;i?shape.lineTo(x,y):shape.moveTo(x,y)});shape.closePath();for(const hole of poly.slice(1)){const p=new THREE.Path();hole.forEach(([lon,lat],i)=>{const x=(lon-120.55)*20,y=(lat-22.95)*20;i?p.lineTo(x,y):p.moveTo(x,y)});shape.holes.push(p)}const geo=new THREE.ExtrudeGeometry(shape,{depth:.8,bevelEnabled:true,bevelThickness:.07,bevelSize:.06,bevelSegments:1,steps:1});group.add(new THREE.Mesh(geo,mat))});
-const bounds=new THREE.Box3().setFromObject(group),center=bounds.getCenter(new THREE.Vector3());group.position.sub(center);group.rotation.x=-Math.PI/2;scene.add(group);mesh=group;
+const bounds=new THREE.Box3().setFromObject(group),center=bounds.getCenter(new THREE.Vector3());group.position.sub(center);group.rotation.x=-Math.PI/2;scene.add(group);mesh=group;const dims=bounds.getSize(new THREE.Vector3());const extent=Math.max(dims.x,dims.y);camera.position.set(0,Math.max(12,extent*.9),Math.max(18,extent*1.45));camera.lookAt(0,0,0);
 }).catch(()=>{wrap.querySelector('.legend').textContent='高雄地理模型資料載入失敗，請稍後重新整理。'});
 renderer.domElement.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});
 renderer.domElement.addEventListener('pointermove',e=>{if(!drag)return;rotY+=(e.clientX-lastX)*.009;rotX=Math.max(-1.4,Math.min(-.15,rotX+(e.clientY-lastY)*.007));lastX=e.clientX;lastY=e.clientY});
