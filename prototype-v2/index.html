@@ -495,4 +495,51 @@ const src=document.createElement('a');src.href=p.source;src.target='_blank';src.
 root.insertBefore(box,root.querySelector('.mFoot'));
 };
 })();
+</script><style>
+/* Unified evidence-first visual display */
+#visualLab .visualCard .artwork{aspect-ratio:16/9;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:#f0ece6;position:relative;margin:12px 0}
+#visualLab .visualCard .artwork img{width:100%;height:100%;object-fit:contain}
+#visualLab .visualCard .artwork .pending{padding:15px;text-align:center;font-size:13px;color:#827b7b}
+#visualLab .visualCard .artwork .pending strong{font-size:14px}
+#visualLab .visualCard .sourceLink{display:inline-flex;margin-top:8px;font-weight:800}
+#marketingPanel .mCandidate .actualArt{display:block;aspect-ratio:16/9;background:#f4f1eb;border-radius:12px;overflow:hidden;margin:12px 0}
+#marketingPanel .mCandidate .actualArt img{width:100%;height:100%;object-fit:contain}
+#marketingPanel .mCandidate .actualArt .missingArt{padding:16px;font-size:12px;color:#858188}
+</style>
+<script>
+(function(){
+let visuals=null;
+fetch('./campaign-visuals.json').then(r=>r.ok?r.json():Promise.reject(Error('visuals'))).then(d=>visuals=d).catch(()=>{});
+const originalRender=render;
+render=function(){
+originalRender();
+if(!visuals)return;
+const city=C[selected]?.[0];if(!city)return;
+const candidates=visuals.visuals.filter(v=>v.city===city);
+const root=document.getElementById('visualLab');
+if(root){
+ const cards=[...root.querySelectorAll('.visualCard')];
+ candidates.forEach((v,i)=>{
+  const card=cards[i];if(!card)return;
+  const slot=document.createElement('div');slot.className='artwork';
+  if(v.asset){const img=document.createElement('img');img.src=v.asset;img.alt=v.name+'競選主視覺';img.onerror=()=>{slot.textContent='原始圖片無法載入，請參閱來源';};slot.append(img)}
+  else{const msg=document.createElement('div');msg.className='pending';msg.textContent='正式主視覺原圖尚未取得可穩定使用的檔案';slot.append(msg)}
+  const header=card.querySelector('strong');if(header)header.after(slot);
+ });
+}
+const marketing=document.getElementById('marketingPanel');
+if(marketing){
+ const cards=[...marketing.querySelectorAll('.mCandidate')];
+ const roster=C[selected][3];
+ roster.forEach((candidate,i)=>{
+  const card=cards[i],v=candidates.find(x=>x.name===candidate[0]);if(!card||!v)return;
+  const art=document.createElement('div');art.className='actualArt';
+  if(v.asset){const img=document.createElement('img');img.src=v.asset;img.alt=v.name+'官方競選主視覺';img.onerror=()=>{art.textContent='主視覺圖片暫時無法載入';};art.append(img)}
+  else{const msg=document.createElement('div');msg.className='missingArt';msg.textContent='主視覺原圖待入庫（不以配色示意圖冒充）';art.append(msg)}
+  const slogan=card.querySelector('.mSlogan');if(slogan)slogan.after(art);
+  const a=document.createElement('a');a.href=v.source;a.target='_blank';a.rel='noopener noreferrer';a.textContent='查看原始主視覺報導 ↗';a.style.fontSize='12px';a.style.color='#b66b53';art.after(a);
+ });
+}
+};
+})();
 </script></html>
