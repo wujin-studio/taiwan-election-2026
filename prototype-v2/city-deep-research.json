@@ -1,0 +1,351 @@
+{
+  "asOf": "2026-10-17",
+  "provenance": "User-provided research, not independently verified; official election gazette controls",
+  "regions": [
+    {
+      "city": "臺北",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "首都商業金融集中"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "東區與信義計畫區興起"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "捷運與南港內湖科技"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "AI總部、都更與人口外移"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "蔣萬安",
+          "theme": "松山機場遷移與AI園區",
+          "details": "300公頃土地重整、解除限高、捷運與跨河廊道",
+          "need": "土地受限與住宅更新",
+          "marketing": "產業升級＋安居樂業"
+        },
+        {
+          "name": "沈伯洋",
+          "theme": "HEART城市治理",
+          "details": "青年AI額度、內湖錯峰與電動小巴、夜間市長",
+          "need": "通勤壅塞、青年生活成本",
+          "marketing": "解決城市卡住的日常"
+        }
+      ]
+    },
+    {
+      "city": "新北",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "衛星城工業化"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "住宅密集與板橋樞紐"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "升格後捷運與新市鎮"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "跨區通勤與城市主體性"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "李四川",
+          "theme": "雙巨蛋與科學城",
+          "details": "淡海科學城、板橋小巨蛋、跨市交通、居住新五箭",
+          "need": "衛星城通勤、區域發展落差",
+          "marketing": "工程專業與跨域治理"
+        },
+        {
+          "name": "蘇巧慧",
+          "theme": "新北城市主體性",
+          "details": "青年育兒宅、AI簡政、板橋科技園區、新皇冠觀光",
+          "need": "家庭照顧、在地就業",
+          "marketing": "溫暖創新會做事"
+        },
+        {
+          "name": "蘇輝湟",
+          "theme": "尚無具體政見",
+          "details": "未見具體市政方案報導",
+          "need": "待查",
+          "marketing": "待查"
+        }
+      ]
+    },
+    {
+      "city": "桃園",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "機場與工業區"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "高鐵青埔與科技製造"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "升格、航空城與機捷"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "人口成長與軌道供給"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "張善政",
+          "theme": "可負擔住宅",
+          "details": "機捷A20/A21與中壢園區住宅、捷運綠線、通學廊道",
+          "need": "人口移入與住宅壓力",
+          "marketing": "政績延續"
+        },
+        {
+          "name": "黃世杰",
+          "theme": "軌道與公車改革",
+          "details": "三心六線、市營公車、桃竹苗大矽谷",
+          "need": "捷運工程延宕與通勤需求",
+          "marketing": "年輕城市動起來"
+        }
+      ]
+    },
+    {
+      "city": "臺中",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "港口與精密機械"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "七期與中科"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "縣市合併與捷運"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "AI智造與交通空品"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "江啟臣",
+          "theme": "旗艦城市",
+          "details": "20項交通、AI智慧製造、文化觀光廊帶",
+          "need": "交通瓶頸與產業轉型",
+          "marketing": "國際化旗艦城"
+        },
+        {
+          "name": "何欣純",
+          "theme": "六星市政168",
+          "details": "中火以氣換煤、山線三三三、綠蔭生活圈",
+          "need": "交通與空品、城鄉差距",
+          "marketing": "換新治理"
+        },
+        {
+          "name": "洪麗華",
+          "theme": "青年就業與水資源",
+          "details": "少子化、投資、農漁業產能",
+          "need": "就業與水資源",
+          "marketing": "待查"
+        }
+      ]
+    },
+    {
+      "city": "臺南",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "農工與古都"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "南科形成"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "先進晶圓與文化觀光"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "南科外溢、交通與淹水"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "謝龍介",
+          "theme": "翻轉大台南",
+          "details": "婚育宅、育兒津貼、敬老福利、只做一屆",
+          "need": "社福與政黨輪替",
+          "marketing": "庶民改革"
+        },
+        {
+          "name": "陳亭妃",
+          "theme": "妃常幸福",
+          "details": "五大觀光軸、交通七彩行、農漁與能源韌性",
+          "need": "南科成長、觀光分散",
+          "marketing": "基層經營與女市長"
+        },
+        {
+          "name": "蕭燐洪",
+          "theme": "尚無具體政見",
+          "details": "未見報導",
+          "need": "待查",
+          "marketing": "待查"
+        },
+        {
+          "name": "葉人文",
+          "theme": "永續韌性",
+          "details": "曾簽署政策承諾，細項未見報導",
+          "need": "待查",
+          "marketing": "待查"
+        }
+      ]
+    },
+    {
+      "city": "高雄",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "重化工與加工出口"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "捷運港灣文化轉型"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "亞洲新灣區"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "楠梓先進製程與S廊帶"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "柯志恩",
+          "theme": "13579城市藍圖",
+          "details": "五區均衡、青年安居三支箭、涼感城市、全齡照顧",
+          "need": "產業轉型與生活品質",
+          "marketing": "世界雄心與清廉治理"
+        },
+        {
+          "name": "賴瑞隆",
+          "theme": "南方崛起",
+          "details": "AI算力、半導體封測、國家級人才中心",
+          "need": "半導體廊帶與青年留才",
+          "marketing": "延續轉型接棒"
+        },
+        {
+          "name": "張靜",
+          "theme": "司法改革",
+          "details": "陪審制、民選法官與檢察長、司法退場機制",
+          "need": "司法信任",
+          "marketing": "小黨司改"
+        },
+        {
+          "name": "王肇民",
+          "theme": "尚無具體政見",
+          "details": "未見報導",
+          "need": "待查",
+          "marketing": "待查"
+        },
+        {
+          "name": "洪方隆",
+          "theme": "尚無具體政見",
+          "details": "未見報導",
+          "need": "待查",
+          "marketing": "待查"
+        }
+      ]
+    },
+    {
+      "city": "屏東",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "農漁與人口外流"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "墾丁觀光"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "農科與南迴電氣化"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "屏科與太空產業"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "周春米",
+          "theme": "希望城市",
+          "details": "半導體S廊帶、冷鏈智慧農業、育兒三部曲、長照",
+          "need": "人口外流與農漁升級",
+          "marketing": "政績延續"
+        },
+        {
+          "name": "蘇清泉",
+          "theme": "醫者仁心",
+          "details": "敬老卡、假牙、醫療補助、能源供應",
+          "need": "高齡化與所得",
+          "marketing": "福利與政黨輪替"
+        }
+      ]
+    },
+    {
+      "city": "屏東市",
+      "eras": [
+        {
+          "period": "1970–1989",
+          "summary": "縣治商業與軍眷村"
+        },
+        {
+          "period": "1990–2009",
+          "summary": "市區生活機能擴張"
+        },
+        {
+          "period": "2010–2019",
+          "summary": "鐵路高架與勝利星村"
+        },
+        {
+          "period": "2020–2026",
+          "summary": "科學園區與高鐵配套"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "周佳琪",
+          "theme": "安居樂業好生活",
+          "details": "路燈、道路、社區公園、育兒敬老",
+          "need": "縣治生活機能",
+          "marketing": "基層治理"
+        },
+        {
+          "name": "梁育慈",
+          "theme": "屏東市要做事",
+          "details": "活動中心、科技就業、兒少運動卡、數位便民",
+          "need": "公共空間與科技產業外溢",
+          "marketing": "縣市同隊"
+        }
+      ]
+    }
+  ]
+}
