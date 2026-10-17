@@ -585,4 +585,43 @@ region.people.forEach(person=>{const card=document.createElement('article');card
 const foot=document.createElement('p');foot.className='mediaNote';foot.textContent='搜尋結果不等於官方帳號。帳號驗證、貼文資料及互動指標尚未取得，不能據此比較聲量或推估投票效果。';section.append(foot);marketing.append(section);
 };
 })();
+</script><style>
+#mediaEvidence{padding:20px;background:#fff;border:1px solid #e9e0d7;border-radius:20px;margin:18px 0}
+#mediaEvidence h3{font-size:clamp(24px,3vw,35px);margin:5px 0 10px}
+#mediaEvidence .medNav{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}
+#mediaEvidence .medNav button{border:1px solid #e5d9ce;background:#fff;border-radius:22px;padding:8px 12px;font-size:12px}
+#mediaEvidence .medNav button.selected{background:#2e3039;color:#fff}
+#mediaEvidence .medRow{margin:14px 0}
+#mediaEvidence .medRow strong{font-size:14px}
+#mediaEvidence .medTrack{height:15px;background:#f0ede8;border-radius:12px;overflow:hidden;margin:7px 0}
+#mediaEvidence .medFill{height:100%;background:#d8795b;border-radius:12px;transition:width .4s}
+#mediaEvidence .medRow:nth-of-type(2n) .medFill{background:#8b9eae}
+#mediaEvidence .medSummary{font-size:13px;line-height:1.85;color:#606570;padding:12px;background:#f7f4f0;border-radius:12px}
+#mediaEvidence .medSources{font-size:11px;color:#8a8991;line-height:1.7}
+#mediaEvidence a{color:#bd7055}
+</style>
+<script>
+(function(){
+let metrics=null,metricIndex=0;
+fetch('./media-observations-2026.json').then(r=>r.ok?r.json():Promise.reject(Error('media'))).then(d=>metrics=d).catch(()=>{});
+const previous=render;
+render=function(){
+previous();if(!metrics||tab!==5)return;
+const target=document.getElementById('marketingPanel');if(!target)return;
+const records=metrics.observations.filter(o=>o.city===C[selected][0]);if(!records.length)return;
+const box=document.createElement('section');box.id='mediaEvidence';
+const h=document.createElement('h3');h.textContent='媒體監測｜發文、聲量與傳播路徑';box.append(h);
+const caption=document.createElement('p');caption.className='medSources';caption.textContent='監測週期：2026/10/05–10/11。各指標為不同定義，不可互相代替。';box.append(caption);
+const nav=document.createElement('div');nav.className='medNav';const graph=document.createElement('div');const insight=document.createElement('p');insight.className='medSummary';const foot=document.createElement('p');foot.className='medSources';
+records.forEach((r,i)=>{const b=document.createElement('button');b.textContent=r.candidate;b.className=i===metricIndex?'selected':'';b.onclick=()=>{metricIndex=i;render()};nav.append(b)});
+const r=records[Math.min(metricIndex,records.length-1)];
+const entries=[['候選人發文',r.posts,'篇'],['跨平台討論量',r.mentions,'篇'],['FB平均留言',r.fbAvgComments,'則'],['Threads平均留言',r.threadsAvgComments,'則']];
+const max=Math.max(1,...entries.map(e=>e[1]||0));
+entries.forEach(([label,value,unit])=>{if(value==null)return;const row=document.createElement('div');row.className='medRow';const heading=document.createElement('strong');heading.textContent=label+'　'+value.toLocaleString()+' '+unit;const track=document.createElement('div');track.className='medTrack';const fill=document.createElement('div');fill.className='medFill';fill.style.width=(value/max*100)+'%';track.append(fill);row.append(heading,track);graph.append(row)});
+if(r.channels){const h=document.createElement('h4');h.textContent='跨平台討論來源分布';graph.append(h);Object.entries(r.channels).forEach(([k,v])=>{const row=document.createElement('div');row.className='medRow';const label=document.createElement('strong');label.textContent=({threads:'Threads',facebook:'Facebook',media:'新聞媒體',forums:'論壇'}[k]||k)+'　'+v+'%';const track=document.createElement('div');track.className='medTrack';const fill=document.createElement('div');fill.className='medFill';fill.style.width=v+'%';track.append(fill);row.append(label,track);graph.append(row)})}
+insight.textContent=r.mentions!=null?'本週討論量 '+r.mentions.toLocaleString()+' 篇；正向分類 '+r.positivePct+'%、負向分類 '+r.negativePct+'%。這是媒體監測情緒，不是選民支持度。':'目前有候選人發文與留言觀測，但跨平台總聲量尚未完整取得。';
+const source=document.createElement('a');source.href=r.source;source.target='_blank';source.rel='noopener noreferrer';source.textContent='檢視原始監測報告 ↗';foot.textContent='資料來源：QSearch。不同指標採不同單位；粉絲數、觸及與真正互動率尚待取得。 ';foot.append(source);
+box.append(nav,graph,insight,foot);target.prepend(box);
+};
+})();
 </script></html>
