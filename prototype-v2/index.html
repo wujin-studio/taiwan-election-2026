@@ -187,4 +187,13 @@ window.showCutScene=function(i){selectedCut=i;cutSection=0;const c=C[i];document
 window.openCity=window.showCutScene;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){exitCut();exitCityWorld()}});
 })();
+</script><script>
+(function(){
+const ids=['63000','65000','68000','66000','67000','64000','10013'];
+const names=['臺北','新北','桃園','臺中','臺南','高雄','屏東'];
+function show(i){const box=document.getElementById('cutWorld');if(!box)return;const roster=window.roster||[];const people=(typeof C!=='undefined'&&C[i]&&C[i][2])||[];document.getElementById('cutTitle').textContent=names[i]+'｜候選人主張';const root=document.getElementById('cutGrid');root.replaceChildren();people.forEach((name,j)=>{const card=document.createElement('div');card.className='cutPerson';card.style.animationDelay=(j*.14)+'s';const a=document.createElement('div');a.className='party';a.textContent='候選人 '+(j+1);const b=document.createElement('div');b.className='name';b.textContent=name;const c=document.createElement('div');c.className='bigSlogan';c.textContent='正式競選口號待核實';card.append(a,b,c);root.append(card)});box.classList.add('show')}
+const svg=document.getElementById('map');if(svg){svg.addEventListener('click',function(e){const node=e.target.closest('path.city,text.mapname');if(!node)return;const f=node.__data__;const code=f&&f.properties&&(f.properties.id||f.properties.COUNTYCODE);const i=ids.indexOf(String(code));if(i<0)return;e.preventDefault();e.stopImmediatePropagation();show(i)},true)}
+const switcher=document.getElementById('switch');if(switcher)switcher.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=Array.from(switcher.querySelectorAll('button')).indexOf(b);if(i>=0){e.preventDefault();e.stopImmediatePropagation();show(i)}},true);
+const cutEnter=document.getElementById('cutEnter');if(cutEnter)cutEnter.addEventListener('click',()=>{document.getElementById('cutWorld').classList.remove('show');document.getElementById('cityWorld').classList.add('show');if(typeof drawCityWorld==='function')drawCityWorld()});
+})();
 </script></body></html>
