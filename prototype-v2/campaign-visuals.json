@@ -9,8 +9,9 @@
       "palette": "亮藍＋黃色",
       "imagery": "都會能量與安居樂業",
       "source": "https://www.cna.com.tw/news/aipl/202609290204.aspx",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6087.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "競選識別"
     },
     {
       "city": "臺北",
@@ -19,8 +20,9 @@
       "palette": "黑、橘、綠",
       "imagery": "奔奔、抱抱；原主視覺曾下架",
       "source": "https://www.cna.com.tw/news/aloc/202608250080.aspx",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6086.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "民間應援視覺"
     },
     {
       "city": "新北",
@@ -39,8 +41,9 @@
       "palette": "愛心、燈泡、閃電",
       "imagery": "動態視覺、放射燈箱",
       "source": "https://www.fountmedia.io/article/430570",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6093.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "競選主視覺"
     },
     {
       "city": "桃園",
@@ -79,8 +82,9 @@
       "palette": "粉紅＋紫色",
       "imagery": "欣潮、純派飄帶",
       "source": "https://www.cna.com.tw/news/aipl/202610140288.aspx",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6099.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "競選主視覺"
     },
     {
       "city": "臺南",
@@ -89,8 +93,9 @@
       "palette": "鐵皮屋、庶民感",
       "imagery": "基層、接地氣",
       "source": "https://www.chinatimes.com/realtimenews/20260920001973-260407",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6098.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "政策廣告"
     },
     {
       "city": "臺南",
@@ -99,8 +104,9 @@
       "palette": "綠＋桃紅",
       "imagery": "跑道、數字1、泰迪熊牆",
       "source": "https://www.ettoday.net/news/20260910/3235050.htm",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6101.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "競選活動照片"
     },
     {
       "city": "高雄",
@@ -109,8 +115,9 @@
       "palette": "科技藍、豐收黃、豔陽紅、海洋青",
       "imagery": "海港與世界雄心",
       "source": "https://udn.com/news/story/124652/9807165",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6103.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "戶外看板"
     },
     {
       "city": "高雄",
@@ -119,8 +126,9 @@
       "palette": "桃紅色",
       "imagery": "市政願景公車、接棒",
       "source": "https://udn.com/news/story/124652/9672080",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6102.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "競選主視覺"
     },
     {
       "city": "屏東",
@@ -129,8 +137,9 @@
       "palette": "太陽、晶片、米字",
       "imagery": "農業科技融合",
       "source": "https://www.chinatimes.com/realtimenews/20261013002830-260407",
-      "asset": null,
-      "status": "reference_only"
+      "asset": "./assets/visuals/IMG_6106.jpeg",
+      "status": "file_pending_upload",
+      "assetType": "競選活動照片"
     },
     {
       "city": "屏東",
@@ -162,5 +171,10 @@
       "asset": null,
       "status": "reference_only"
     }
-  ]
+  ],
+  "extraReference": {
+    "city": "桃園",
+    "file": "IMG_6094.jpeg",
+    "type": "城市形象視覺（非已確認候選人競選主視覺）"
+  }
 }
