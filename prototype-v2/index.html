@@ -135,4 +135,56 @@ const cases=[
 function insertCase(){const c=cases.find(x=>x.city===C[current]?.[0]);if(!c||tab!==0)return;const b=document.getElementById('body');if(!b)return;document.getElementById('casePanel')?.remove();const e=document.createElement('section');e.id='casePanel';const ey=document.createElement('div');ey.className='ey';ey.textContent='VERIFIED CASE STUDY / 2026';const title=document.createElement('h3');title.textContent=c.title;e.append(ey,title);c.points.forEach(([label,description])=>{const item=document.createElement('div');item.className='insight';const t=document.createElement('strong');t.textContent=label;const p=document.createElement('p');p.textContent=description;item.append(t,p);e.appendChild(item)});const note=document.createElement('p');note.className='sourceNote';note.textContent='資料依中央社報導整理；媒體行銷解讀與新聞事實分開呈現。';e.appendChild(note);c.links.forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.textContent=name+' ↗　';e.appendChild(a)});b.prepend(e)}
 const existing=window.draw;if(typeof existing==='function'){window.draw=function(){existing();insertCase()}}
 })();
+</script><style>
+:root{--cut:#ed7559}
+header b{font-weight:900}
+#cutWorld{position:fixed;inset:0;z-index:50;background:#fbfaf7;display:none;overflow:hidden}
+#cutWorld.show{display:block}
+#cutWorld .cutTop{height:64px;display:flex;justify-content:space-between;align-items:center;padding:0 4%;border-bottom:1px solid #eee9e3;position:relative;z-index:3}
+#cutWorld .cutTop b{font-size:17px}
+#cutWorld .cutTop button{border:1px solid #e3ddd5;background:white;border-radius:24px;padding:10px 16px;font-size:12px}
+#cutWorld .cutTitle{font-size:clamp(30px,5vw,70px);font-weight:900;letter-spacing:-3px;padding:25px 5% 10px}
+#cutWorld .cutHint{font-size:12px;color:#9a8f8a;padding:0 5%}
+#cutWorld .cutGrid{height:calc(100dvh - 205px);display:flex;align-items:stretch;justify-content:center;gap:1px;padding:20px 3% 28px;overflow:hidden}
+.cutPerson{flex:1;min-width:0;position:relative;overflow:hidden;background:#f5e8df;border:1px solid #fff;border-radius:20px;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2vw,35px);transform:translateY(120vh);animation:cutUp .8s cubic-bezier(.2,.85,.2,1) forwards}
+.cutPerson:nth-child(3n+2){background:#eeeafb}.cutPerson:nth-child(3n){background:#e9f0e9}
+.cutPerson .party{font-size:12px;color:#8c7774;font-weight:800}.cutPerson .name{font-size:clamp(17px,2.1vw,30px);font-weight:900}.cutPerson .bigSlogan{font-size:clamp(21px,3.5vw,55px);line-height:1.25;font-weight:900;letter-spacing:-1.5px;overflow-wrap:anywhere}
+.cutPerson .ticker{font-size:12px;color:#8b8587;border-top:1px solid #cfc6c066;padding-top:13px;line-height:1.8}
+.cutPerson .portrait{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;background:#ffffff80;color:#8d8a8a;font-size:11px;margin:15px 0}
+#cutBlade{position:absolute;z-index:4;top:-120%;left:49%;height:250%;width:4px;background:linear-gradient(transparent,#fff 30%,#ed765a 50%,#fff 70%,transparent);transform:rotate(25deg);pointer-events:none}
+#cutWorld.show #cutBlade{animation:bladeSweep .9s ease-out forwards}
+#cutEnter{position:absolute;bottom:20px;right:5%;z-index:5;background:#272a32;color:white;border:0;border-radius:30px;padding:14px 22px;font-weight:900}
+#cityWorld{position:fixed;inset:0;z-index:55;background:#fbfaf7;display:none;overflow:hidden}
+#cityWorld.show{display:block}
+#cityWorld .cityHeader{height:68px;display:flex;justify-content:space-between;align-items:center;padding:0 4%;border-bottom:1px solid #e9e3dd}
+#cityWorld .cityHeader button{background:#fff;border:1px solid #e7e0d8;border-radius:30px;padding:10px 15px}
+#cityWorld .cityMain{display:grid;grid-template-columns:35% 65%;height:calc(100dvh - 68px)}
+#cityWorld .cityMenu{padding:7vh 5vw;border-right:1px solid #eae4dc;overflow:auto}
+#cityWorld .cityMenu h2{font-size:clamp(43px,5vw,80px);margin:12px 0}
+#cityWorld .cityMenu p{font-size:14px;line-height:1.9;color:#85858b}
+#cityWorld .cutNav{display:flex;flex-direction:column;gap:12px;margin-top:40px}
+#cityWorld .cutNav button{border:0;border-bottom:1px solid #e6e0d9;text-align:left;padding:14px 0;background:transparent;font-weight:900;font-size:18px}
+#cityWorld .cutNav button:before{content:'╱';color:#ed765a;margin-right:15px}
+#cityWorld .cityContent{padding:8vh 7vw;overflow:auto}
+#cityWorld .cityContent h3{font-size:clamp(30px,4vw,56px);line-height:1.2}
+#cityWorld .cityContent p{color:#7a7d84;line-height:1.9}
+#cityWorld .contentPiece{padding:20px 0;border-bottom:1px solid #e7e1db}
+#cityWorld .contentPiece strong{font-size:19px}
+@keyframes cutUp{to{transform:translateY(0)}}@keyframes bladeSweep{from{left:-30%}to{left:130%}}
+@media(max-width:720px){#cutWorld .cutTitle{font-size:35px;padding:17px 5% 6px}#cutWorld .cutGrid{height:calc(100dvh - 175px);display:flex;flex-wrap:wrap;align-content:center;gap:6px;padding:12px 3% 50px}.cutPerson{flex:0 1 calc(50% - 5px);min-height:150px;max-height:43%;padding:12px;border-radius:14px}.cutPerson .bigSlogan{font-size:clamp(18px,4.4vw,28px)}.cutPerson .portrait{width:35px;height:35px;margin:5px 0;font-size:8px}.cutPerson .ticker{font-size:9px}.cutPerson .party{font-size:10px}.cutPerson .name{font-size:15px}#cutEnter{bottom:9px;right:5%;padding:11px 17px}#cityWorld .cityMain{display:block;overflow:auto}#cityWorld .cityMenu{padding:20px 5%;border-right:0}#cityWorld .cityMenu h2{font-size:42px}#cityWorld .cutNav{flex-direction:row;overflow-x:auto;gap:18px;margin-top:15px}#cityWorld .cutNav button{white-space:nowrap;font-size:13px}#cityWorld .cityContent{padding:15px 5% 70px;overflow:visible}#cityWorld .cityContent h3{font-size:32px}}
+@media(prefers-reduced-motion:reduce){.cutPerson{animation:none;transform:none}#cutBlade{display:none}}
+</style>
+<div id="cutWorld" role="dialog" aria-modal="true" aria-label="全螢幕候選人口號"><div id="cutBlade"></div><div class="cutTop"><b>2026 選戰切一刀 / ELECTION CUT</b><button onclick="exitCut()">返回地圖 ×</button></div><div class="cutTitle" id="cutTitle"></div><div class="cutHint">候選人口號全螢幕登場／未驗證者不冒用口號</div><div class="cutGrid" id="cutGrid"></div><button id="cutEnter" onclick="enterCityWorld()">切入城市分析 ↗</button></div>
+<div id="cityWorld" role="dialog" aria-modal="true" aria-label="城市政治行銷橫切面"><div class="cityHeader"><b>2026 選戰切一刀</b><button onclick="exitCityWorld()">返回台灣地圖 ×</button></div><div class="cityMain"><div class="cityMenu"><span class="ey">ELECTION MARKETING / CITY CROSS SECTION</span><h2 id="cityWorldTitle"></h2><p>切開候選人口號，探索城市需求、政治品牌、媒體渠道與民意證據。</p><div class="cutNav" id="cutNav"></div></div><div class="cityContent" id="cityWorldContent"></div></div></div>
+<script>
+(function(){
+let selectedCut=0,cutSection=0;
+window.exitCut=function(){document.getElementById('cutWorld').classList.remove('show')};
+window.enterCityWorld=function(){document.getElementById('cutWorld').classList.remove('show');document.getElementById('cityWorld').classList.add('show');drawCityWorld()};
+window.exitCityWorld=function(){document.getElementById('cityWorld').classList.remove('show');document.getElementById('cutWorld').classList.remove('show')};
+window.drawCityWorld=function(){const c=C[selectedCut],sections=['城市需求','候選人口號','媒體布局','數據證據','歷屆對照'];document.getElementById('cityWorldTitle').textContent=c[0];document.getElementById('cutNav').innerHTML=sections.map((n,i)=>'<button data-section="'+i+'">'+n+'</button>').join('');document.querySelectorAll('#cutNav button').forEach(x=>x.onclick=()=>{cutSection=+x.dataset.section;drawCityWorld()});const b=document.getElementById('cityWorldContent');let pieces=[];if(cutSection===0)pieces=c[3].map(x=>[x,'城市條件與需求研究主題；需結合公開統計、政策原文及受眾調查才能確認訴求與選民需求的關係。']);if(cutSection===1)pieces=roster[selectedCut].map(x=>[x[0]+'｜'+(x[2]||'正式口號待查證'),x[1]+'；'+(x[3]||'尚無已核實的競選主口號。')]);if(cutSection===2)pieces=[['線上渠道','候選人官方社群、短影音、新聞素材；逐筆記錄日期、主張、互動與來源。'],['線下渠道','競總、造勢、掃街、廟口、市場活動；以已發生的公開紀錄為準。'],['成效辨識','聲量、觸及、民調及投票屬不同指標，不可互相代替。']];if(cutSection===3)pieces=[['民調與事件','原始調查尚需逐份核對機構、日期、樣本及問法，不以舊數據冒充最新。'],['媒體指標','待建立可比的貼文與活動紀錄，再計算渠道使用量與可觀測成效。']];if(cutSection===4)pieces=[['2022 年選舉','依中選會正式得票數及候選人素材建立歷史對照。'],['2026 年競選','以正式口號首發日期、政策主張及傳播素材建立動態年表。']];b.innerHTML='<div class="ey">THE CUT / 0'+(cutSection+1)+'</div><h3>'+sections[cutSection]+'</h3>'+pieces.map(([a,z])=>'<div class="contentPiece"><strong>'+a+'</strong><p>'+z+'</p></div>').join('')};
+window.showCutScene=function(i){selectedCut=i;cutSection=0;const c=C[i];document.getElementById('cutTitle').textContent=c[0]+'｜誰在定義這座城市？';const g=document.getElementById('cutGrid');g.innerHTML='';(roster[i]||[]).forEach((p,j)=>{let el=document.createElement('div');el.className='cutPerson';el.style.animationDelay=(j*.13)+'s';const party=document.createElement('div');party.className='party';party.textContent=p[1];const portrait=document.createElement('div');portrait.className='portrait';portrait.textContent='肖像待授權';const name=document.createElement('div');name.className='name';name.textContent=p[0];const slogan=document.createElement('div');slogan.className='bigSlogan';slogan.textContent=p[2]||'主打口號待查證';const ticker=document.createElement('div');ticker.className='ticker';ticker.textContent=p[3]||'尚無可核實的官方口號素材';el.append(party,portrait,name,slogan,ticker);g.appendChild(el)});document.getElementById('cutWorld').classList.add('show')};
+window.openCity=window.showCutScene;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){exitCut();exitCityWorld()}});
+})();
 </script></body></html>
