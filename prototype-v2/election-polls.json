@@ -1,0 +1,116 @@
+{
+  "asOf": "2026-10-17",
+  "method": "Public poll results; do not combine different methodologies into a single inferred trend",
+  "regions": [
+    {
+      "city": "臺北",
+      "polls": [
+        {
+          "end": "2026-05-27",
+          "pollster": "TVBS",
+          "method": "市話隨機",
+          "sample": null,
+          "results": {
+            "蔣萬安": 58,
+            "沈伯洋": 30
+          },
+          "source": "https://cc.tvbs.com.tw/portal/file/poll_center/2026/20260527/87ed4a7009e43fa1cea459b7f1785f83.pdf"
+        },
+        {
+          "end": "2026-09-18",
+          "pollster": "畢肯",
+          "method": "市話及手機隨機",
+          "sample": 1076,
+          "results": {
+            "蔣萬安": 41.7,
+            "沈伯洋": 40.5
+          },
+          "source": "https://poll-tw.com/taipei"
+        },
+        {
+          "end": "2026-10-07",
+          "pollster": "TVBS",
+          "method": "市話隨機",
+          "sample": 1120,
+          "results": {
+            "蔣萬安": 49,
+            "沈伯洋": 41
+          },
+          "source": "https://news.tvbs.com.tw/politics/4033527"
+        }
+      ],
+      "otherMetrics": [
+        {
+          "date": "2026-10-15",
+          "question": "電視辯論表現看好度（非投票意向）",
+          "results": {
+            "沈伯洋": 41,
+            "蔣萬安": 30
+          },
+          "sample": 1131,
+          "source": "https://news.tvbs.com.tw/politics/4037282"
+        }
+      ]
+    },
+    {
+      "city": "高雄",
+      "polls": [
+        {
+          "end": "2026-04-29",
+          "pollster": "山水民意／上報",
+          "method": "市話及手機隨機",
+          "sample": 2027,
+          "results": {
+            "賴瑞隆": 47,
+            "柯志恩": 30.7
+          },
+          "source": "https://poll-tw.com/kaohsiung"
+        },
+        {
+          "end": "2026-06-09",
+          "pollster": "大地民意／鏡新聞",
+          "method": "市話分層抽樣",
+          "sample": 1116,
+          "results": {
+            "賴瑞隆": 45.1,
+            "柯志恩": 24.8
+          },
+          "source": "https://poll-tw.com/kaohsiung"
+        },
+        {
+          "end": "2026-07-18",
+          "pollster": "年代民調",
+          "method": "市話隨機",
+          "sample": 1071,
+          "results": {
+            "賴瑞隆": 36.2,
+            "柯志恩": 23.6
+          },
+          "source": "https://poll-tw.com/kaohsiung"
+        },
+        {
+          "end": "2026-07-20",
+          "pollster": "山水民意／震傳媒",
+          "method": "市話隨機",
+          "sample": 1069,
+          "results": {
+            "賴瑞隆": 39.6,
+            "柯志恩": 31.6
+          },
+          "source": "https://poll-tw.com/kaohsiung"
+        },
+        {
+          "end": "2026-08-30",
+          "pollster": "ETtoday民調雲",
+          "method": "非隨機網路樣本",
+          "sample": 1283,
+          "results": {
+            "賴瑞隆": 43.5,
+            "柯志恩": 43.8
+          },
+          "source": "https://poll-tw.com/kaohsiung"
+        }
+      ]
+    }
+  ]
+}
