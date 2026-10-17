@@ -114,4 +114,47 @@ const line=document.createElementNS(svgNS,'line');line.setAttribute('class','tai
 group.append(circle,dot,line,label);group.addEventListener('click',e=>{e.stopPropagation();openCity(0)});map.append(group);
 },250);setTimeout(()=>clearInterval(wait),12000);
 })();
+</script><style>
+.cityAtlas{margin:25px 0;padding:24px;border:1px solid #e8e1d9;background:#fff;border-radius:20px}
+.cityAtlas h4{font-size:24px;margin:12px 0}.atlasControls{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
+.atlasControls button{background:#f7f5f1;border:1px solid #e7e0d9;padding:8px 12px;border-radius:20px;font-size:12px}
+.atlasControls button.active{background:#272b33;color:white}
+.atlasStage{height:290px;position:relative;background:radial-gradient(ellipse at center,#e6e1d8,#f8f7f3);border-radius:15px;overflow:hidden;perspective:800px}
+.atlasStage .cityModel{position:absolute;inset:10%;transform-style:preserve-3d;transform:rotateX(56deg) rotateZ(-25deg);animation:atlasTurn 17s linear infinite}
+.atlasStage .cityModel .zone{position:absolute;background:#b5c3b9;border:2px solid #fff;border-radius:9px;box-shadow:8px 10px 0 #9ba89d,12px 14px 15px #756b6240;display:flex;align-items:center;justify-content:center;padding:7px;font-size:12px;font-weight:900;text-align:center;cursor:pointer}
+.atlasStage .cityModel .zone:nth-child(2n){background:#e5b69d;box-shadow:8px 10px 0 #b18c79,12px 14px 15px #756b6240}
+.atlasStage .cityModel .zone:nth-child(1){left:30%;top:5%;width:35%;height:21%}
+.atlasStage .cityModel .zone:nth-child(2){left:11%;top:29%;width:40%;height:21%}
+.atlasStage .cityModel .zone:nth-child(3){left:53%;top:33%;width:38%;height:24%}
+.atlasStage .cityModel .zone:nth-child(4){left:20%;top:65%;width:36%;height:20%}
+.atlasStage .cityModel .zone:nth-child(5){left:60%;top:67%;width:31%;height:20%}
+.atlasStage.paused .cityModel{animation-play-state:paused}
+.atlasDetail{font-size:13px;line-height:1.8;color:#666f78;margin-top:14px}
+.atlasTimeline{display:flex;overflow-x:auto;gap:10px;padding:14px 0}
+.atlasTimeline button{min-width:105px;background:#f8f5f0;border:1px solid #e8e1d9;border-radius:14px;padding:14px;text-align:left;font-weight:900}
+.atlasTimeline button.active{background:#272b33;color:white}
+.atlasMetric{display:flex;gap:10px;flex-wrap:wrap}
+.atlasMetric div{background:#f8f5f0;padding:14px;border-radius:12px;flex:1 1 100px}
+.atlasMetric strong{font-size:23px;display:block}
+@keyframes atlasTurn{to{transform:rotateX(56deg) rotateZ(335deg)}}
+@media(prefers-reduced-motion:reduce){.atlasStage .cityModel{animation:none}}
+</style>
+<script>
+(function(){
+let atlas=null,era=4,zone=0,paused=false;
+fetch('./kaohsiung-city-atlas.json').then(r=>r.ok?r.json():Promise.reject(Error('atlas'))).then(d=>{atlas=d}).catch(()=>{});
+const oldRender=render;
+render=function(){oldRender();if(selected!==5||!atlas||tab!==0)return;
+const root=document.getElementById('content');
+const shell=document.createElement('section');shell.className='cityAtlas';
+shell.innerHTML='<div style="font-size:11px;color:#c16f55;font-weight:900">KAOHSIUNG / CITY EVOLUTION LAB</div><h4>一座城市，四十年的轉型。</h4><p>從港都工業、路竹科技園區到楠梓先進晶圓製造。點擊年代與產業區塊，理解候選人政見面對的城市結構。</p><div class="atlasTimeline" id="atlasTimeline"></div><div class="atlasControls"><button id="atlasSpin">暫停／旋轉</button><button id="atlasSketch">切換線稿</button></div><div class="atlasStage" id="atlasStage"><div class="cityModel" id="cityModel"></div></div><div class="atlasDetail" id="atlasDetail"></div><div class="atlasMetric" id="atlasMetric"></div><p style="font-size:11px;color:#98949b">目前為產業關係示意模型，非真實地形或建築比例。正式 GIS 3D 模型尚未建置。</p>';
+root.prepend(shell);
+const timeline=shell.querySelector('#atlasTimeline');atlas.eras.forEach((e,i)=>{const b=document.createElement('button');b.textContent=e.year;b.className=i===era?'active':'';b.onclick=()=>{era=i;render()};timeline.append(b)});
+const model=shell.querySelector('#cityModel');atlas.zones.forEach((z,i)=>{const b=document.createElement('button');b.className='zone';b.textContent=z.name;b.onclick=()=>{zone=i;update()};model.append(b)});
+const stage=shell.querySelector('#atlasStage');stage.classList.toggle('paused',paused);shell.querySelector('#atlasSpin').onclick=()=>{paused=!paused;stage.classList.toggle('paused',paused)};
+shell.querySelector('#atlasSketch').onclick=()=>{model.querySelectorAll('.zone').forEach(x=>{x.style.background=x.style.background?'':'transparent';x.style.borderColor='#8877b1'})};
+function update(){const z=atlas.zones[zone],e=atlas.eras[era];shell.querySelector('#atlasDetail').innerHTML='<strong>'+e.year+'｜'+e.label+'</strong><p>'+e.note+'</p><strong>'+z.name+'｜'+z.role+'</strong><p>'+z.detail+'</p>'}
+update();const metrics=shell.querySelector('#atlasMetric');atlas.metrics.forEach(m=>{const el=document.createElement('div');el.innerHTML='<strong>'+m.value+'</strong><span>'+m.unit+'｜'+m.label+'</span>';metrics.append(el)});
+};
+})();
 </script></html>
