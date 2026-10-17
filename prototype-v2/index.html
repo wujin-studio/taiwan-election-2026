@@ -356,4 +356,36 @@ eventData.events.filter(e=>filter==='全部'||e.candidate===filter).sort((a,b)=>
 #scene .card .ticker{font-size:11px!important;min-height:0!important;padding-top:7px!important}
 #scene .card .source{font-size:9px!important}
 }
-</style></html>
+</style><style>
+#deepResearch{margin:25px 0 40px;padding:20px;background:#fff;border:1px solid #e9e1d9;border-radius:18px}
+#deepResearch h4{font-size:clamp(24px,3vw,34px);margin:8px 0 18px}
+#deepResearch .eraGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#deepResearch .era{padding:13px;border-radius:12px;background:#f7f3ee;border-top:3px solid #df8e75}
+#deepResearch .era b{font-size:12px;color:#b96c52}#deepResearch .era p{font-size:12px;line-height:1.6}
+#deepResearch .candidateResearch{padding:15px 0;border-bottom:1px solid #e7e1da}
+#deepResearch .candidateResearch strong{font-size:20px}
+#deepResearch .candidateResearch p{font-size:13px;line-height:1.85;color:#6d717a}
+#deepResearch .analytical{padding:12px;background:#f6f0e9;border-radius:9px}
+@media(max-width:720px){#deepResearch .eraGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<script>
+(function(){
+let deep=null;
+fetch('./city-deep-research.json').then(r=>r.ok?r.json():Promise.reject(Error('research'))).then(d=>deep=d).catch(()=>{});
+const previousRender=render;
+render=function(){
+previousRender();
+if(!deep||tab!==0)return;
+const city=deep.regions.find(r=>r.city===C[selected][0]);if(!city)return;
+const root=document.getElementById('content'),section=document.createElement('section');section.id='deepResearch';
+const eyebrow=document.createElement('small');eyebrow.textContent='CITY EVOLUTION × CAMPAIGN STRATEGY';
+const heading=document.createElement('h4');heading.textContent='城市發展如何變成選戰議題？';section.append(eyebrow,heading);
+const grid=document.createElement('div');grid.className='eraGrid';
+city.eras.forEach(e=>{const el=document.createElement('div');el.className='era';const year=document.createElement('b');year.textContent=e.period;const desc=document.createElement('p');desc.textContent=e.summary;el.append(year,desc);grid.append(el)});section.append(grid);
+const heading2=document.createElement('h4');heading2.textContent='候選人政見 × 受眾 × 政治品牌';section.append(heading2);
+city.candidates.forEach(c=>{const el=document.createElement('div');el.className='candidateResearch';const name=document.createElement('strong');name.textContent=c.name+'｜'+c.theme;const policy=document.createElement('p');policy.textContent='政策內容：'+c.details;const need=document.createElement('p');need.textContent='對應城市需求：'+c.need;const marketing=document.createElement('p');marketing.className='analytical';marketing.textContent='行銷解讀：'+c.marketing;el.append(name,policy,need,marketing);section.append(el)});
+const foot=document.createElement('p');foot.style.fontSize='11px';foot.style.color='#98939a';foot.textContent='資料截至2026/10/17，依使用者提供資料建立研究框架，尚未逐項獨立核對；候選人政見以官方選舉公報為準。';section.append(foot);
+root.prepend(section);
+};
+})();
+</script></html>
