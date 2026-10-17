@@ -1,0 +1,69 @@
+{
+  "updated": "2026-10-18",
+  "definitions": {
+    "mentions": "跨 Threads、Facebook、媒體、論壇的候選人提及篇數，非官方帳號觸及或粉絲數",
+    "negative": "監測系統情緒分類比例，非選民負面評價率",
+    "posts": "候選人本人帳號在 Facebook 與 Threads 的發文數，非所有平台總貼文",
+    "engagement": "未取得各候選人可核實粉絲數、每篇互動數與觸及，不能計算互動率"
+  },
+  "observations": [
+    {
+      "city": "臺北",
+      "period": "2026-10-05/2026-10-11",
+      "candidate": "蔣萬安",
+      "posts": 7,
+      "top20ThreadsOwn": 0,
+      "fbAvgComments": 93,
+      "threadsAvgComments": 27,
+      "source": "https://www.qsearch.cc/blog/2026/10/taipei-mayor-2026-social-volume-1005-1011/"
+    },
+    {
+      "city": "臺北",
+      "period": "2026-10-05/2026-10-11",
+      "candidate": "沈伯洋",
+      "posts": 65,
+      "top20ThreadsOwn": 14,
+      "fbAvgComments": 99,
+      "threadsAvgComments": 27,
+      "source": "https://www.qsearch.cc/blog/2026/10/taipei-mayor-2026-social-volume-1005-1011/"
+    },
+    {
+      "city": "新北",
+      "period": "2026-10-05/2026-10-11",
+      "candidate": "李四川",
+      "mentions": 3167,
+      "changePct": -8.3,
+      "positivePct": 23.2,
+      "negativePct": 38.8,
+      "channels": {
+        "threads": 16.4,
+        "facebook": 27,
+        "media": 49.5,
+        "forums": 7.1
+      },
+      "posts": 34,
+      "fbAvgComments": 67,
+      "threadsAvgComments": 40,
+      "source": "https://www.qsearch.cc/blog/2026/10/newtaipei-mayor-2026-social-volume-1005-1011/"
+    },
+    {
+      "city": "新北",
+      "period": "2026-10-05/2026-10-11",
+      "candidate": "蘇巧慧",
+      "mentions": 3331,
+      "changePct": -24.6,
+      "positivePct": 38.5,
+      "negativePct": 29.9,
+      "channels": {
+        "threads": 27,
+        "facebook": 23.2,
+        "media": 45.3,
+        "forums": 4.5
+      },
+      "posts": 50,
+      "fbAvgComments": 50,
+      "threadsAvgComments": 22,
+      "source": "https://www.qsearch.cc/blog/2026/10/newtaipei-mayor-2026-social-volume-1005-1011/"
+    }
+  ]
+}
