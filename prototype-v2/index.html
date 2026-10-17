@@ -210,4 +210,69 @@ function installAtlas(){
 const observer=new MutationObserver(()=>{if(document.querySelector('.cityAtlas .atlasStage:not([data-drag-ready])'))installAtlas()});
 observer.observe(document.getElementById('content'),{childList:true,subtree:true});
 })();
+</script><style>
+#policyLab{margin:15px 0 35px;border-top:2px solid #e47758;padding-top:22px}
+#policyLab h4{font-size:clamp(24px,3vw,36px);margin:8px 0 20px}
+#policyLab .policyTabs{display:flex;gap:7px;overflow-x:auto;padding:8px 0 15px}
+#policyLab .policyTabs button{white-space:nowrap;border:1px solid #e6ded6;background:white;border-radius:20px;padding:9px 13px;font-size:12px}
+#policyLab .policyTabs button.active{background:#292b33;color:#fff}
+#policyLab .policyGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#policyLab .policyColumn{padding:18px;background:#fff;border:1px solid #e8e1d9;border-radius:16px}
+#policyLab .policyColumn h5{font-size:22px;margin:8px 0}
+#policyLab .policyColumn .policySlogan{font-size:13px;font-weight:800;color:#c56e52}
+#policyLab .policyColumn strong{font-size:17px;display:block;margin:15px 0 8px}
+#policyLab .policyColumn p,#policyLab .policyColumn li{font-size:13px;line-height:1.8;color:#6d727c}
+#policyLab .policyColumn ul{padding-left:20px}
+#policyLab .policyColumn .marketing{padding:12px;background:#f8f4ef;border-radius:10px}
+#policyLab .policyColumn a{font-size:12px;color:#bc674f}
+#policyLab .policyFoot{font-size:11px;color:#929096;line-height:1.8}
+#city3d{margin:20px 0;border:1px solid #e9e0d7;border-radius:20px;overflow:hidden;background:#f5f2ed}
+#city3d .head{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+#city3d .head strong{font-size:18px}
+#city3d .head small{font-size:11px;color:#8b8584}
+#city3d canvas{display:block;width:100%;height:330px;touch-action:none}
+#city3d .legend{padding:12px 20px;font-size:12px;color:#7b7e84}
+@media(max-width:700px){#policyLab .policyGrid{grid-template-columns:1fr}#city3d canvas{height:260px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+<script>
+(function(){
+let policyData=null,chosenCategory='產業與科技',map3d=null;
+fetch('./kaohsiung-policies.json').then(r=>r.ok?r.json():Promise.reject(Error('policy'))).then(x=>policyData=x).catch(()=>{});
+function policySection(){
+if(selected!==5||!policyData||tab!==0)return;
+const root=document.getElementById('content');
+const el=document.createElement('section');el.id='policyLab';
+el.innerHTML='<div class="ey">POLICY CROSS SECTION / KAOHSIUNG</div><h4>兩位候選人，如何回應同一座城市？</h4><div class="policyTabs"></div><div class="policyGrid"></div><p class="policyFoot">政見為候選人提出的主張，並非已實施成果；行銷解讀與客觀政策內容分開呈現。</p>';
+root.prepend(el);
+const categories=[...new Set(policyData.candidates.flatMap(c=>c.policies.map(p=>p.category)))],tabs=el.querySelector('.policyTabs'),grid=el.querySelector('.policyGrid');
+function draw(){tabs.replaceChildren();grid.replaceChildren();categories.forEach(cat=>{const b=document.createElement('button');b.textContent=cat;b.className=cat===chosenCategory?'active':'';b.onclick=()=>{chosenCategory=cat;draw()};tabs.append(b)});policyData.candidates.forEach(c=>{const p=c.policies.find(x=>x.category===chosenCategory);const card=document.createElement('div');card.className='policyColumn';const name=document.createElement('h5');name.textContent=c.name;const slogan=document.createElement('div');slogan.className='policySlogan';slogan.textContent=c.slogan;card.append(name,slogan);if(p){const title=document.createElement('strong');title.textContent=p.title;card.append(title);const ul=document.createElement('ul');p.details.forEach(s=>{const li=document.createElement('li');li.textContent=s;ul.append(li)});card.append(ul);const audience=document.createElement('p');audience.textContent='關聯受眾：'+p.audience;const marketing=document.createElement('p');marketing.className='marketing';marketing.textContent='行銷橫切面：'+p.marketing;card.append(audience,marketing);p.sources.forEach((u,i)=>{const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.textContent='原始來源 '+(i+1)+' ↗　';card.append(a)})}else{const p=document.createElement('p');p.textContent='此分類的具體政見仍待原始資料核對。';card.append(p)}grid.append(card)})}
+draw();
+}
+function city3d(){
+if(selected!==5||tab!==0||!window.THREE)return;
+const root=document.getElementById('content'),wrap=document.createElement('section');wrap.id='city3d';wrap.innerHTML='<div class="head"><strong>高雄｜3D 行政區輪廓</strong><small>拖曳旋轉／縮放</small></div><div class="canvasHost"></div><div class="legend">真實高雄市縣市邊界擠出模型（非建築物實景）；城市園區位置與真實建物模型待補 GIS 資料。</div>';root.prepend(wrap);
+const host=wrap.querySelector('.canvasHost');const width=host.clientWidth||500,height=330;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xf5f2ed);
+const camera=new THREE.PerspectiveCamera(42,width/height,.1,500);camera.position.set(0,17,27);camera.lookAt(0,0,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(width,height);host.append(renderer.domElement);
+scene.add(new THREE.AmbientLight(0xffffff,2));const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(6,15,10);scene.add(light);
+const mat=new THREE.MeshStandardMaterial({color:0xe89472,roughness:.8,metalness:.05,side:THREE.DoubleSide});
+let mesh=null,drag=false,lastX=0,lastY=0,rotY=-.25,rotX=-.7,auto=true;
+fetch('./taiwan-counties.topo.json').then(r=>r.json()).then(t=>{
+const f=topojson.feature(t,t.objects.map).features.find(x=>x.properties.id==='64000');if(!f)throw Error('Missing Kaohsiung');
+const polys=f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[f.geometry.coordinates];
+const group=new THREE.Group();
+polys.forEach(poly=>{const outer=poly[0];if(outer.length<3)return;const shape=new THREE.Shape();outer.forEach(([lon,lat],i)=>{const x=(lon-120.55)*20,y=(lat-22.95)*20;i?shape.lineTo(x,y):shape.moveTo(x,y)});shape.closePath();for(const hole of poly.slice(1)){const p=new THREE.Path();hole.forEach(([lon,lat],i)=>{const x=(lon-120.55)*20,y=(lat-22.95)*20;i?p.lineTo(x,y):p.moveTo(x,y)});shape.holes.push(p)}const geo=new THREE.ExtrudeGeometry(shape,{depth:.8,bevelEnabled:true,bevelThickness:.07,bevelSize:.06,bevelSegments:1,steps:1});group.add(new THREE.Mesh(geo,mat))});
+const bounds=new THREE.Box3().setFromObject(group),center=bounds.getCenter(new THREE.Vector3());group.position.sub(center);group.rotation.x=-Math.PI/2;scene.add(group);mesh=group;
+}).catch(()=>{wrap.querySelector('.legend').textContent='高雄地理模型資料載入失敗，請稍後重新整理。'});
+renderer.domElement.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});
+renderer.domElement.addEventListener('pointermove',e=>{if(!drag)return;rotY+=(e.clientX-lastX)*.009;rotX=Math.max(-1.4,Math.min(-.15,rotX+(e.clientY-lastY)*.007));lastX=e.clientX;lastY=e.clientY});
+renderer.domElement.addEventListener('pointerup',()=>drag=false);
+renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();camera.position.multiplyScalar(e.deltaY>0?1.06:.94)},{passive:false});
+let frame=0;function animate(){if(!document.contains(wrap)){renderer.dispose();return}frame=requestAnimationFrame(animate);if(mesh){if(!drag)rotY+=.0018;mesh.rotation.y=rotY;mesh.rotation.x=-Math.PI/2+rotX*.3}renderer.render(scene,camera)}animate();
+}
+const previous=render;
+render=function(){previous();policySection();city3d()};
+})();
 </script></html>
