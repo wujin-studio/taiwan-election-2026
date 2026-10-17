@@ -1,0 +1,166 @@
+{
+  "asOf": "2026-10-17",
+  "provenance": "User-supplied news descriptions; source images not licensed or copied; descriptions are not original campaign artwork",
+  "visuals": [
+    {
+      "city": "臺北",
+      "name": "蔣萬安",
+      "slogan": "台北安可",
+      "palette": "亮藍＋黃色",
+      "imagery": "都會能量與安居樂業",
+      "source": "https://www.cna.com.tw/news/aipl/202609290204.aspx",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "臺北",
+      "name": "沈伯洋",
+      "slogan": "台北順起來",
+      "palette": "黑、橘、綠",
+      "imagery": "奔奔、抱抱；原主視覺曾下架",
+      "source": "https://www.cna.com.tw/news/aloc/202608250080.aspx",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "新北",
+      "name": "李四川",
+      "slogan": "新北世界級",
+      "palette": "橋樑、工程插畫",
+      "imagery": "川伯扛榔頭",
+      "source": "https://www.chinatimes.com/realtimenews/20260527003586-260407",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "新北",
+      "name": "蘇巧慧",
+      "slogan": "溫暖、創新、會做事",
+      "palette": "愛心、燈泡、閃電",
+      "imagery": "動態視覺、放射燈箱",
+      "source": "https://www.fountmedia.io/article/430570",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "桃園",
+      "name": "張善政",
+      "slogan": "桃園前進，繼續挺善良",
+      "palette": "白底、簡潔文字",
+      "imagery": "政績延續",
+      "source": "https://news.ltn.com.tw/news/politics/breakingnews/5601536",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "桃園",
+      "name": "黃世杰",
+      "slogan": "心桃園，新市長",
+      "palette": "綠底白字",
+      "imagery": "新世代與城市更新",
+      "source": "https://news.ltn.com.tw/news/politics/breakingnews/5601536",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "臺中",
+      "name": "江啟臣",
+      "slogan": "打造臺中旗艦城",
+      "palette": "圍棋、啟程號角",
+      "imagery": "戰略布局、國際城市",
+      "source": "https://udn.com/news/story/7325/9791625",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "臺中",
+      "name": "何欣純",
+      "slogan": "六星市政168",
+      "palette": "粉紅＋紫色",
+      "imagery": "欣潮、純派飄帶",
+      "source": "https://www.cna.com.tw/news/aipl/202610140288.aspx",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "臺南",
+      "name": "謝龍介",
+      "slogan": "翻轉大台南，人民贏一次",
+      "palette": "鐵皮屋、庶民感",
+      "imagery": "基層、接地氣",
+      "source": "https://www.chinatimes.com/realtimenews/20260920001973-260407",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "臺南",
+      "name": "陳亭妃",
+      "slogan": "妃常幸福",
+      "palette": "綠＋桃紅",
+      "imagery": "跑道、數字1、泰迪熊牆",
+      "source": "https://www.ettoday.net/news/20260910/3235050.htm",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "高雄",
+      "name": "柯志恩",
+      "slogan": "夢想海港・世界雄心",
+      "palette": "科技藍、豐收黃、豔陽紅、海洋青",
+      "imagery": "海港與世界雄心",
+      "source": "https://udn.com/news/story/124652/9807165",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "高雄",
+      "name": "賴瑞隆",
+      "slogan": "南方崛起、邁向國際",
+      "palette": "桃紅色",
+      "imagery": "市政願景公車、接棒",
+      "source": "https://udn.com/news/story/124652/9672080",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "屏東",
+      "name": "周春米",
+      "slogan": "希望城市・屏東亮起來",
+      "palette": "太陽、晶片、米字",
+      "imagery": "農業科技融合",
+      "source": "https://www.chinatimes.com/realtimenews/20261013002830-260407",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "屏東",
+      "name": "蘇清泉",
+      "slogan": null,
+      "palette": "未見正式主視覺",
+      "imagery": "屏東好未來音樂會非正式主視覺",
+      "source": "https://udn.com/news/story/124652/9821272",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "屏東市",
+      "name": "周佳琪",
+      "slogan": "安居樂業好生活",
+      "palette": "待補官方原始素材",
+      "imagery": "基層治理與生活",
+      "source": "https://udn.com/news/story/124652/9735138",
+      "asset": null,
+      "status": "reference_only"
+    },
+    {
+      "city": "屏東市",
+      "name": "梁育慈",
+      "slogan": "屏東市要做事，梁育慈會做事",
+      "palette": "待補官方原始素材",
+      "imagery": "縣市同一隊",
+      "source": "https://news.ltn.com.tw/news/politics/breakingnews/5571638",
+      "asset": null,
+      "status": "reference_only"
+    }
+  ]
+}
