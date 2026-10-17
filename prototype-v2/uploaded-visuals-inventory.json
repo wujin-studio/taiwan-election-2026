@@ -1,0 +1,86 @@
+{
+  "asOf": "2026-10-18",
+  "note": "User supplied ten image files. Filenames are local attachments; NOT yet GitHub-hosted URLs. Never treat a campaign event photograph or city-government banner as the candidate's official primary brand artwork.",
+  "images": [
+    {
+      "file": "IMG_6086.jpeg",
+      "candidate": "沈伯洋",
+      "city": "臺北",
+      "kind": "campaign_artwork",
+      "text": "台北大洋流",
+      "notes": "橘黑白視覺；洋流船舶圖像；與主口號台北順起來分別標示"
+    },
+    {
+      "file": "IMG_6087.jpeg",
+      "candidate": "蔣萬安",
+      "city": "臺北",
+      "kind": "campaign_logo",
+      "text": "台北安可",
+      "notes": "藍黃圖形標誌"
+    },
+    {
+      "file": "IMG_6093.jpeg",
+      "candidate": "蘇巧慧",
+      "city": "新北",
+      "kind": "campaign_artwork",
+      "text": "溫暖 創新 會做事",
+      "notes": "淺珊瑚色主標準字"
+    },
+    {
+      "file": "IMG_6094.jpeg",
+      "candidate": null,
+      "city": "桃園",
+      "kind": "city_government_artwork",
+      "text": "未來，從桃園開始",
+      "notes": "市府形象視覺，不得直接標成張善政或黃世杰的競選主視覺"
+    },
+    {
+      "file": "IMG_6098.jpeg",
+      "candidate": "謝龍介",
+      "city": "臺南",
+      "kind": "policy_ad",
+      "text": "翻轉大臺南 人民贏一次",
+      "notes": "育兒津貼政策宣傳；屬政策廣告而非純品牌主視覺"
+    },
+    {
+      "file": "IMG_6099.jpeg",
+      "candidate": "何欣純",
+      "city": "臺中",
+      "kind": "campaign_artwork",
+      "text": "台中 行動 溫度 創新",
+      "notes": "粉紫配色與人物形象"
+    },
+    {
+      "file": "IMG_6101.jpeg",
+      "candidate": "陳亭妃",
+      "city": "臺南",
+      "kind": "campaign_event_photo",
+      "text": "台南400年第一女市長",
+      "notes": "活動現場照片，不能冒充正式主視覺"
+    },
+    {
+      "file": "IMG_6102.jpeg",
+      "candidate": "賴瑞隆",
+      "city": "高雄",
+      "kind": "campaign_artwork",
+      "text": "南方崛起 邁向國際",
+      "notes": "桃紅人物海報"
+    },
+    {
+      "file": "IMG_6103.jpeg",
+      "candidate": "柯志恩",
+      "city": "高雄",
+      "kind": "campaign_billboard",
+      "text": "這柯不一樣 柯志恩",
+      "notes": "藍黃戶外看板"
+    },
+    {
+      "file": "IMG_6106.jpeg",
+      "candidate": "周春米",
+      "city": "屏東",
+      "kind": "campaign_event_photo",
+      "text": "希望城市 屏東亮起來",
+      "notes": "競選團隊與品牌圖形實體展示，非平面主視覺原檔"
+    }
+  ]
+}
