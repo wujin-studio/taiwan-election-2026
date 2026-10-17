@@ -464,4 +464,35 @@ const foot=document.createElement('p');foot.className='mFoot';foot.textContent='
 };
 function injectTab(){const tabs=document.getElementById('tabs');if(!tabs||tabs.querySelector('.marketingTab'))return;const b=document.createElement('button');b.className='marketingTab';b.textContent='╱ 行銷橫切面';b.onclick=()=>{tab=5;render()};tabs.prepend(b)}
 })();
+</script><style>
+#pollLab{margin:18px 0 32px;padding:20px;background:#fff;border:1px solid #e9e1d8;border-radius:18px}
+#pollLab h4{font-size:clamp(22px,3vw,34px);margin:6px 0 14px}
+#pollLab .pollOptions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+#pollLab .pollOptions button{padding:9px 12px;border-radius:20px;border:1px solid #e8ded5;background:#fff;font-size:12px}
+#pollLab .pollOptions button.active{background:#282b34;color:#fff}
+#pollLab .pollChart{display:flex;align-items:end;gap:12px;min-height:180px;border-bottom:1px solid #ddd8d0;padding:14px 10px}
+#pollLab .pollCol{flex:1;text-align:center;font-size:12px}
+#pollLab .pollBar{margin:6px auto 0;width:75%;max-width:110px;border-radius:9px 9px 0 0;background:#e0a38e;transition:height .5s}
+#pollLab .pollCol:nth-child(2) .pollBar{background:#a2b7ae}
+#pollLab .pollValue{font-size:21px;font-weight:900}
+#pollLab .pollFoot{font-size:11px;color:#87848a;line-height:1.7;margin-top:14px}
+#pollLab .pollFoot a{color:#b56e54}
+</style>
+<script>
+(function(){
+let polls=null,pollIndex=0;
+fetch('./election-polls.json').then(r=>r.ok?r.json():Promise.reject(Error('polls'))).then(d=>polls=d).catch(()=>{});
+const old=render;
+render=function(){
+old();if(!polls||tab!==5)return;
+const region=polls.regions.find(x=>x.city===C[selected][0]);if(!region)return;
+const root=document.getElementById('marketingPanel');if(!root)return;
+const box=document.createElement('section');box.id='pollLab';const title=document.createElement('h4');title.textContent='民調對決｜逐次觀測';box.append(title);
+const options=document.createElement('div');options.className='pollOptions';const chart=document.createElement('div');chart.className='pollChart';const note=document.createElement('div');note.className='pollFoot';box.append(options,chart,note);
+region.polls.forEach((p,i)=>{const b=document.createElement('button');b.textContent=p.end+' · '+p.pollster;b.className=i===pollIndex?'active':'';b.onclick=()=>{pollIndex=i;render()};options.append(b)});
+const p=region.polls[Math.min(pollIndex,region.polls.length-1)];Object.entries(p.results).forEach(([name,value])=>{const col=document.createElement('div');col.className='pollCol';const val=document.createElement('div');val.className='pollValue';val.textContent=value+'%';const bar=document.createElement('div');bar.className='pollBar';bar.style.height=(value*2.3)+'px';const label=document.createElement('div');label.textContent=name;col.append(val,bar,label);chart.append(col)});
+const src=document.createElement('a');src.href=p.source;src.target='_blank';src.rel='noopener';src.textContent='原始民調來源 ↗';note.textContent='調查截止：'+p.end+'｜機構：'+p.pollster+'｜方法：'+p.method+'｜樣本：'+(p.sample||'未列')+'。不同機構與非機率網路樣本不可直接解讀為同一追蹤民調。 ';note.append(src);
+root.insertBefore(box,root.querySelector('.mFoot'));
+};
+})();
 </script></html>
