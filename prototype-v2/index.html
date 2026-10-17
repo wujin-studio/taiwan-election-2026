@@ -557,4 +557,32 @@ if(marketing){
 #scene .card:nth-child(n+3) .slogan{margin:12px 0!important;font-size:18px!important}
 #scene .card:nth-child(n+3) .portraitPhoto,#scene .card:nth-child(n+3) .portraitMissing{display:none!important}
 @media(max-width:700px){#scene .cards{height:calc(100dvh - 165px)!important;gap:7px!important}#scene .card{padding:10px!important}#scene .card .name{font-size:18px!important}#scene .card .portraitPhoto{top:52px!important;right:9px!important;width:53px!important;height:63px!important}#scene .card .portraitMissing{top:52px!important;right:8px!important}#scene .card .slogan{margin:78px 0 0!important;font-size:clamp(23px,6vw,34px)!important;letter-spacing:-.6px!important}#scene .card .ticker{font-size:11px!important}}
-</style></html>
+</style><style>
+#mediaIntel{padding:22px;margin:20px 0;background:#fff;border:1px solid #e8e1d9;border-radius:20px}
+#mediaIntel h3{font-size:clamp(24px,3vw,34px);margin:8px 0}
+#mediaIntel .mediaCards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+#mediaIntel .mediaCard{padding:17px;border:1px solid #e6e0d9;border-radius:15px;background:#faf8f4}
+#mediaIntel .mediaCard h4{font-size:21px;margin:4px 0 12px}
+#mediaIntel .mediaChannels{display:flex;flex-wrap:wrap;gap:7px}
+#mediaIntel .mediaChannels a{font-size:12px;padding:8px 10px;border:1px solid #ddd7d0;border-radius:18px;color:#b66b52;text-decoration:none;background:white}
+#mediaIntel .mediaInsight{font-size:13px;line-height:1.8;color:#696d75;margin:13px 0}
+#mediaIntel .mediaNote{font-size:11px;color:#8b8990;line-height:1.7}
+@media(max-width:650px){#mediaIntel .mediaCards{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+let social=null;
+fetch('./candidate-social-channels.json').then(r=>r.ok?r.json():Promise.reject(Error('social'))).then(d=>social=d).catch(()=>{});
+const previousRender=render;
+render=function(){
+previousRender();
+if(!social||tab!==5)return;
+const marketing=document.getElementById('marketingPanel');if(!marketing)return;
+const region=social.regions.find(r=>r.city===C[selected][0]);if(!region)return;
+const section=document.createElement('section');section.id='mediaIntel';const head=document.createElement('h3');head.textContent='媒體布局｜平台角色與內容驗證';section.append(head);
+const grid=document.createElement('div');grid.className='mediaCards';
+region.people.forEach(person=>{const card=document.createElement('article');card.className='mediaCard';const title=document.createElement('h4');title.textContent=person.name;const links=document.createElement('div');links.className='mediaChannels';Object.entries(person.channels).forEach(([channel,url])=>{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=({facebook:'Facebook 搜尋',instagram:'Instagram 搜尋',threads:'Threads 搜尋',youtube:'YouTube 搜尋',podcast:'Podcast 搜尋',website:'競選官網'}[channel]||channel)+' ↗';links.append(a)});const note=document.createElement('p');note.className='mediaInsight';note.textContent='分析待完成：官方發文頻率、內容分類、影片觀看與互動、跨平台口號一致性、民間二創擴散。';card.append(title,links,note);grid.append(card)});section.append(grid);
+const foot=document.createElement('p');foot.className='mediaNote';foot.textContent='搜尋結果不等於官方帳號。帳號驗證、貼文資料及互動指標尚未取得，不能據此比較聲量或推估投票效果。';section.append(foot);marketing.append(section);
+};
+})();
+</script></html>
