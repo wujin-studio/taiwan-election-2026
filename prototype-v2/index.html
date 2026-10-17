@@ -673,4 +673,41 @@ document.querySelectorAll('#visualLab .artwork img,#marketingPanel .actualArt im
 #scene #cards .card .ticker{font-size:10px!important}
 #scene #cards .card:nth-child(n+3){min-height:120px!important}
 }
-</style></html>
+</style><style>
+#mediaDash{margin:20px 0;padding:20px;border:1px solid #e8e1d8;background:#fff;border-radius:20px}
+#mediaDash h3{font-size:clamp(22px,3vw,32px);margin:4px 0 12px}
+#mediaDash .switches{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+#mediaDash .switches button{border:1px solid #e4ddd5;background:#f8f6f3;border-radius:20px;padding:8px 12px;font-size:12px}
+#mediaDash .switches button.active{background:#282c35;color:white}
+#mediaDash .graphRow{margin:13px 0}
+#mediaDash .graphLabel{display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:5px}
+#mediaDash .graphTrack{height:22px;border-radius:14px;background:#eee9e3;overflow:hidden}
+#mediaDash .graphFill{height:100%;background:linear-gradient(90deg,#eeb39b,#d8795a);border-radius:14px;transition:width .55s}
+#mediaDash .graphRow:nth-child(even) .graphFill{background:linear-gradient(90deg,#b6c6d8,#859bb8)}
+#mediaDash .graphFoot{font-size:11px;color:#81818b;line-height:1.7}
+#mediaDash .graphFoot a{color:#ae694f}
+</style>
+<script>
+(function(){
+let observations=null,selectedMetric='mentions';
+fetch('./media-observations-2026.json').then(r=>r.ok?r.json():Promise.reject(Error('data'))).then(x=>observations=x).catch(()=>{});
+const prior=render;
+render=function(){
+prior();
+if(!observations||tab!==5)return;
+const root=document.getElementById('marketingPanel');if(!root)return;
+const rows=observations.observations.filter(x=>x.city===C[selected][0]);
+if(!rows.length)return;
+const dashboard=document.createElement('section');dashboard.id='mediaDash';
+const title=document.createElement('h3');title.textContent='媒體行銷｜可切換指標';dashboard.append(title);
+const buttons=document.createElement('div');buttons.className='switches';
+const metrics=[['mentions','跨平台提及'],['posts','每週發文'],['fbAvgComments','FB 平均留言'],['threadsAvgComments','Threads 平均留言']];
+metrics.forEach(([key,label])=>{const b=document.createElement('button');b.textContent=label;b.className=selectedMetric===key?'active':'';b.onclick=()=>{selectedMetric=key;render()};buttons.append(b)});
+dashboard.append(buttons);
+const valid=rows.filter(x=>Number.isFinite(x[selectedMetric])),max=Math.max(1,...valid.map(x=>x[selectedMetric]));
+valid.forEach(r=>{const row=document.createElement('div');row.className='graphRow';const label=document.createElement('div');label.className='graphLabel';const left=document.createElement('span');left.textContent=r.candidate;const right=document.createElement('span');right.textContent=r[selectedMetric].toLocaleString()+(selectedMetric==='mentions'||selectedMetric==='posts'?' 篇':' 則');label.append(left,right);const track=document.createElement('div');track.className='graphTrack';const fill=document.createElement('div');fill.className='graphFill';fill.style.width=(r[selectedMetric]/max*100)+'%';track.append(fill);row.append(label,track);dashboard.append(row)});
+const foot=document.createElement('p');foot.className='graphFoot';foot.textContent='監測期間：2026/10/05–10/11。跨平台提及、官方發文與平均留言屬不同統計口徑；均不是粉絲數或互動率。 ';const a=document.createElement('a');a.href=rows[0].source;a.target='_blank';a.rel='noopener noreferrer';a.textContent='監測資料來源';foot.append(a);dashboard.append(foot);
+root.prepend(dashboard);
+};
+})();
+</script></html>
