@@ -648,4 +648,29 @@ document.querySelectorAll('#visualLab .artwork img,#marketingPanel .actualArt im
 });
 };
 })();
-</script></html>
+</script><style id="scene-layout-v9">
+/* Rebuild candidate introduction as responsive editorial rows, without absolute-position collisions */
+#scene #cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:auto!important;align-content:start!important;align-items:stretch!important;gap:12px!important;overflow-y:auto!important;overflow-x:hidden!important;height:calc(100dvh - 170px)!important;padding:12px 14px 105px!important;box-sizing:border-box!important}
+#scene #cards .card{box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr) clamp(50px,9vw,95px)!important;grid-template-rows:auto auto auto auto!important;gap:8px!important;position:relative!important;overflow:visible!important;height:auto!important;min-height:clamp(240px,30vh,380px)!important;max-height:none!important;padding:clamp(14px,2vw,24px)!important;align-content:start!important;align-items:start!important}
+#scene #cards .card .party{grid-column:1!important;grid-row:1!important;padding:0!important;margin:0!important;font-size:12px!important;position:static!important}
+#scene #cards .card .name{grid-column:1!important;grid-row:2!important;position:static!important;font-size:clamp(21px,2.4vw,32px)!important;line-height:1.2!important;margin:0!important;padding:0!important;order:unset!important}
+#scene #cards .card .partyIcon{grid-column:2!important;grid-row:1!important;position:static!important;justify-self:end!important}
+#scene #cards .card .portraitPhoto{grid-column:2!important;grid-row:2 / span 2!important;position:static!important;width:100%!important;height:clamp(70px,11vw,118px)!important;max-height:none!important;object-fit:cover!important;object-position:center top!important;border-radius:12px!important;margin:0!important;mix-blend-mode:normal!important;order:unset!important}
+#scene #cards .card .portraitMissing{grid-column:2!important;grid-row:2 / span 2!important;position:static!important;width:100%!important;min-height:55px!important;max-height:none!important;font-size:10px!important}
+#scene #cards .card .slogan{grid-column:1 / -1!important;grid-row:3!important;position:static!important;display:block!important;font-size:clamp(28px,4.4vw,64px)!important;line-height:1.12!important;letter-spacing:-.8px!important;margin:10px 0 0!important;padding:0!important;min-height:0!important;overflow:visible!important;word-break:break-word!important;overflow-wrap:anywhere!important;order:unset!important}
+#scene #cards .card .ticker{grid-column:1 / -1!important;grid-row:4!important;position:static!important;margin:8px 0 0!important;padding:0!important;min-height:0!important;line-height:1.4!important;order:unset!important}
+#scene #cards .card .source,#scene #cards .card .photoCredit{display:none!important}
+#scene #cards .card:nth-child(n+3){min-height:125px!important;padding:14px!important}
+#scene #cards .card:nth-child(n+3) .slogan{font-size:clamp(18px,2vw,26px)!important;margin:6px 0!important}
+#scene #cards .card:nth-child(n+3) .portraitPhoto,#scene #cards .card:nth-child(n+3) .portraitMissing{display:none!important}
+@media(max-width:700px){
+#scene #cards{height:calc(100dvh - 156px)!important;gap:8px!important;padding:8px 9px 100px!important}
+#scene #cards .card{grid-template-columns:minmax(0,1fr) 52px!important;grid-template-rows:auto auto auto auto!important;gap:5px!important;padding:11px!important;min-height:235px!important}
+#scene #cards .card .party{font-size:10px!important}
+#scene #cards .card .name{font-size:clamp(18px,4.5vw,24px)!important}
+#scene #cards .card .portraitPhoto{height:65px!important;width:52px!important}
+#scene #cards .card .slogan{font-size:clamp(22px,5.3vw,34px)!important;line-height:1.16!important;margin:12px 0 0!important;letter-spacing:-.5px!important}
+#scene #cards .card .ticker{font-size:10px!important}
+#scene #cards .card:nth-child(n+3){min-height:120px!important}
+}
+</style></html>
