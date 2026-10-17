@@ -26,4 +26,33 @@ const scene=document.getElementById('scene'),cards=document.getElementById('card
 const observer=new MutationObserver(()=>{if(!scene.classList.contains('on')){if(timer)clearInterval(timer);return}if(timer)clearInterval(timer);const city=C[selected];cards.querySelectorAll('.card').forEach((card,j)=>{const p=city[3][j];if(!p)return;const top=card.querySelector('.party');if(top&&!card.querySelector('.partyIcon')){const icon=document.createElement('div');icon.className='partyIcon';icon.textContent=p[1]==='國民黨'?'KMT':p[1]==='民進黨'?'DPP':'—';top.before(icon)}const ticker=document.createElement('div');ticker.className='ticker';card.append(ticker);ticker.textContent=p[2].length>1?p[2][1]:'主打競選口號';});let tick=0;timer=setInterval(()=>{tick++;cards.querySelectorAll('.card').forEach((card,j)=>{const p=city[3][j],ticker=card.querySelector('.ticker');if(!ticker||!p)return;const extras=p[2].slice(1);ticker.style.opacity='0';setTimeout(()=>{ticker.textContent=extras.length?extras[tick%extras.length]:'主打競選口號';ticker.style.opacity='1'},180)})},2600)});
 observer.observe(scene,{attributes:true,attributeFilter:['class']});
 })();
+</script><style>
+.card{overflow:hidden;isolation:isolate}
+.card .portraitPhoto{height:clamp(105px,23vh,260px);width:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 14px #29222a22);mix-blend-mode:multiply;transition:transform .5s ease}
+.card:hover .portraitPhoto{transform:scale(1.07)}
+.card .photoCredit{font-size:10px;color:#807a7a}
+.card .portraitMissing{min-height:65px;display:flex;align-items:center;font-size:11px;color:#8a8385}
+@media(max-width:760px){.card .portraitPhoto{height:clamp(75px,16vh,150px)}.card .slogan{font-size:clamp(22px,5.8vw,35px)}.card .photoCredit{font-size:8px}}
+</style>
+<script>
+const portraitFiles={"蔣萬安":"蔣萬安委員.jpg","沈伯洋":"Puma_Shen_2024.jpg","蘇巧慧":"蘇巧慧委員.jpg","張善政":"張善政照片.jpg","江啟臣":"江啟臣委員.jpg","何欣純":"第十一屆立法委員何欣純肖像.jpg","陳亭妃":"中華民國立法委員陳亭妃官方肖像.jpg","柯志恩":"柯志恩肖像.jpg","賴瑞隆":"立法委員賴瑞隆.jpg"};
+const originalOpenCity=openCity;
+openCity=function(i){
+ originalOpenCity(i);
+ const region=C[i],cards=[...document.querySelectorAll('#cards .card')];
+ region[3].forEach((candidate,j)=>{
+ const card=cards[j];if(!card)return;
+ const filename=portraitFiles[candidate[0]];
+ const portrait=document.createElement(filename?'img':'div');
+ portrait.className=filename?'portraitPhoto':'portraitMissing';
+ if(filename){
+ portrait.src='https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(filename);
+ portrait.alt=candidate[0]+'歷史官方肖像';
+ portrait.loading='eager';portrait.referrerPolicy='no-referrer';
+ portrait.onerror=()=>{portrait.replaceWith(Object.assign(document.createElement('div'),{className:'portraitMissing',textContent:'肖像來源暫時無法載入'}))};
+ }else{portrait.textContent='肖像尚未取得可重用授權';}
+ const name=card.querySelector('.name');if(name)name.after(portrait);
+ if(filename){const credit=document.createElement('div');credit.className='photoCredit';credit.textContent='歷史肖像／來源：Wikimedia Commons（請見授權頁）';portrait.after(credit)}
+ });
+};
 </script></html>
