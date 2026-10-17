@@ -113,4 +113,26 @@ const priorDraw=window.draw;
 if(typeof priorDraw==='function'){window.draw=function(){priorDraw();const b=document.getElementById('body');if(!b)return;if(tab===0&&current===6){const d=document.createElement('div');d.id='sourcePane';d.innerHTML='<div class="ey">VERIFIED CAMPAIGN CASE / 2026.10.13</div><h3>「屏東亮起來」如何連結產業轉型？</h3><p>周春米以太陽、晶片與「米」字組成競選識別，連結屏東農漁產業、半導體進駐及人才發展。這是把城市產業敘事轉譯為視覺符號的案例。蘇清泉亦已登記參選，但其主推口號仍需原始素材查核。</p><a href="https://udn.com/vote2026/story/124652/9811912" target="_blank" rel="noopener">來源：聯合新聞網 2026/10/13 ↗</a>';b.appendChild(d)}};
 }
 })();
+</script><style>
+#casePanel{margin:18px 0 25px;padding:22px;border-radius:20px;background:#faf6f1;border:1px solid #eee7df}
+#casePanel h3{margin:9px 0 12px;font-size:22px}
+#casePanel .sourceNote{font-size:12px;color:#a76a54;line-height:1.7}
+#casePanel .insight{padding:14px 0;border-bottom:1px solid #e9e0d6}
+#casePanel .insight strong{display:block;font-size:15px;margin-bottom:6px}
+#casePanel .insight p{font-size:13px;line-height:1.8;margin:4px 0}
+#casePanel a{color:#b65e46;font-size:12px}
+</style>
+<script>
+(function(){
+const cases=[
+{city:'屏東',title:'屏東亮起來：從產業轉型到城市認同',points:[
+['口號與主視覺','周春米於 10/13 公布「做事拚未來！屏東亮起來！」，以太陽、晶片與「米」字構成識別；將農漁產業與科技進駐放在同一敘事。'],
+['線下動員','10/4 周春米進行五場廟口行程，搭配歌唱與助講；蘇清泉走訪廟宇，提出福利與人才留在屏東的問題。'],
+['渠道差異','10/8 蘇清泉夜市掃街並表明以市場、廟口與組織戰接觸選民；周春米以縣政活動及社福據點成果呈現施政連續性。'],
+['行銷解讀','周春米偏向成果延續與城市升級敘事；蘇清泉強調產業投資能否轉化為居民生活品質。此為素材分析，尚非效果證明。']
+],links:[['10/13 競選識別與競總','https://www.cna.com.tw/news/aipl/202610130175.aspx'],['10/4 廟口活動','https://www.cna.com.tw/news/aipl/202610040191.aspx'],['10/8 夜市與縣政行程','https://www.cna.com.tw/news/aipl/202610080356.aspx']]}
+];
+function insertCase(){const c=cases.find(x=>x.city===C[current]?.[0]);if(!c||tab!==0)return;const b=document.getElementById('body');if(!b)return;document.getElementById('casePanel')?.remove();const e=document.createElement('section');e.id='casePanel';const ey=document.createElement('div');ey.className='ey';ey.textContent='VERIFIED CASE STUDY / 2026';const title=document.createElement('h3');title.textContent=c.title;e.append(ey,title);c.points.forEach(([label,description])=>{const item=document.createElement('div');item.className='insight';const t=document.createElement('strong');t.textContent=label;const p=document.createElement('p');p.textContent=description;item.append(t,p);e.appendChild(item)});const note=document.createElement('p');note.className='sourceNote';note.textContent='資料依中央社報導整理；媒體行銷解讀與新聞事實分開呈現。';e.appendChild(note);c.links.forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.textContent=name+' ↗　';e.appendChild(a)});b.prepend(e)}
+const existing=window.draw;if(typeof existing==='function'){window.draw=function(){existing();insertCase()}}
+})();
 </script></body></html>
