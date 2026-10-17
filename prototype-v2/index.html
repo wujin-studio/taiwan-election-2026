@@ -710,4 +710,40 @@ const foot=document.createElement('p');foot.className='graphFoot';foot.textConte
 root.prepend(dashboard);
 };
 })();
+</script><style>
+#strategyInsights{background:#fff;border:1px solid #e6dfd6;border-radius:18px;padding:20px;margin:18px 0}
+#strategyInsights h3{font-size:25px;margin:0 0 12px}
+#strategyInsights .insight{padding:13px 0;border-top:1px solid #e8e3dd}
+#strategyInsights .insight b{display:block;font-size:16px;margin-bottom:6px}
+#strategyInsights .insight p{font-size:13px;line-height:1.8;color:#676b75;margin:0}
+#strategyInsights .statGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0}
+#strategyInsights .stat{background:#f8f3ed;padding:13px;border-radius:12px}
+#strategyInsights .stat strong{display:block;font-size:clamp(23px,3vw,36px)}
+#strategyInsights .stat small{font-size:11px;color:#777}
+</style>
+<script>
+(function(){
+const previous=render;
+render=function(){
+previous();
+if(tab!==5)return;
+const root=document.getElementById('marketingPanel');if(!root||document.getElementById('strategyInsights'))return;
+const city=C[selected][0];
+let stats=[],findings=[];
+if(city==='臺北'){
+stats=[['1.41 倍','沈伯洋相對蔣萬安提及量'],['9.29 倍','沈伯洋相對蔣萬安發文量'],['58.5%','沈伯洋在兩人合計提及量的占比'],['90.3%','沈伯洋在兩人合計發文量的占比']];
+findings=[['內容供給與傳播不成正比','沈伯洋65篇、蔣萬安7篇，發文相差9.29倍；跨平台提及量44846對31833僅相差1.41倍。不同媒體與第三方曝光的作用需要拆開研究。'],['留言量接近，不代表互動率接近','Facebook平均留言99對93則，Threads平均留言均27則。缺乏觸及與粉絲分母，不能判斷誰的互動效率較好。'],['口號與品牌假說','台北順起來可研究民間洋流二創的擴散機制；台北安可可研究市政新聞與現任品牌認知。尚未證明這些因素導致民調變化。']];
+}
+if(city==='新北'){
+stats=[['5.2%','蘇巧慧提及量相對李四川的差距'],['15.3 點','蘇巧慧正向分類較李四川高'],['10.6 點','蘇巧慧Threads來源占比較高'],['49.5%','李四川新聞媒體來源占比']];
+findings=[['聲量接近，討論情緒不同','李四川3167篇、蘇巧慧3331篇，差164篇；正向分類23.2%對38.5%。僅靠聲量排名會遺漏重要差異。'],['不同媒體渠道的角色','李四川的新聞媒體來源占比49.5%，蘇巧慧45.3%；Threads來源分別16.4%與27%。可據此檢驗工程人設與親子IP的傳播渠道。'],['情緒分類不能當作支持度','李四川負向分類38.8%，蘇巧慧29.9%；需回查貼文語境與重大事件，不能把系統情緒分類直接等同選民好惡。']];
+}
+if(!stats.length)return;
+const box=document.createElement('section');box.id='strategyInsights';const title=document.createElement('h3');title.textContent='行銷橫切面｜數據背後的策略';box.append(title);
+const grid=document.createElement('div');grid.className='statGrid';
+stats.forEach(([value,label])=>{const item=document.createElement('div');item.className='stat';const n=document.createElement('strong');n.textContent=value;const l=document.createElement('small');l.textContent=label;item.append(n,l);grid.append(item)});box.append(grid);
+findings.forEach(([heading,body])=>{const item=document.createElement('div');item.className='insight';const b=document.createElement('b');b.textContent=heading;const p=document.createElement('p');p.textContent=body;item.append(b,p);box.append(item)});
+const foot=document.createElement('p');foot.style.cssText='font-size:11px;color:#898b92;line-height:1.7';foot.textContent='期間：2026/10/05–10/11。根據已匯入QSearch監測數據計算；相對占比僅限所列兩名候選人，並非全體候選人或選民占比。來源與方法仍須核實。';box.append(foot);root.prepend(box);
+};
+})();
 </script></html>
