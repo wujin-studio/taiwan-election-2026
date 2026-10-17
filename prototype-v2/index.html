@@ -275,4 +275,32 @@ let frame=0;function animate(){if(!document.contains(wrap)){renderer.dispose();r
 const previous=render;
 render=function(){previous();policySection();city3d()};
 })();
+</script><style>
+#eventLab{margin:20px 0 30px;border-top:2px solid #e67c5c;padding-top:20px}
+#eventLab h4{font-size:26px;margin:10px 0}
+#eventLab .filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+#eventLab .filters button{border:1px solid #e7ded6;border-radius:20px;background:#fff;padding:9px 14px;font-size:12px;font-weight:800}
+#eventLab .filters button.active{background:#292b33;color:white}
+#eventLab .events{position:relative;border-left:2px solid #e5c6b9;margin-left:10px;padding-left:20px}
+#eventLab .event{padding:13px 0 19px;border-bottom:1px solid #ebe3dc;position:relative}
+#eventLab .event:before{content:'';position:absolute;left:-27px;top:21px;width:12px;height:12px;border-radius:50%;background:#eb8d72;border:3px solid #fff}
+#eventLab .event .date{font-size:12px;color:#a27360;font-weight:900}
+#eventLab .event h5{font-size:17px;margin:6px 0}
+#eventLab .event p{font-size:13px;color:#777d84;line-height:1.8}
+#eventLab .event a{font-size:12px;color:#b46b53}
+#eventLab .event .person{font-size:12px;font-weight:900;color:#555}
+</style>
+<script>
+(function(){
+let eventData=null,filter='全部';
+fetch('./kaohsiung-events.json').then(r=>r.ok?r.json():Promise.reject(Error('events'))).then(d=>eventData=d).catch(()=>{});
+const prior=render;
+render=function(){prior();if(selected!==5||tab!==0||!eventData)return;
+const root=document.getElementById('content');const wrap=document.createElement('section');wrap.id='eventLab';
+wrap.innerHTML='<div style="font-size:11px;font-weight:900;color:#bd6b51">CAMPAIGN MOMENTUM / VERIFIED EVENTS</div><h4>口號、政策與媒體的時間軸</h4><p style="font-size:13px;color:#8a8b91">點擊候選人篩選政策發布、形象影片與線下活動。事件不直接等於民調效果。</p><div class="filters"></div><div class="events"></div>';
+root.append(wrap);const controls=wrap.querySelector('.filters'),list=wrap.querySelector('.events');
+['全部','柯志恩','賴瑞隆'].forEach(x=>{const b=document.createElement('button');b.textContent=x;b.className=x===filter?'active':'';b.onclick=()=>{filter=x;render()};controls.append(b)});
+eventData.events.filter(e=>filter==='全部'||e.candidate===filter).sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{const card=document.createElement('div');card.className='event';const date=document.createElement('div');date.className='date';date.textContent=e.date+' / '+e.type;const title=document.createElement('h5');title.textContent=e.title;const name=document.createElement('div');name.className='person';name.textContent=e.candidate;const desc=document.createElement('p');desc.textContent=e.detail;const source=document.createElement('a');source.href=e.source;source.target='_blank';source.rel='noopener';source.textContent='查閱原始報導 ↗';card.append(date,name,title,desc,source);list.append(card)});
+};
+})();
 </script></html>
