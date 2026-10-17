@@ -73,12 +73,12 @@ const previousDraw=draw;draw=function(){if(chartInstance){chartInstance.destroy(
 <div id="sloganScene" role="dialog" aria-modal="true" aria-label="候選人口號轉場"><div class="sceneHead">ELECTION DECODE / THE VOICES OF A CITY</div><div class="sceneTitle" id="sceneTitle"></div><div id="sloganCards"></div><button id="sceneSkip" onclick="finishScene()">進入城市分析 ↗</button></div>
 <script>
 const roster=[
-[['蔣萬安','國民黨','讓每一個人在台北實現自我','媒體列示競選主張'],['沈伯洋','民進黨','台北順起來','官方社群競選標籤'],['郭璽','台灣麻將最大黨',null,null],['蕭文乾','台灣SoR無法黨',null,null],['唐新民','三勢團結促進聯盟',null,null],['林志成','無黨籍',null,null]],
-[['李四川','國民黨','我就是一個做事的人','媒體列示競選主張'],['蘇巧慧','民進黨','新時代新市長','官方社群競選標籤'],['蘇輝湟','無黨籍',null,null]],
-[['張善政','國民黨',null,null],['黃世杰','民進黨',null,null]],
-[['江啟臣','國民黨',null,null],['何欣純','民進黨',null,null],['洪麗華','司法正義黨',null,null]],
+[['蔣萬安','國民黨',null,null],['沈伯洋','民進黨','你的市長 沈伯洋','民進黨候選人官方頁'],['郭璽','台灣麻將最大黨',null,null],['蕭文乾','台灣SoR無法黨',null,null],['唐新民','三勢團結促進聯盟',null,null],['林志成','無黨籍',null,null]],
+[['李四川','國民黨',null,null],['蘇巧慧','民進黨',null,null],['蘇輝湟','無黨籍',null,null]],
+[['張善政','國民黨',null,null],['黃世杰','民進黨','心桃園 動起來','民進黨候選人官方頁']],
+[['江啟臣','國民黨',null,null],['何欣純','民進黨','市長換欣．台中創新！','民進黨候選人官方頁'],['洪麗華','司法正義黨',null,null]],
 [['謝龍介','國民黨',null,null],['陳亭妃','民進黨',null,null],['蕭燐洪','台灣SoR無法黨',null,null],['葉人文','無黨籍',null,null]],
-[['柯志恩','國民黨',null,null],['賴瑞隆','民進黨',null,null],['張靜','司法改革黨',null,null],['王肇民','無黨籍',null,null],['洪方隆','無黨籍',null,null]]
+[['柯志恩','國民黨',null,null],['賴瑞隆','民進黨','南方崛起 邁向國際','民進黨候選人官方頁',['張靜','司法改革黨',null,null],['王肇民','無黨籍',null,null],['洪方隆','無黨籍',null,null]]
 ];let pendingCity=null,sceneTimer=null;const enterCity=openCity;
 function finishScene(){if(sceneTimer)clearTimeout(sceneTimer);document.getElementById('sloganScene').classList.remove('show');if(pendingCity!==null){enterCity(pendingCity);pendingCity=null}}
 function startCityScene(i){pendingCity=i;const scene=document.getElementById('sloganScene');document.getElementById('sceneTitle').textContent=C[i][0]+'｜選戰發聲';const cards=document.getElementById('sloganCards');cards.innerHTML='';roster[i].forEach((p,j)=>{const d=document.createElement('div');d.className='sloganCard';d.style.animationDelay=(j*.15)+'s';const title=document.createElement('div');title.className='candidateName';title.textContent=p[0];const party=document.createElement('div');party.className='partyName';party.textContent=p[1];const slogan=document.createElement('div');slogan.className='sloganText';slogan.textContent=p[2]||'競選口號待核實';const kind=document.createElement('div');kind.className='sloganType';kind.textContent=p[3]||'尚未取得可核實口號';d.append(title,party,slogan,kind);cards.appendChild(d)});scene.classList.add('show');if(sceneTimer)clearTimeout(sceneTimer);sceneTimer=setTimeout(finishScene,Math.max(3200,roster[i].length*500+1600))}
