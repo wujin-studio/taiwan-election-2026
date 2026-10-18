@@ -15,7 +15,7 @@ const c1=c=>c.palette[0]==='#ffffff'?(c.palette[1]||'#888'):(c.palette[0]||'#888
 const c2=c=>c.palette[1]&&c.palette[1]!=='#ffffff'?c.palette[1]+'33':'#eee';
 const cvars=c=>`--c1:${c1(c)};--c2:${c2(c)}`;
 
-const TABS=[['marketing','行銷橫切面'],['chain','數據→需求→口號'],['people-cand','候選人'],['eras','城市年代'],['demo','人口結構'],['media','媒體布局'],['polls','民調與事件'],['compare','橫向比較']];
+const TABS=[['marketing','行銷橫切面'],['mix','整合比對'],['chain','數據→需求→口號'],['people-cand','候選人'],['eras','城市年代'],['demo','人口結構'],['media','媒體布局'],['polls','民調與事件'],['compare','橫向比較']];
 const ORDER=['taipei','new-taipei','taoyuan','taichung','tainan','kaohsiung','pingtung','pingtung-city'];
 
 app.innerHTML=`
@@ -264,6 +264,76 @@ RENDER.polls=el=>{
   svg.append('g').attr('font-size',11).attr('fill','#7c766c').call(g=>{g.append('rect').attr('x',W-230).attr('y',2).attr('width',10).attr('height',8).attr('fill','#6b7d8e');g.append('text').attr('x',W-216).attr('y',9).text('電話調查');g.append('rect').attr('x',W-150).attr('y',2).attr('width',10).attr('height',8).attr('fill','#a497c6');g.append('text').attr('x',W-136).attr('y',9).text('網路問卷')});
 };
 
+
+/* ================= 整合比對：行政區 × 人口 × 建設 × 口號 × 政績政見 ================= */
+const ALIAS={'北士科':['北投','士林'],'內湖':['內湖'],'南港':['南港'],'動物園':['文山'],'松山機場':['松山'],'松機':['松山'],'亞灣':['前鎮','苓雅'],'亞洲新灣區':['前鎮','苓雅'],'淡海':['淡水'],'林口':['林口'],'板橋':['板橋'],
+ '龍潭':['龍潭'],'楊梅':['楊梅'],'觀音':['觀音'],'新屋':['新屋'],'中壢':['中壢'],'航空城':['大園','蘆竹'],'西屯':['西屯'],'山線':['豐原','后里','東勢','石岡','新社'],'海線':['大甲','大安','清水','梧棲','沙鹿','龍井'],
+ '屯區':['太平','大里','霧峰','烏日'],'中火':['龍井'],'永康':['永康'],'南科':['新市','善化','安定'],'楠梓':['楠梓'],'路竹':['路竹'],'橋頭':['橋頭'],'旗津':['旗津'],'岡山':['岡山'],'小港':['小港'],'萬年溪':['屏東市'],'勝利星村':['屏東市'],'六塊厝':['屏東市']};
+const short=n=>n.replace(/(區|鄉|鎮|市)$/,'');
+function tagD(text){const set=new Set();(R.districts||[]).forEach(d=>{const k=short(d.name);if(k.length>=2&&text.includes(k))set.add(d.name)});
+  Object.entries(ALIAS).forEach(([k,v])=>{if(text.includes(k))v.forEach(x=>{const d=(R.districts||[]).find(d=>short(d.name)===x||d.name===x);if(d)set.add(d.name)})});return [...set]}
+RENDER.mix=async el=>{
+  const ds=R.districts||[];
+  if(!ds.length){el.innerHTML='<div class="gap"><b>沒有行政區資料</b></div>';return}
+  const items=majors.flatMap(c=>[...c.record.map(x=>({c,kind:'政績',x})),...c.pledges.map(x=>({c,kind:'政見',x}))]).map(o=>({...o,d:tagD(o.x.text+(o.x.stage||''))}));
+  const front=(R.frontier||[]).map(f=>({...f,d:f.districts&&f.districts.length?(f.districts.map(x=>(ds.find(d=>short(d.name)===x||d.name===x)||{}).name).filter(Boolean)):[]}));
+  const total=ds.reduce((a,d)=>a+d.pop,0),rank=[...ds].sort((a,b)=>b.pop-a.pop);
+  el.innerHTML=`<div class="dash-h"><div><h2 class="h-l">整合比對</h2><p class="note">點地圖或下方行政區：人口、建設現況、候選人政績與政見會一起連動。圖釘是發展前沿；政見與行政區的對應用地名比對（含北士科→北投、士林這類別名），屬編輯整理。</p></div>
+   <div class="seg" role="group" aria-label="地圖顏色"><button aria-pressed="true" data-mc="pop">人口數</button><button aria-pressed="false" data-mc="hit">候選人提及次數</button></div></div>
+  <div class="mix">
+   <section class="dc mx-map"><svg id="mxMap" role="img" aria-label="${esc(R.name)}行政區地圖"></svg><div class="mx-leg" id="mxLeg"></div>
+     <div class="mx-dl" id="mxDl">${rank.map(d=>`<button data-d="${esc(d.name)}">${esc(short(d.name))}</button>`).join('')}</div></section>
+   <section class="dc mx-mid" id="mxMid"></section>
+   <section class="dc mx-cands" id="mxC"></section>
+  </div>`;
+  const g=await getTowns();const geo=R.parent?(await (await fetch(`data/geo/towns-${R.county}.geojson`)).json()):g;
+  const box=el.querySelector('.mx-map'),W=box.clientWidth-24||520;const b0=d3.geoPath(d3.geoMercator().fitWidth(W-16,geo)).bounds(geo),H=Math.max(300,Math.min(520,b0[1][1]-b0[0][1]+16));
+  const svg=d3.select('#mxMap').attr('viewBox',`0 0 ${W} ${H}`),pj=d3.geoMercator().fitExtent([[8,8],[W-8,H-8]],geo),path=d3.geoPath(pj);
+  const pop=Object.fromEntries(ds.map(d=>[d.name,d.pop]));
+  const hits=Object.fromEntries(ds.map(d=>[d.name,items.filter(o=>o.d.includes(d.name)).length+front.filter(f=>f.d.includes(d.name)).length]));
+  const paths=svg.append('g').selectAll('path').data(geo.features).join('path').attr('d',path).attr('tabindex',0).attr('class','mx-p')
+    .attr('aria-label',d=>`${d.properties.name} ${fmt(pop[d.properties.name])}人`);
+  const KC={'產業':'#c2562e','交通':'#6b7d8e','能源':'#c9a227','土地':'#8ba387','科技':'#a497c6','觀光':'#e2457f'};
+  const pins=[];front.forEach(f=>f.d.forEach((dn,j)=>{const ft=geo.features.find(x=>x.properties.name===dn);if(ft){const [x,y]=path.centroid(ft);pins.push({f,x:x+(j%2?5:-5)*(pins.filter(p=>p.dn===dn).length),y,dn})}}));
+  svg.append('g').selectAll('g').data(pins).join('g').attr('class','pin').attr('transform',d=>`translate(${d.x},${d.y})`).style('animation-delay',(d,i)=>i*90+'ms')
+    .call(g=>{g.append('circle').attr('r',7).attr('fill',d=>KC[d.f.kind]||'#c2562e').attr('stroke','#fff').attr('stroke-width',2);g.append('title').text(d=>d.f.name)})
+    .on('click',function(e,d){e.stopPropagation();sel(d.dn)});
+  el.querySelector('#mxLeg').innerHTML=Object.entries(KC).filter(([k])=>front.some(f=>f.kind===k&&f.d.length)).map(([k,c])=>`<span><i style="background:${c}"></i>${k}</span>`).join('')+`<span class="note">圖釘＝發展前沿</span><span id="mxScale" class="note"></span>`;
+  let mode='pop';
+  const color=()=>{const v=mode==='pop'?pop:hits,vals=Object.values(v),mx=d3.max(vals)||1,mn=mode==='pop'?d3.min(vals):0,sc=d3.scaleLinear([mn,mx],mode==='pop'?['#f6ebdf','#b4471f']:['#f1f3f5','#2f4456']);
+    paths.transition().duration(EC.reduced()?0:600).attr('fill',d=>v[d.properties.name]!=null?sc(v[d.properties.name]):'#eee');
+    el.querySelector('#mxScale').textContent=mode==='pop'?`色深＝人口（${fmt(mn)}–${fmt(mx)}，線性色階）`:`色深＝政績政見與建設提及數（0–${mx}）`};
+  color();
+  el.querySelector('.dash-h .seg').onclick=e=>{const b=e.target.closest('[data-mc]');if(!b)return;b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));mode=b.dataset.mc;color()};
+  const cityMid=()=>{const L=R.labor;return `<div class="mx-lab"><h4>全${esc(R.short)}勞動力（2025）${st(L.status)}${srcs(L.src)}</h4><div class="stack sm">${[['emp','就業','#6b7d8e'],['unemp','失業','#c2562e'],['nlf','非勞動力','#d9d0c1']].map(([k,l,c])=>`<div style="flex:${L[k]};background:${c}"><span>${l} ${fmt(L[k])}千</span></div>`).join('')}</div>
+    ${R.occupation&&R.occupation.values?`<div class="stack sm occ">${db.occGroups.filter(x=>R.occupation.values[x.id]).map((x,i)=>`<div style="flex:${R.occupation.values[x.id][0]};background:${['#2c3e50','#6b7d8e'][i]}"><span>${esc(x.label.slice(0,4))} ${R.occupation.values[x.id][0]}千</span></div>`).join('')}<div class="unk" style="flex:${R.occupation.total-db.occGroups.filter(x=>R.occupation.values[x.id]).reduce((a,x)=>a+R.occupation.values[x.id][0],0)}"><span>其餘職業待匯入</span></div></div>`:`<p class="note">職業人數：待匯入主計總處縣市別原表 ${st('missing')}</p>`}
+    <p class="note">勞動力與職業只有縣市層級，沒有行政區別資料。</p></div>`};
+  function sel(name){
+    paths.classed('on',d=>d.properties.name===name).classed('off',d=>!!name&&d.properties.name!==name);el.querySelectorAll('#mxDl button').forEach(b=>b.classList.toggle('on',b.dataset.d===name));
+    const mid=el.querySelector('#mxMid'),cc=el.querySelector('#mxC');
+    if(!name){
+      mid.innerHTML=`<h3>${esc(R.name)}全區</h3><div class="mx-k"><span class="num">${fmt(total)}</span> 人 ${st('verified')}${srcs(['ris-048'])}<div class="note">${ds.length} 個行政區｜2025 年底戶籍</div></div>
+       <div class="mx-top"><h4>人口前五大區</h4>${rank.slice(0,5).map(d=>`<button class="mx-bar" data-d="${esc(d.name)}"><span>${esc(short(d.name))}</span><span class="t"><i style="width:${(d.pop/rank[0].pop*100).toFixed(1)}%"></i></span><b>${fmt(d.pop)}</b></button>`).join('')}</div>
+       ${cityMid()}<div class="mx-front"><h4>全市發展前沿 ${front.length} 項</h4>${front.map(f=>`<div class="fr"><i style="background:${KC[f.kind]||'#c2562e'}"></i><b>${esc(f.name)}</b><span>${esc(f.stage)}${f.d.length?'｜'+f.d.map(short).join('、'):'｜全市'}</span></div>`).join('')}</div>`;
+    }else{
+      const p=pop[name],r=rank.findIndex(d=>d.name===name)+1,fr=front.filter(f=>f.d.includes(name));
+      mid.innerHTML=`<h3>${esc(name)}<button class="lnk" data-clear>看全區</button></h3><div class="mx-k"><span class="num">${fmt(p)}</span> 人 ${st('verified')}${srcs(['ris-048'])}<div class="note">占全${esc(R.short)} ${(p/total*100).toFixed(1)}%｜${ds.length} 區中第 ${r} 大</div></div>
+       <div class="mx-share"><i style="width:${(p/total*100).toFixed(2)}%"></i></div>
+       <div class="mx-front"><h4>此區發展前沿 ${fr.length} 項</h4>${fr.length?fr.map(f=>`<div class="fr"><i style="background:${KC[f.kind]||'#c2562e'}"></i><b>${esc(f.name)}</b><span>${esc(f.stage)}｜${esc(f.detail)}</span> ${st(f.status)}${srcs(f.src)}</div>`).join(''):'<p class="note">本站尚未收錄這一區的重大建設或產業據點。</p>'}</div>${cityMid()}`;
+    }
+    cc.innerHTML=`<div class="mx-ch"><h3>${name?esc(short(name))+' 與候選人':'候選人口號、政績、政見'}</h3></div><div class="mx-cg" style="--n:${majors.length}">${majors.map(c=>{const mine=items.filter(o=>o.c===c),rel=name?mine.filter(o=>o.d.includes(name)):mine;
+      const sl=sloganText(c),slHit=name&&sl.includes(short(name));
+      return `<div class="mx-col" style="${cvars(c)}"><div class="mx-who">${c.photo?`<img src="${c.photo.file}" alt="">`:`<span class="mono">${esc(c.name[0])}</span>`}<div><b>${esc(c.name)}</b>${party(c.party)}</div></div>
+        <p class="mx-sl ${slHit?'hit':''}">「${esc(sl)}」</p>
+        <div class="mx-cnt"><b class="num">${rel.length}</b> 項${name?'提到這一區':'政績與政見'}<span class="note">（政績 ${rel.filter(o=>o.kind==='政績').length}・政見 ${rel.filter(o=>o.kind==='政見').length}）</span></div>
+        <ul>${mine.map(o=>{const on=!name||o.d.includes(name);return `<li class="${on?'':'dim'} ${o.kind==='政績'?'rec':'pl'}"><span class="k">${o.kind}</span>${esc(o.x.text)} ${st(o.x.status)}${srcs(o.x.src)}${o.d.length?`<span class="dz">${o.d.map(x=>esc(short(x))).join('・')}</span>`:'<span class="dz all">全市</span>'}</li>`}).join('')||'<li class="dim">尚未收錄</li>'}</ul></div>`}).join('')}</div>
+      ${name&&items.filter(o=>o.d.includes(name)).length===0&&fr0(name)?`<p class="warn note">有建設正在這一區進行，但兩位候選人的政績政見都還沒查到直接提及。</p>`:''}`;
+  }
+  const fr0=n=>front.some(f=>f.d.includes(n));
+  paths.on('click',(e,d)=>sel(d.properties.name)).on('keydown',(e,d)=>{if(e.key==='Enter')sel(d.properties.name)});
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(b&&el.contains(b)&&!b.closest('.bars')){sel(b.dataset.d)}if(e.target.closest('[data-clear]'))sel(null)});
+  const top=front.flatMap(f=>f.d)[0];sel(R.parent?'屏東市':null);
+};
 
 /* ================= 數據 → 需求 → 口號（交叉應證） ================= */
 const sloganBag=c=>[c.slogan.status!=='missing'?c.slogan.text:'',...c.subSlogans.map(x=>x.text)].join('｜');

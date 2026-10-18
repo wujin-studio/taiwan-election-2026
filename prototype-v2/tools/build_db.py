@@ -743,6 +743,19 @@ FRONTIER = {
  'pingtung-city': [FR('高鐵屏東站', '規劃中', '六塊厝，鄰近屏東市', U, 'editorial', '交通'), FR('勝利星村', '營運中', '眷村再生商圈', U, 'editorial', '觀光')],
 }
 
+FRONT_DIST = {
+ 'taipei': {'北士科 輝達台灣總部': ['北投','士林'], '北士科臨時／永久變電所': ['北投','士林'], '自駕巴士沙盒': ['北投','士林','文山'], '松山機場遷移': ['松山']},
+ 'new-taipei': {'淡海新市鎮／科學城': ['淡水'], '捷運環狀線': ['新店','中和','板橋','新莊','五股'], '林口新市鎮': ['林口']},
+ 'taoyuan': {'桃園航空城': ['大園','蘆竹'], '捷運綠線': ['桃園','八德','蘆竹','大園','中壢'], '龍潭科學園區三期': ['龍潭']},
+ 'taichung': {'中部科學園區': ['西屯','大雅'], '臺中火力發電廠': ['龍井']},
+ 'tainan': {'南部科學園區先進製程': ['新市','善化','安定'], '鐵路地下化': ['永康','東區','北區','南區']},
+ 'kaohsiung': {'楠梓 台積電晶圓 22 廠': ['楠梓'], '半導體 S 廊帶': ['楠梓','路竹','橋頭','前鎮'], '亞灣 AI 產業聚落': ['前鎮','苓雅'], '楠梓園區聯外交通': ['楠梓']},
+ 'pingtung': {'旭海短期火箭發射場': ['牡丹'], '高鐵延伸屏東': ['屏東市']},
+ 'pingtung-city': {'高鐵屏東站': ['屏東市'], '勝利星村': ['屏東市']},
+}
+for rid, items in FRONTIER.items():
+    for f in items: f['districts'] = FRONT_DIST.get(rid, {}).get(f['name'], [])
+
 # ------------------------------------------------------------------ needs: evidence (city data → need) + slogan keywords (need → slogan)
 E = lambda t, st=V, *src: {'text': t, 'status': st, 'src': list(src)}
 NEED_X = {
@@ -789,7 +802,7 @@ NEED_X = {
 }
 
 for r in R:
-    prefix = {'taipei': '臺北市', 'new-taipei': '新北市', 'taoyuan': '桃園市', 'taichung': '臺中市', 'tainan': '臺南市', 'kaohsiung': '高雄市', 'pingtung': '屏東縣'}.get(r['id'])
+    prefix = {'taipei': '臺北市', 'new-taipei': '新北市', 'taoyuan': '桃園市', 'taichung': '臺中市', 'tainan': '臺南市', 'kaohsiung': '高雄市', 'pingtung': '屏東縣', 'pingtung-city': '屏東縣'}.get(r['id'])
     r['districts'] = dist(prefix) if prefix else []
     r['districtSrc'] = {'src': ['ris-048'], 'date': '2025-12', 'status': V} if prefix else None
     r.setdefault('occupation', {'status': M, 'note': r.pop('occupationNote', None) or '主計總處《人力資源調查》「就業者之職業－按縣市別」原表尚未匯入（主計總處網站拒絕自動擷取，需要人工下載）；不以全國比例或產業結構推算', 'src': ['dgbas-occ']})
