@@ -59,6 +59,11 @@ S = {
  'nlsc-towns': ('鄉鎮市區界線（經 dkaoster/taiwan-atlas 轉製，MIT）', '內政部國土測繪中心', None, 'https://github.com/dkaoster/taiwan-atlas'),
  'mol-23': ('勞動統計年報 表2-3 人力資源概況－按地區分（114年平均）', '勞動部（資料來源：主計總處人力資源調查）', '2025', 'https://statdb.mol.gov.tw/html/year/year14/32030.pdf'),
  'tpe-occ': ('臺北市統計年報 表35 臺北市就業人口之職業', '臺北市政府主計處（資料來源：主計總處人力資源調查統計年報）', '2025', 'https://www-ws.gov.taipei/001/Upload/367/relfile/48245/8011538/7db72b4a-9bb8-40ce-9ea9-329731d1f539.pdf'),
+ 'infominer': ('2026 候選人聲量與好感度總覽（7 日聲量、好感淨值）', 'InfoMiner 大選輿情實驗室', '2026-10-18 擷取', 'https://election.infominer.io/candidates/'),
+ 'ltn-qs-1013': ('沈伯洋狂捲232萬聲量藏隱憂（引用 QSearch 10/5–10/11 跨平台聲量）', '自由時報', '2026-10-13', 'https://news.ltn.com.tw/news/politics/breakingnews/5604657'),
+ 'udn-chiang-fb': ('臉書遭40萬留言灌爆 專家示警「蔣萬安危機」', '聯合報', '2026-10-04', 'https://udn.com/news/story/124652/9794276'),
+ 'udn-tc-tpoc': ('台中市長選戰：江啟臣聲量、好感度雙領先（TPOC／QuickseeK 3/1–5/31）', '聯合報', '2026-06-12', 'https://udn.com/news/story/124652/9562915'),
+ 'gvm-khh-fb': ('高雄初選後臉書貼文（賴瑞隆、柯志恩）', '遠見雜誌', None, 'https://city.gvm.com.tw/article/127342'),
  'user': ('使用者 2026/10/17–18 整理之研究筆記（尚未逐條比對原文）', '使用者提供', '2026-10-18', None),
  'user-img': ('使用者提供之圖片檔（來源網址與授權待補）', '使用者提供', '2026-10-18', None),
  'editorial': ('編輯依公開史料整理；尚待逐條附原始出處', '本站編輯', '2026-10-18', None),
@@ -102,7 +107,7 @@ VIS = lambda f, kind, cap, status=U, src='user-img', **kw: dict({'file': f'asset
 
 # ---------- 臺北
 cand(id='chiang-wan-an', region='taipei', name='蔣萬安', party='中國國民黨', incumbent=True,
-  photo=None,
+  photo=PHOTO('chiang-wan-an'),
   slogan=it('台北安可', V, 'cna-chiang-hq', '2026-09-29', en='Taipei Encore'),
   subSlogans=[it('市政延長賽（媒體對連任框架的描述，非陣營口號）', U, 'bnext-tpe')],
   palette=['#1f6fd6', '#59bde9', '#ffd43b'],
@@ -236,7 +241,7 @@ cand(id='li-szu-chuan', region='new-taipei', name='李四川', party='中國國�
   identity=[it('國民黨提名新北市長參選人；前臺北市副市長', V, 'cna-reg')],
 )
 cand(id='su-chiao-hui', region='new-taipei', name='蘇巧慧', party='民主進步黨',
-  photo=None,
+  photo=PHOTO('su-chiao-hui'),
   slogan=it('溫暖、創新、會做事', V, 'fount-su', '2026-10-02'),
   subSlogans=[it('慧做事拚未來', V, 'fount-su'), it('2026新北慧贏', V, 'fount-su'), it('新世代扛起新時代', V, 'fount-su')],
   palette=['#f08a6c', '#f6e7d8', '#2f8b57'],
@@ -323,7 +328,7 @@ cand(id='huang-shih-chieh', region='taoyuan', name='黃世杰', party='民主進
 
 # ---------- 臺中
 cand(id='chiang-chi-chen', region='taichung', name='江啟臣', party='中國國民黨',
-  photo=None,
+  photo=PHOTO('chiang-chi-chen'),
   slogan=it('打造臺中旗艦城', U, 'user', note='專訪中為「國際旗艦城市」；正式口號字樣待文宣確認'),
   subSlogans=[it('國際旗艦城市', V, 'mirror-chiang', '2026-08-30'), it('台中智造 布局全球', V, 'cna-tc', '2026-10-14'),
               it('找出臺中味，走出臺中Way', V, 'storm-chiang-web'), it('12345，台中更幸福', U, 'user')],
@@ -351,7 +356,7 @@ cand(id='chiang-chi-chen', region='taichung', name='江啟臣', party='中國國
   identity=[it('國民黨提名臺中市長參選人；立法委員', V, 'cna-reg')],
 )
 cand(id='ho-hsin-chun', region='taichung', name='何欣純', party='民主進步黨',
-  photo=None,
+  photo=PHOTO('ho-hsin-chun'),
   slogan=it('六星市政168', V, 'now-ho', '2026-08-05', note='巡迴說明會及政策架構名稱；「六星」與「168」的意義，報導中沒有說明'),
   subSlogans=[it('生活首都', V, 'now-ho'), it('貼近你的欣（官網意見區）', V, 'now-ho'), it('欣潮純派', V, 'cna-tc', '2026-10-14'),
               it('行動 溫度 創新（主視覺文字）', V, 'user-img'), it('台中迎新向前行', U, 'user')],
@@ -404,7 +409,7 @@ cand(id='hsieh-lung-chieh', region='tainan', name='謝龍介', party='中國國�
   identity=[it('國民黨提名臺南市長參選人；立法委員', V, 'cna-reg')],
 )
 cand(id='chen-ting-fei', region='tainan', name='陳亭妃', party='民主進步黨',
-  photo=None,
+  photo=PHOTO('chen-ting-fei'),
   slogan=it('妃常幸福', U, 'user', note='自由時報 9/22 報導中為「妃熊幸福的城市」「妃常旋風」，未見「妃常幸福」原字'),
   subSlogans=[it('台南400年第一女市長（活動背板）', V, 'user-img'), it('交通七彩行：路路相通、城鄉共榮', V, 'udn-chen-traffic', '2026-09-22'),
               it('攜手將台南堆疊成妃熊幸福的城市', V, 'ltn-chen-bear', '2026-09-22'), it('2026要贏，2028更要贏', U, 'user')],
@@ -575,6 +580,38 @@ cand(id='liang-yu-tzu', region='pingtung-city', name='梁育慈', party='民主�
   tactics=[{'ch': 'car', 'text': '市場掃街，議員、候選人聯合拜票', 'status': V, 'src': ['nt-liang']}, {'ch': 'ugc', 'text': '健康按摩梳話題', 'status': U, 'src': ['user']}],
   identity=[it('民進黨提名屏東市長參選人；曾任縣議員', V, 'nt-liang')],
 )
+
+# ------------------------------------------------------------------ media intelligence (followers / ads / content / feedback)
+IM = {'shen-po-yang':(3827,-15.2),'chiang-wan-an':(2139,-22.2),'li-szu-chuan':(2753,-1.0),'su-chiao-hui':(1032,16.5),'su-hui-huang':(83,3.6),
+      'chang-shan-cheng':(2999,28.8),'huang-shih-chieh':(686,1.3),'ho-hsin-chun':(2359,11.3),'chiang-chi-chen':(962,34.8),'hsieh-lung-chieh':(792,-13.1),
+      'chen-ting-fei':(723,41.6),'ko-chih-en':(2578,11.5),'lai-jui-lung':(1411,19.2),'chou-chun-mi':(1028,40.9),'su-ching-chuan':(149,8.7)}
+QS_TOTAL = {'shen-po-yang':(2324543,-14.6),'chiang-wan-an':(1643538,-44.0),'li-szu-chuan':(125921,-16.9),'su-chiao-hui':(100004,0.8)}
+THEMES = {
+ 'chiang-wan-an':[it('松山機場遷移政見（Facebook 熱議 15.6%）', V, 'qs-tpe'), it('毒品減害政策爭論：單篇貼文湧入逾 40 萬則留言，專家提醒演算法後座力', V, ['qs-tpe','udn-chiang-fb'], '2026-10-04'), it('營養午餐與出席率（7.0%）', V, 'qs-tpe'), it('藝人蔡康永現身競總（6.7%）', V, 'qs-tpe')],
+ 'shen-po-yang':[it('電視專訪（少康戰情室 9.9%）', V, 'qs-tpe'), it('毒品減害政策爭論（9.5%）', V, 'qs-tpe'), it('「台北順起來」與順報（4.4%）', V, 'qs-tpe'), it('洋流車掃（2.0%）', V, 'qs-tpe')],
+ 'li-szu-chuan':[it('形象廣告：把路打通、大巨蛋與輝達總部經驗', V, 'udn-li-ad'), it('工程人設、台語腔廣告', U, 'user')],
+ 'su-chiao-hui':[it('水獺媽媽 Podcast 角色', V, 'fount-su'), it('發言人「躲鏡頭挑戰」短影音', V, 'fount-su'), it('TAIWOLF 聯名募款小物', V, 'fount-su')],
+ 'chiang-chi-chen':[it('3/31 初選勝出、4/3 團結記者會帶動高峰；正面聲量集中在地方建設與校園服務', V, 'udn-tc-tpoc', '2026-06-12'), it('「台中智造」產業政見', V, 'cna-tc')],
+ 'ho-hsin-chun':[it('3/31 與蔡英文、蔡其昌輕鬆互動的高峰；負面聲量集中在過往地方表現與特定法案立場', V, 'udn-tc-tpoc', '2026-06-12'), it('「欣潮純派」飄帶、在地商家合作', V, 'cna-tc')],
+ 'lai-jui-lung':[it('初選後貼文：「謙卑承擔」、三個優先（團結、守住高雄、共融發展）、市場長大的個人故事', V, 'gvm-khh-fb'), it('「百變隆隆」百工百業影片', V, 'cna-lai-video')],
+ 'ko-chih-en':[it('初選後貼文：「君子之爭」、批評抹紅與抗中牌、以小博大的逆勢敘事', V, 'gvm-khh-fb'), it('四色看板「為高雄凸全世界」', V, 'udn-khh-visual')],
+ 'chen-ting-fei':[it('AI 動畫政見「交通七彩行」', V, 'udn-chen-traffic'), it('9 款妃妃泰迪熊', V, 'ltn-chen-bear')],
+ 'hsieh-lung-chieh':[it('成長津貼政策廣告（月月領 5000）', V, 'user-img'), it('直播與庶民語言', U, 'user')],
+ 'chang-shan-cheng':[it('以施政成果為核心、發言人議題攻防', U, 'user')],
+ 'huang-shih-chieh':[it('政見圖文、軌道與醫療政見', V, 'udn-huang')],
+ 'chou-chun-mi':[it('LOGO「屏東亮起來」：太陽、晶片、米字', V, 'ct-chou'), it('廟口開唱', U, 'user')],
+ 'su-ching-chuan':[it('「屏東大團結」造勢、韓國瑜站台', V, 'cna-su-rally')],
+}
+TPOC = {'chiang-chi-chen':{'share':59.16,'pn':1.04,'pos':12.07,'neg':11.65},'ho-hsin-chun':{'share':40.84,'pn':0.83,'pos':10.50,'neg':12.59}}
+for c in C:
+    if not c['major']: continue
+    soc = {'followers': {'status': M, 'note': '官方帳號粉絲數尚未取得可核實的數據：需要先確認官方帳號，再依平台規範記錄擷取日期；本站不用搜尋頁或估計值。'},
+           'ads': {'status': M, 'note': '是否投放廣告、金額與受眾，需要在 Meta 廣告檔案庫逐一查詢（本站環境無法自動擷取）；查到之前標示為缺漏，不推測。'},
+           'themes': THEMES.get(c['id'], [])}
+    if c['id'] in IM: v, n = IM[c['id']]; soc['im'] = {'vol7': v, 'net': n, 'status': U, 'src': ['infominer'], 'note': '7 日聲量（則）與好感淨值；監測期間與方法未公開'}
+    if c['id'] in QS_TOTAL: v, n = QS_TOTAL[c['id']]; soc['qsTotal'] = {'vol': v, 'score': n, 'status': V, 'src': ['ltn-qs-1013'], 'period': '2026-10-05/10-11'}
+    if c['id'] in TPOC: soc['tpoc'] = dict(TPOC[c['id']], status=V, src=['udn-tc-tpoc'], period='2026-03-01/05-31')
+    c['social'] = soc
 
 # ------------------------------------------------------------------ regions
 def dist(prefix):

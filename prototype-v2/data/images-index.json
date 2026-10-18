@@ -319,14 +319,59 @@
    "kind": "手機截圖（GitHub／Render／舊版網站驗收紀錄）",
    "rights": "內部參考，不公開",
    "status": "not-published"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/portraits/chiang-wan-an.jpg",
+   "subject": "蔣萬安",
+   "kind": "portrait",
+   "identification": "使用者於對話中確認人物對應（上傳檔名遺失）",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/portraits/chiang-chi-chen.jpg",
+   "subject": "江啟臣",
+   "kind": "portrait",
+   "identification": "使用者於對話中確認人物對應（上傳檔名遺失）",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/portraits/ho-hsin-chun.jpg",
+   "subject": "何欣純",
+   "kind": "portrait",
+   "identification": "使用者於對話中確認人物對應（上傳檔名遺失）",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/portraits/chen-ting-fei.jpg",
+   "subject": "陳亭妃",
+   "kind": "portrait",
+   "identification": "使用者於對話中確認人物對應（上傳檔名遺失）",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/portraits/su-chiao-hui.jpg",
+   "subject": "蘇巧慧",
+   "kind": "portrait",
+   "identification": "使用者於對話中確認人物對應（上傳檔名遺失）",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
   }
  ],
  "missingPortraits": [
-  "蔣萬安",
-  "蘇巧慧",
-  "江啟臣",
-  "陳亭妃",
-  "何欣純（僅主視覺內含人物，無獨立肖像）",
   "郭璽",
   "蕭文乾",
   "唐新民",

@@ -11,6 +11,7 @@ const majors=cands.filter(c=>c.major),minors=cands.filter(c=>!c.major);
 const polls=db.polls.filter(p=>p.region===R.id);
 document.title=`${R.name}${R.office}選戰行銷分析｜2026 選戰切一刀`;
 document.getElementById('back').href='./#'+R.id;
+const CATC={'交通':'#4f6d8a','產業':'#c2562e','科技':'#7b62b8','建設':'#5f8a5a','商業':'#c9962b','觀光':'#d9467e','服務':'#2a8f8a','能源':'#a8741a','土地':'#8b6b4a'};const catC=k=>CATC[k]||'#6b7d8e';
 const c1=c=>c.palette[0]==='#ffffff'?(c.palette[1]||'#888'):(c.palette[0]||'#888');
 const c2=c=>c.palette[1]&&c.palette[1]!=='#ffffff'?c.palette[1]+'33':'#eee';
 const cvars=c=>`--c1:${c1(c)};--c2:${c2(c)}`;
@@ -72,6 +73,7 @@ RENDER.marketing=el=>{
     ${minors.length?`<button class="pill" data-minors>另 ${minors.length} 位參選人</button>`:''}</div>
   <div class="dash">
     <section class="dc heads" aria-label="候選人主口號">${M.map(m=>headCard(m)).join('')}</section>
+    <section class="dc chainx" aria-label="一眼看懂行銷鏈">${chainStrip()}</section>
     <section class="dc insight" aria-label="比對結論"><h3>比對結論</h3>${insight(M)}<p class="note">由下方圖表的數據自動彙整，非陣營說法；不推論任何族群的投票傾向。</p></section>
     <section class="dc heat" aria-label="口號與需求對應熱圖"><div class="dc-h"><h3>口號 × 城市需求</h3><span class="legend3"><i class="s"></i>口號字面（候選人色）<i class="p"></i>政見<i class="d"></i>數據已核實</span></div>${heat()}</section>
     <section class="dc power" aria-label="行銷力道對照"><div class="dc-h"><h3>行銷布局對照</h3><span class="note">每列各自以最大值為滿格，從 0 起算</span></div>${power(M)}</section>
@@ -86,11 +88,28 @@ RENDER.marketing=el=>{
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer(el)});
   requestAnimationFrame(()=>el.querySelector('.dash').classList.add('go'));
 };
+
+const CHG={fb:'社群',ig:'社群',threads:'社群',line:'社群',yt:'影音',podcast:'影音',live:'影音',web:'自有媒體',news:'新聞',rally:'實體',car:'實體',hq:'實體',board:'戶外',merch:'周邊',ugc:'二創',team:'團隊'};
+const CHGC={'社群':'#4f6d8a','影音':'#7b62b8','自有媒體':'#2a8f8a','新聞':'#6b6258','實體':'#c2562e','戶外':'#c9962b','周邊':'#d9467e','二創':'#5f8a5a','團隊':'#8b6b4a'};
+function chainStrip(){
+  const okEv=n=>(n.evidence||[]).find(x=>x.status==='verified')||(n.evidence||[])[0];
+  return `<div class="dc-h"><h3>一眼看懂：口號 → 城市條件 → 對誰說 → 用什麼說 → 反應如何</h3><span class="note">每一格都來自本站資料庫；點「完整解析」看依據</span></div>
+  <div class="chx">${majors.map(c=>{const ns=R.needs.filter(n=>hitM(c,n).length),ns2=ns.length?ns:R.needs.filter(n=>(R.matrix[c.id]||{})[n.id]);
+    const ev=ns2.slice(0,2).map(n=>({n,e:okEv(n)}));const aud=(c.analysis?.needs||[]).slice(0,2);
+    const groups=[...new Set(c.tactics.map(t=>CHG[t.ch]).filter(Boolean))];const so=c.social||{};
+    const fb=so.im?`7 日聲量 ${fmt(so.im.vol7)} 則・好感淨值 ${so.im.net>0?'+':''}${so.im.net}%`:(c.metrics?`聲量 ${fmt(c.metrics.mentions)} 篇`:'尚無監測數據');
+    return `<div class="chx-r" style="${cvars(c)}"><div class="chx-who">${c.photo?`<img src="${c.photo.file}" alt="">`:''}<b>${esc(c.name)}</b></div>
+     <div class="chx-s s1"><small>口號</small><b>${esc(sloganText(c))}</b></div>
+     <div class="chx-s"><small>回應的城市條件</small>${ev.length?ev.map(x=>`<p><b>${esc(x.n.label)}</b>${x.e?`<span>${esc(x.e.text)}</span>`:''}</p>`).join(''):'<p class="note">口號與政見都尚未對應到本站整理的需求</p>'}</div>
+     <div class="chx-s"><small>對誰說（編輯詮釋）</small>${aud.map(a=>`<p>${esc(a)}</p>`).join('')||'<p class="note">—</p>'}</div>
+     <div class="chx-s"><small>用什麼說</small><div class="chg">${groups.map(g=>`<span style="--cc:${CHGC[g]}">${g}</span>`).join('')||'<span class="note">尚未收錄</span>'}</div></div>
+     <div class="chx-s"><small>反應如何</small><p>${esc(fb)}</p>${so.im?`<p class="note">InfoMiner，方法未公開</p>`:''}</div></div>`}).join('')}</div>`;
+}
 const hitM=(c,n)=>(n.keywords||[]).filter(k=>[c.slogan.status!=='missing'?c.slogan.text:'',...c.subSlogans.map(x=>x.text)].join('｜').includes(k));
 const latestPhoneM=c=>polls.filter(p=>p.mode==='phone'&&p.question==='vote'&&p.results[c.id]!=null).sort((a,b)=>b.end.localeCompare(a.end))[0];
 const latestOnlineM=c=>polls.filter(p=>p.mode!=='phone'&&p.question==='vote'&&p.results[c.id]!=null).sort((a,b)=>b.end.localeCompare(a.end))[0];
-function headCard(m){const c=m.c,none=c.slogan.status==='missing';
-  return `<button class="hc" style="${cvars(c)}" data-open="${c.id}" aria-label="看${esc(c.name)}完整解析">
+function headCard(m){const c=m.c,none=c.slogan.status==='missing',v=c.visuals[0];
+  return `<button class="hc ${v?'hasv':''}" style="${cvars(c)}" data-open="${c.id}" aria-label="看${esc(c.name)}完整解析">${v?`<span class="hc-v"><img src="${v.file}" alt="${esc(v.caption)}" loading="lazy"><em>${esc(v.kind)}</em></span>`:`<span class="hc-v none">主視覺原圖缺漏</span>`}
    ${c.photo?`<img src="${c.photo.file}" alt="" loading="lazy">`:`<span class="mono">${esc(c.name[0])}</span>`}
    <span class="hc-t"><span class="hc-n">${esc(c.name)} ${party(c.party)}${c.incumbent?'<em>現任</em>':''}</span>
    <span class="hc-s ${none?'none':''}">${esc(none?'未見正式口號':c.slogan.text)}</span>
@@ -166,7 +185,7 @@ function matrix(){
 
 RENDER['people-cand']=el=>{
   el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">候選人：身分、政績、政見、爭議</h2><p>政績是已經完成的事；政見是還沒實施的承諾，標示目前階段。爭議只收錄有出處的內容，並列出回應（沒有取得的會寫明）。</p></div></div>
-  <div class="cgrid">${cands.map(c=>`<article class="cbox" style="${cvars(c)}"><h3>${esc(c.name)} ${party(c.party)}${c.incumbent?'<span class="note">現任</span>':''}</h3>
+  <div class="cgrid">${cands.map(c=>`<article class="cbox" style="${cvars(c)}">${c.visuals[0]?`<figure class="cb-vis"><img src="${c.visuals[0].file}" alt="${esc(c.visuals[0].caption)}" loading="lazy"><figcaption>${esc(c.visuals[0].kind)}・使用者提供</figcaption></figure>`:''}<div class="cb-h">${c.photo?`<img src="${c.photo.file}" alt="">`:''}<h3>${esc(c.name)} ${party(c.party)}${c.incumbent?'<span class="note">現任</span>':''}</h3></div>
     <ul>${c.identity.map(x=>`<li>${item(x)}</li>`).join('')}</ul>
     ${c.major||c.record.length||c.pledges.length?`
     <h4>政績（已完成）<em>${c.record.length} 項</em></h4>${c.record.length?`<ul>${c.record.map(x=>`<li class="done">${item(x)}</li>`).join('')}</ul>`:`<p class="empty">${c.incumbent?'尚未整理到有出處的政績條目':'非現任；政績欄位不適用'}</p>`}
@@ -178,9 +197,9 @@ RENDER['people-cand']=el=>{
 RENDER.eras=el=>{
   const eras=[...R.eras].sort((a,b)=>a.year-b.year),cats=[...new Set(eras.map(e=>e.cat))];
   el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">城市年代軸 1970–2026</h2><p>建設、交通、產業、商業、科技、觀光、服務一層層堆疊出今天的城市需求。拖動年份，看到那一年為止已經發生的事。</p></div></div>
-  <div class="era-ctl"><output id="eraY">2026</output><input type="range" id="eraR" min="1970" max="2026" step="1" value="2026" aria-label="年份"><div class="cats" id="cats">${cats.map(c=>`<button aria-pressed="true" data-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div></div>
+  <div class="era-ctl"><output id="eraY">2026</output><input type="range" id="eraR" min="1970" max="2026" step="1" value="2026" aria-label="年份"><div class="cats" id="cats">${cats.map(c=>`<button aria-pressed="true" data-cat="${esc(c)}" style="--cc:${catC(c)}"><i></i>${esc(c)}</button>`).join('')}</div></div>
   <div class="era-axis"><svg id="eraAxis"></svg></div>
-  <div class="era-list" id="eraList">${eras.map((e,i)=>`<article data-i="${i}"><time>${e.year}</time><span class="cat">${esc(e.cat)}</span><h4>${esc(e.title)}</h4>${e.detail?`<p>${esc(e.detail)}</p>`:''}<p style="margin-top:6px">${st(e.status)}${srcs(e.src)}</p></article>`).join('')}</div>
+  <div class="era-list" id="eraList">${eras.map((e,i)=>`<article data-i="${i}" style="--cc:${catC(e.cat)}"><time>${e.year}</time><span class="cat" style="--cc:${catC(e.cat)}">${esc(e.cat)}</span><h4>${esc(e.title)}</h4>${e.detail?`<p>${esc(e.detail)}</p>`:''}<p style="margin-top:6px">${st(e.status)}${srcs(e.src)}</p></article>`).join('')}</div>
   <p class="note">年代條目多數為編輯依公開史料整理（標「未核實」），尚待逐條補上原始出處；有官方或報導來源的已標「已核實」。</p>
   <div class="sec"><h3 class="h-m">由年代堆疊出的城市需求</h3><div class="chips" style="margin-top:10px">${R.needs.map(n=>`<span style="background:var(--terra-soft)">${esc(n.label)}</span>`).join('')}</div></div>
   ${R.zones?`<div class="sec"><h3 class="h-m">產業空間分工</h3><p class="note">晶圓製造和封裝測試是不同環節，請勿混為一談。</p><div class="zones">${R.zones.map(z=>`<div><b>${esc(z.name)}</b><span class="role">${esc(z.role)}</span><p class="note" style="margin:0">${esc(z.detail)} ${st(z.status)}${srcs(z.src)}</p></div>`).join('')}</div></div>`:''}`;
@@ -190,7 +209,7 @@ RENDER.eras=el=>{
   svg.selectAll('text.tick').data(d3.range(1970,2030,10).concat([2026]).filter((v,i,a)=>a.indexOf(v)===i&&v<=2026)).join('text').attr('x',x).attr('y',92).attr('text-anchor','middle').attr('font-size',12).attr('fill','#7c766c').attr('font-family','var(--serif)').text(d=>d);
   const dots=svg.selectAll('g.e').data(eras).join('g').attr('transform',(d,i)=>`translate(${x(d.year)},${60-(i%3)*16-10})`);
   dots.append('line').attr('y1',0).attr('y2',d=>0).attr('stroke','#23211d33');
-  dots.append('circle').attr('r',7).attr('fill','#c2562e').attr('stroke','#fff').attr('stroke-width',2).style('cursor','pointer').attr('tabindex',0).attr('role','button').attr('aria-label',d=>`${d.year} ${d.title}`)
+  dots.append('circle').attr('r',8).attr('fill',d=>catC(d.cat)).attr('stroke','#fff').attr('stroke-width',2).style('cursor','pointer').attr('tabindex',0).attr('role','button').attr('aria-label',d=>`${d.year} ${d.title}`)
     .on('click keydown',function(ev,d){if(ev.type==='keydown'&&ev.key!=='Enter')return;EC.openPop(this,`<h4>${d.year}｜${esc(d.title)}</h4><div class="meta">${esc(d.cat)}</div><p>${esc(d.detail||'')}</p>`)});
   const upd=()=>{const y=+el.querySelector('#eraR').value;el.querySelector('#eraY').textContent=y;const on=new Set([...el.querySelectorAll('#cats [aria-pressed=true]')].map(b=>b.dataset.cat));
     el.querySelectorAll('#eraList article').forEach(a=>{const e=eras[a.dataset.i];a.classList.toggle('dim',e.year>y||!on.has(e.cat))});dots.style('opacity',d=>d.year<=y&&on.has(d.cat)?1:.15)};
@@ -221,14 +240,36 @@ RENDER.demo=async el=>{
 
 RENDER.media=el=>{
   const withM=majors.filter(c=>c.metrics);
-  el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">媒體布局</h2><p>16 種渠道 × 候選人：實心點是有出處的觀察，空心點是使用者整理但還沒核對原文。空格代表本站還沒查到，不等於沒有使用這個渠道。</p></div></div>
+  const imAll=db.candidates.filter(c=>c.region===R.id&&c.social&&c.social.im);
+  el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">媒體布局</h2><p>每位候選人一張行銷總覽：主視覺、使用的通路、粉絲、廣告投放、內容重點、互動反饋。有數據就附來源，沒有就標缺漏，不用推估補空格。</p></div></div>
+  <div class="mo-grid">${majors.map(moCard).join('')}</div>
+  ${imAll.length?`<div class="sec"><div class="sec-h"><div><h3 class="h-m">聲量與好感淨值（第三方監測）</h3><p>左邊是 7 日聲量（則數），右邊是好感淨值（正面減負面）。聲量不等於支持；監測方法未公開，只能當參考。</p></div></div><div class="imx">${imAll.map(c=>{const mx=Math.max(...imAll.map(x=>x.social.im.vol7)),n=c.social.im.net;return `<div class="imx-r" style="${cvars(c)}"><span class="imx-n">${esc(c.name)}</span><span class="imx-v"><i style="--w:${(c.social.im.vol7/mx*100).toFixed(1)}%"></i><b>${fmt(c.social.im.vol7)}</b></span><span class="imx-d"><span class="mid"></span><i class="${n<0?'neg':'pos'}" style="--w:${Math.min(50,Math.abs(n))}%"></i><b>${n>0?'+':''}${n}%</b></span></div>`}).join('')}<div class="imx-ax"><span></span><span>7 日聲量（則，從 0 起算）</span><span>好感淨值（−50%｜0｜+50%）</span></div></div><p class="note">${st('unverified')}${srcs(['infominer'])}　2026-10-18 擷取</p></div>`:''}
+  <div class="sec"><div class="sec-h"><div><h3 class="h-m">16 種渠道對照</h3><p>實心點是有出處的觀察，空心點是使用者整理但還沒核對原文；顏色代表渠道類型。空格代表本站還沒查到，不等於沒有使用。</p></div><div class="chg">${Object.entries(CHGC).map(([g,c])=>`<span style="--cc:${c}">${g}</span>`).join('')}</div></div>
   <div class="scroll-x"><table class="chm"><thead><tr><th scope="col">渠道</th>${majors.map(c=>`<th scope="col" style="${cvars(c)}">${esc(c.name)}</th>`).join('')}</tr></thead><tbody>
-  ${db.channels.map(ch=>`<tr><th scope="row">${esc(ch.label)}</th>${majors.map(c=>{const ts=c.tactics.filter(t=>t.ch===ch.id);return ts.length?`<td style="${cvars(c)}">${ts.map(t=>`<button class="dot ${t.status}" data-pop="${esc(`<h4>${esc(c.name)}｜${esc(ch.label)}</h4><p>${esc(t.text)}</p><div class='meta'>${t.status==='verified'?'已核實':'未核實'}｜來源：${t.src.map(s=>esc(db.sources[s].publisher+' '+(db.sources[s].date||''))).join('、')}</div>${t.src.map(s=>db.sources[s].url?`<p style='margin:.4em 0 0'><a href='${esc(db.sources[s].url)}' target='_blank' rel='noopener'>開啟原始來源</a></p>`:'').join('')}`)}"><i></i><span>${esc(t.text.length>26?t.text.slice(0,26)+'…':t.text)}</span></button>`).join('<br>')}</td>`:`<td class="no">—</td>`}).join('')}</tr>`).join('')}
-  </tbody></table></div>
-  <div class="sec"><div class="sec-h"><div><h3 class="h-m">社群聲量與互動（第三方監測）</h3><p>聲量是跨 Threads、Facebook、媒體、論壇的提及篇數，不等於支持度；情緒是 AI 分類，可能誤判反諷。這裡沒有放粉絲數和互動率，因為還沒取得可以核實的官方帳號數據。</p></div></div>
-  ${withM.length?`<div class="mgrid">${metricCards(withM)}</div>`:`<div class="gap"><b>社群數據缺漏 ${st('missing')}</b>本選區還沒取得可以引用的第三方監測週報。官方帳號粉絲數、發文數、平均互動、互動率、留言情緒、觸及與觀看，都要先核對官方帳號、遵守平台規範後才能補上；本站不使用搜尋頁面推估。</div>`}</div>
-  <div class="sec gap"><b>尚未入站分析的指標</b>粉絲數、互動率（互動 ÷ 粉絲）、觸及、觀看、廣告投放金額（可以從 Meta 廣告檔案庫查證）。每一項補上時，都會附上抓取日期、帳號 ID 與定義。</div>`;
+  ${db.channels.map(ch=>`<tr style="--cc:${CHGC[CHG[ch.id]]||'#888'}"><th scope="row"><i class="chdot"></i>${esc(ch.label)}<small>${CHG[ch.id]||''}</small></th>${majors.map(c=>{const ts=c.tactics.filter(t=>t.ch===ch.id);return ts.length?`<td>${ts.map(t=>`<button class="dot ${t.status}" style="--c1:${CHGC[CHG[ch.id]]||'#888'}" data-pop="${esc(`<h4>${esc(c.name)}｜${esc(ch.label)}</h4><p>${esc(t.text)}</p><div class='meta'>${t.status==='verified'?'已核實':'未核實'}｜${t.src.map(s=>esc(db.sources[s].publisher+' '+(db.sources[s].date||''))).join('、')}</div>`)}"><i></i><span>${esc(t.text.length>26?t.text.slice(0,26)+'…':t.text)}</span></button>`).join('<br>')}</td>`:`<td class="no">—</td>`}).join('')}</tr>`).join('')}
+  </tbody></table></div></div>
+  ${withM.length?`<div class="sec"><div class="sec-h"><div><h3 class="h-m">週報細項（QSearch 10/5–11）</h3><p>聲量是跨 Threads、Facebook、媒體、論壇的提及篇數；情緒是 AI 分類。</p></div></div><div class="mgrid">${metricCards(withM)}</div></div>`:''}`;
 };
+function moCard(c){
+  const so=c.social||{},v=c.visuals[0],groups=[...new Set(c.tactics.map(t=>CHG[t.ch]).filter(Boolean))];
+  const fbk=[];
+  if(c.metrics)fbk.push(`<div class="kv"><span>提及篇數（10/5–11）</span><b>${fmt(c.metrics.mentions)}</b><em>${c.metrics.change>0?'+':''}${c.metrics.change}% 週增</em>${srcs(c.metrics.src)}</div>`);
+  if(c.metrics&&c.metrics.avgComments)fbk.push(`<div class="kv"><span>平均每篇留言</span><b>FB ${c.metrics.avgComments.facebook}・Threads ${c.metrics.avgComments.threads}</b>${srcs(c.metrics.src)}</div>`);
+  if(c.metrics)fbk.push(`<div class="kv"><span>本人發文</span><b>${c.metrics.posts?c.metrics.posts.facebook+c.metrics.posts.threads:c.metrics.postsTotal} 則</b>${srcs(c.metrics.src)}</div>`);
+  if(so.qsTotal)fbk.push(`<div class="kv"><span>跨平台總聲量（10/5–11）</span><b>${fmt(so.qsTotal.vol)}</b><em>情緒分數 ${so.qsTotal.score>0?'+':''}${so.qsTotal.score}%</em>${srcs(so.qsTotal.src)}</div>`);
+  if(so.tpoc)fbk.push(`<div class="kv"><span>聲量占比（3/1–5/31）</span><b>${so.tpoc.share}%</b><em>P/N 比 ${so.tpoc.pn}</em>${srcs(so.tpoc.src)}</div>`);
+  if(so.im)fbk.push(`<div class="kv"><span>7 日聲量・好感淨值</span><b>${fmt(so.im.vol7)} 則</b><em>${so.im.net>0?'+':''}${so.im.net}%</em>${st('unverified')}${srcs(so.im.src)}</div>`);
+  if(c.metrics&&c.metrics.sentiment)fbk.push(`<div class="kv full"><span>情緒（正／中／負）</span><div class="senti">${c.metrics.sentiment.map(x=>`<i style="width:${x}%"></i>`).join('')}</div><em>${c.metrics.sentiment.join('／')}%</em></div>`);
+  return `<article class="mo" style="${cvars(c)}">
+   <div class="mo-vis">${v?`<img src="${v.file}" alt="${esc(v.caption)}" loading="lazy"><span>${esc(v.kind)}・使用者提供</span>`:`<div class="gap"><b>主視覺原圖缺漏</b>尚未取得可以入庫的陣營原圖</div>`}</div>
+   <div class="mo-h">${c.photo?`<img src="${c.photo.file}" alt="">`:''}<div><b>${esc(c.name)}</b>${party(c.party)}<p>「${esc(sloganText(c))}」</p></div></div>
+   <h4>使用的通路 <em>${c.tactics.length} 項觀察</em></h4><div class="chg">${groups.map(g=>`<span style="--cc:${CHGC[g]}">${g}</span>`).join('')||'<span class="note">尚未收錄</span>'}</div>
+   <ul class="mo-t">${c.tactics.map(t=>`<li style="--cc:${CHGC[CHG[t.ch]]||'#888'}"><i></i><span><b>${esc((db.channels.find(x=>x.id===t.ch)||{}).label||t.ch)}</b>${esc(t.text)} ${st(t.status)}${srcs(t.src)}</span></li>`).join('')}</ul>
+   <h4>內容重點</h4>${(so.themes||[]).length?`<ul class="mo-th">${so.themes.map(x=>`<li>${item(x)}</li>`).join('')}</ul>`:'<p class="note">尚未收錄</p>'}
+   <div class="mo-2"><div><h4>粉絲數</h4><p class="miss">${st('missing')} ${esc(so.followers?so.followers.note:'')}</p></div><div><h4>廣告投放</h4><p class="miss">${st('missing')} ${esc(so.ads?so.ads.note:'')}</p></div></div>
+   <h4>互動與反饋</h4>${fbk.length?`<div class="mo-kv">${fbk.join('')}</div>`:'<p class="note">本選區尚無可引用的監測數據</p>'}
+  </article>`;
+}
 function metricCards(list){
   const per=(k,fn,label,unit='')=>{const vals=list.map(c=>[c,fn(c.metrics)]).filter(x=>x[1]!=null);if(!vals.length)return '';const mx=Math.max(...vals.map(x=>x[1]));return `<div class="mcard"><h4>${label}</h4>${vals.map(([c,v])=>`<div class="hbar" style="${cvars(c)}"><span>${esc(c.name)}</span><span class="t"><i style="width:${(v/mx*100).toFixed(1)}%"></i></span><span class="v">${fmt(v)}${unit}</span></div>`).join('')}<p class="note">${esc(list[0].metrics.period)}｜長條從 0 起算 ${st('verified')}${srcs(list[0].metrics.src)}</p></div>`};
   return per('m',m=>m.mentions,'聲量（提及篇數）')+per('p',m=>m.posts?m.posts.facebook+m.posts.threads:m.postsTotal,'本人帳號發文數','則')+per('fb',m=>m.avgComments?.facebook,'Facebook 平均每篇留言')+per('th',m=>m.avgComments?.threads,'Threads 平均每篇留言')+

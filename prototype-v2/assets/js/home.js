@@ -184,13 +184,13 @@ function renderCard(i){
     html=`<div class="tk-who"><span class="tk-region">${esc(r.name)}${r.office}參選人${c.incumbent?'・現任':''}</span><h2 class="tk-name">${esc(c.name)}</h2><span class="tk-party" style="--pc:${c.party.color}"><i aria-hidden="true"></i>${esc(c.party.name)}</span><span class="tk-status">主口號${{verified:'已核實',unverified:'未核實（使用者提供或報導轉述）',missing:'缺漏'}[c.slogan.status]}</span></div>
       ${photoHTML(c)}
       <p class="tk-slogan ${none?'none':''}" data-fit>${esc(none?'目前未見已核實的正式口號':c.slogan.text)}</p>
-      <div class="tk-foot"><div class="tk-sub" aria-live="polite" data-subs='${esc(JSON.stringify(subs.map(s=>s.text)))}'><span>${esc(subs[0].text)}</span></div>
-      ${vis?`<figure class="tk-vis" style="margin:0"><img src="${vis.file}" alt="${esc(vis.caption)}"><figcaption>${esc(vis.kind)}｜使用者提供</figcaption></figure>`:''}</div>`;
+      ${vis?`<figure class="tk-bigvis"><img src="${vis.file}" alt="${esc(vis.caption)}"><figcaption>${esc(vis.kind)}｜使用者提供，出處待補</figcaption></figure>`:''}
+      <div class="tk-foot"><div class="tk-sub" aria-live="polite" data-subs='${esc(JSON.stringify(subs.map(s=>s.text)))}'><span>${esc(subs[0].text)}</span></div></div>`;
   }else{col={bg:'#23211d',fg:'#fff',chip:'#ffffff1a'};
     html=`<div class="tk-who"><span class="tk-region">${esc(r.name)}${r.office}</span><h2 class="tk-name">另有 ${it.list.length} 位參選人</h2></div>
       <div class="tk-minor">${it.list.map(c=>`<div><b>${esc(c.name)}</b>${esc(c.party.name)}<br><span style="opacity:.7">目前未見正式口號</span></div>`).join('')}</div><div class="tk-foot"><div class="tk-sub"><span>登記名單：中央社 2026/9/4</span></div></div>`;
   }
-  const el=document.createElement('div');el.className='tk-card enter';el.style.cssText=`--bg:${col.bg};--fg:${col.fg};--chip:${col.chip}`;el.innerHTML=html;
+  const el=document.createElement('div');el.className='tk-card enter'+(it.type==='cand'&&it.c.visuals[0]?' hasvis':'');el.style.cssText=`--bg:${col.bg};--fg:${col.fg};--chip:${col.chip}`;el.innerHTML=html;
   return {el,col};
 }
 function fitText(el){
