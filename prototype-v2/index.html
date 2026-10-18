@@ -905,4 +905,39 @@ function extra(city){return '<section class="analysisBlock"><h3>市民職業結�
 const originalShow=window.show;
 if(typeof originalShow==='function'){window.show=function(){originalShow();const city=C[selected][0],root=document.getElementById('content');if(tab===0||tab===4)root.insertAdjacentHTML('beforeend',extra(city));};}
 })();</script>
-<style id="v15-lens-css">.lensGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lensGrid .study{margin:0!important}.lensGrid h4{overflow-wrap:anywhere}@media(max-width:650px){.lensGrid{grid-template-columns:1fr}}</style></html>
+<style id="v15-lens-css">.lensGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lensGrid .study{margin:0!important}.lensGrid h4{overflow-wrap:anywhere}@media(max-width:650px){.lensGrid{grid-template-columns:1fr}}</style><style id="map-v18">
+.mapstage .county{fill:#d8d6d0;stroke:#fff;stroke-width:1.2}
+.mapstage .metro{fill:#e5a18b;filter:drop-shadow(0 5px 0 #b98978);transform-box:fill-box;transform-origin:center;transition:transform .5s,filter .5s,fill .5s}
+.mapstage .metro.lift{fill:#e67854!important;transform:translate(-5px,-14px) scale(1.07)!important;filter:drop-shadow(0 10px 0 #b75c43) drop-shadow(0 16px 7px #70514c66)!important}
+#scene{overflow-y:auto!important}
+#scene #cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:20px 5% 15px!important;align-items:stretch!important;align-content:start!important}
+#scene #cards .card{position:relative!important;display:flex!important;flex-direction:column!important;gap:12px!important;min-width:0!important;width:auto!important;max-width:none!important;min-height:205px!important;max-height:none!important;height:auto!important;overflow:hidden!important;padding:clamp(15px,2vw,27px)!important;transform:none!important}
+#scene #cards .card :is(.party,.name,.slogan,.ticker,.source){position:static!important;inset:auto!important;display:block!important;width:100%!important;max-width:100%!important;min-height:0!important;writing-mode:horizontal-tb!important;transform:none!important;animation:none!important;white-space:normal!important;overflow-wrap:anywhere!important;margin:0!important}
+#scene #cards .card .slogan{font-size:clamp(25px,3.5vw,50px)!important;line-height:1.17!important;letter-spacing:-.8px!important}
+#scene #cards .card .name{font-size:clamp(19px,2.4vw,29px)!important}
+#scene #cards .card .source{margin-top:auto!important}
+#scene #next{position:relative!important;inset:auto!important;display:block!important;width:max-content!important;max-width:90%!important;margin:10px 5% 32px auto!important;z-index:50!important}
+#scene #cards .card:nth-child(n+3){min-height:110px!important}
+#scene #cards .card:nth-child(n+3) .slogan{font-size:clamp(17px,2vw,25px)!important}
+@media(max-width:700px){#scene #cards{padding:12px!important;gap:9px!important}#scene #cards .card{padding:13px!important;gap:7px!important;min-height:160px!important}#scene #cards .card .slogan{font-size:clamp(19px,5.1vw,29px)!important}#scene #cards .card .name{font-size:18px!important}#scene #cards .card:nth-child(n+3){min-height:100px!important}#scene #cards .card:nth-child(n+3) .slogan{font-size:17px!important}}
+</style>
+<script id="map-v18-script">
+(function(){
+const stage=document.querySelector('.mapstage'),svg=document.getElementById('map');
+function redraw(){
+if(!window.d3||!window.topojson||!svg)return;
+fetch('./taiwan-counties.topo.json').then(r=>r.json()).then(t=>{
+const fs=topojson.feature(t,t.objects.map).features.filter(f=>{const b=d3.geoBounds(f);return b[0][0]>119.2&&b[1][0]<123.4&&b[0][1]>21.5&&b[1][1]<26.3});
+const w=svg.clientWidth||600,h=svg.clientHeight||700;
+const projection=d3.geoMercator().fitExtent([[w*.12,h*.07],[w*.84,h*.91]],{type:'FeatureCollection',features:fs}),path=d3.geoPath(projection);
+const sel=d3.select(svg);sel.selectAll('*').remove();sel.attr('viewBox','0 0 '+w+' '+h);
+sel.selectAll('path').data(fs).enter().append('path').attr('d',path).attr('class',f=>'county'+(C.some(c=>c[1]===f.properties.id)?' metro':'')).attr('data-id',f=>f.properties.id).on('click',(e,f)=>{const i=C.findIndex(c=>c[1]===f.properties.id);if(i>=0)choose(i)});
+sel.selectAll('text').data(fs.filter(f=>C.some(c=>c[1]===f.properties.id))).enter().append('text').attr('class','label').attr('x',f=>path.centroid(f)[0]).attr('y',f=>path.centroid(f)[1]).attr('text-anchor','middle').text(f=>C.find(c=>c[1]===f.properties.id)[0]).on('click',(e,f)=>choose(C.findIndex(c=>c[1]===f.properties.id)));
+document.getElementById('status').textContent='臺灣完整行政區｜六都與屏東可點擊（宜蘭保留顯示）';
+}).catch(()=>{});
+}
+function choose(i){const code=C[i][1];svg.querySelectorAll('.metro').forEach(p=>p.classList.toggle('lift',p.dataset.id===code));setTimeout(()=>openCity(i),470)}
+document.querySelectorAll('#quick button').forEach((b,i)=>b.onclick=()=>choose(i));
+setTimeout(redraw,350);
+})();
+</script></html>
