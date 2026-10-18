@@ -30,7 +30,7 @@ app.innerHTML=`
 </section>
 <nav class="tabs" role="tablist" aria-label="分析頁籤">${TABS.map(([id,l],i)=>`<button role="tab" id="t-${id}" aria-controls="p-${id}" aria-selected="false" data-tab="${id}">${l}</button>`).join('')}</nav>
 ${TABS.map(([id])=>`<section class="panel" role="tabpanel" id="p-${id}" aria-labelledby="t-${id}" hidden></section>`).join('')}
-<footer class="panel note" style="padding-top:0">${esc(db.meta.neutrality)}　資料更新：${db.meta.asOf}｜版本 ${EC.BUILD}</footer>`;
+<footer class="panel note" style="padding-top:0">${esc(db.meta.neutrality)}　資料更新：${db.meta.asOf}｜版本 ${EC.BUILD}｜本站使用 Google Analytics 匿名統計瀏覽情形</footer>`;
 document.getElementById('rsel').onchange=e=>EC.goCity(e.target.value);
 
 /* ---------------- tab routing (hash; back button works) */
