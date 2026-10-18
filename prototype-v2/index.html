@@ -940,4 +940,30 @@ function choose(i){const code=C[i][1];svg.querySelectorAll('.metro').forEach(p=>
 document.querySelectorAll('#quick button').forEach((b,i)=>b.onclick=()=>choose(i));
 setTimeout(redraw,350);
 })();
+</script><style id="v19-research-structure">#cityview .researchHeading{font-size:clamp(22px,3vw,37px);font-weight:950;line-height:1.2;margin:0 0 12px}#cityview .researchSummary{font-size:13px;color:#6f7380;line-height:1.8;margin:0 0 16px}#cityview .evidenceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#cityview .evidenceCard{background:#fff;border:1px solid #e9e1d8;border-radius:16px;padding:16px;min-width:0}#cityview .evidenceCard h4{font-size:17px;margin:0 0 8px}#cityview .evidenceCard p{font-size:12px;line-height:1.8;color:#686c75;margin:6px 0}#cityview .evidenceCard .headline{font-size:clamp(20px,2.5vw,34px);line-height:1.25;color:#c26d50;font-weight:950;letter-spacing:-.5px}#cityview .evidenceCard .small{font-size:11px;color:#92929b}#cityview .history{display:flex;gap:9px;overflow-x:auto;margin:15px 0}#cityview .history article{min-width:165px;max-width:230px;border-top:4px solid #dd8b6c;background:white;border-radius:10px;padding:13px}#cityview .history p{font-size:12px;line-height:1.7;color:#6b6e78}#cityview .ratio{height:15px;background:#eeeae5;border-radius:8px;overflow:hidden;margin:8px 0}#cityview .ratio span{display:block;height:100%;background:linear-gradient(120deg,#e9a48b,#ce765a)}@media(max-width:750px){#cityview .evidenceGrid{grid-template-columns:1fr}}</style>
+<script id="v19-research-data">
+(function(){
+let cache=null;
+const escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const load=()=>cache?Promise.resolve(cache):Promise.all(['campaign-research.json','city-deep-research.json','poll-research-20261018.json','media-observations-2026.json'].map(p=>fetch('./'+p).then(r=>r.ok?r.json():null).catch(()=>null))).then(([campaign,deep,polls,media])=>cache={campaign,deep,polls,media});
+const oldRender=render;
+render=function(){
+const city=C[selected][0],root=document.getElementById('content'),tabs=document.getElementById('tabs');
+const labels=['行銷橫切面','候選人與政見','民調比較','媒體佈局','城市發展'];
+tabs.replaceChildren();labels.forEach((label,i)=>{const b=document.createElement('button');b.textContent='╱ '+label;b.className=tab===i?'active':'';b.onclick=()=>{tab=i;render()};tabs.append(b)});
+document.getElementById('cityTitle').textContent=city;root.innerHTML='<p class="researchSummary">載入城市研究資料中…</p>';
+load().then(d=>{
+if(C[selected][0]!==city)return;
+const region=d.campaign?.regions?.find(r=>r.city===city),history=d.deep?.regions?.find(r=>r.city===city),studies=(d.polls?.polls||[]).filter(p=>p.city===city),observations=(d.media?.observations||[]).filter(p=>p.city===city);
+const people=region?.people||[];
+const cards=people.map(p=>{const deep=history?.candidates?.find(x=>x.name===p.name);return '<article class="evidenceCard"><h4>'+escape(p.name)+' · '+escape(p.party)+'</h4><div class="headline">'+escape(p.slogan||'主推口號待核實')+'</div><p><b>城市切入：</b>'+escape(deep?.need||'尚無完整政策資料')+'</p><p><b>政策回應：</b>'+escape(deep?.details||p.policies?.slice(0,2).join('；')||'未見完整政策報導')+'</p><p><b>行銷定位：</b>'+escape(deep?.marketing||'尚待原始宣傳資料核實')+'</p><p><b>媒體布局：</b>'+escape((p.media||[]).join('；')||'缺乏可核實媒體資料')+'</p></article>'}).join('');
+const poll=studies.length?studies.map(s=>'<article class="evidenceCard"><h4>'+escape(s.pollster)+'</h4><p class="small">'+escape(s.dates)+' · '+escape(s.method)+' · 委託：'+escape(s.commissioner)+' · n='+escape(s.sample)+'</p>'+Object.entries(s.results).map(([name,v])=>'<p><b>'+escape(name)+'</b> '+Number(v).toFixed(1)+'%</p><div class="ratio"><span style="width:'+Math.min(100,Number(v))+'%"></span></div>').join('')+'<p class="small">'+escape(s.question)+'。'+escape(s.notes)+'</p></article>').join(''):'<article class="evidenceCard">目前沒有可核實的正式民調資料，不以網路票選或評論替代。</article>';
+const media=observations.length?observations.map(o=>'<article class="evidenceCard"><h4>'+escape(o.candidate)+'</h4><p>跨平台提及 '+Number(o.mentions||0).toLocaleString()+' 篇</p><p>每週發文 '+escape(o.posts??'未收錄')+' 篇</p><p>Facebook 平均留言 '+escape(o.fbAvgComments??'未收錄')+' 則</p><p class="small">2026/10/5–10/11；提及量與留言量不是互動率，原始監測方法待複核。</p></article>').join(''):'<article class="evidenceCard">缺少同口徑的媒體監測數據，先保留候選人的已建檔媒體布局，不虛構粉絲數或互動率。</article>';
+const eras=(history?.eras||[]).map(e=>'<article><b>'+escape(e.period)+'</b><p>'+escape(e.summary)+'</p></article>').join('');
+const development='<div class="history">'+eras+'</div><p class="researchSummary">職業別與年齡別比例需取得縣市官方統計。既有的產業聚落定性描述不能冒充職業人口百分比。</p>';
+const heading='<h3 class="researchHeading">'+escape(city)+'｜'+labels[tab]+'</h3>';
+root.innerHTML=heading+(tab===0?'<p class="researchSummary">先看口號如何回應城市問題，再檢視政見與媒體布局；民調僅是觀察指標，不能直接推論廣告造成支持度變化。</p><div class="evidenceGrid">'+cards+'</div><h3>民調證據</h3><div class="evidenceGrid">'+poll+'</div><h3>城市發展背景</h3>'+development:tab===1?'<div class="evidenceGrid">'+cards+'</div>':tab===2?'<div class="evidenceGrid">'+poll+'</div>':tab===3?'<div class="evidenceGrid">'+media+'</div><h3>候選人傳播策略</h3><div class="evidenceGrid">'+cards+'</div>':development+'<div class="evidenceGrid">'+cards+'</div>');
+}).catch(()=>oldRender());
+};
+})();
 </script></html>
