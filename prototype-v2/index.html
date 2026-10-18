@@ -833,4 +833,51 @@ body:has(.scene.on) #editorialOverview,body:has(.cityview.on) #editorialOverview
  if(compare){compare.classList.add('collapsed');const b=document.getElementById('collapseCompare');if(b)b.textContent='展開 ＋';}
  const style=document.createElement('style');style.textContent='body:has(.scene.on) #homeCompare,body:has(.cityview.on) #homeCompare{display:none!important}';document.head.append(style);
 })();
-</script><style id="compact-home-table-v13">#homeCompare table{table-layout:fixed}#homeCompare th:first-child,#homeCompare td:first-child{width:23%}#homeCompare th:nth-child(2),#homeCompare td:nth-child(2){width:58%}#homeCompare th:last-child,#homeCompare td:last-child{width:19%}#homeCompare .slogan{display:inline-block!important;color:#bb6045!important;font-weight:900!important;margin-top:4px!important;overflow-wrap:anywhere!important}#homeCompare td{word-break:normal!important;overflow-wrap:anywhere!important}@media(max-width:750px){#homeCompare th:nth-child(3),#homeCompare td:nth-child(3){display:table-cell!important}#homeCompare.collapsed{width:auto!important}}</style></html>
+</script><style id="compact-home-table-v13">#homeCompare table{table-layout:fixed}#homeCompare th:first-child,#homeCompare td:first-child{width:23%}#homeCompare th:nth-child(2),#homeCompare td:nth-child(2){width:58%}#homeCompare th:last-child,#homeCompare td:last-child{width:19%}#homeCompare .slogan{display:inline-block!important;color:#bb6045!important;font-weight:900!important;margin-top:4px!important;overflow-wrap:anywhere!important}#homeCompare td{word-break:normal!important;overflow-wrap:anywhere!important}@media(max-width:750px){#homeCompare th:nth-child(3),#homeCompare td:nth-child(3){display:table-cell!important}#homeCompare.collapsed{width:auto!important}}</style><style id="v14-mobile-layout">
+/* Override accumulated card styles, preserving the existing transitions. */
+#scene{overflow-y:auto!important;overscroll-behavior:contain}
+#scene #cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:start!important;align-items:stretch!important;gap:12px!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;padding:18px 5% 28px!important}
+#scene #cards .card{position:relative!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;min-width:0!important;max-width:none!important;width:auto!important;height:auto!important;min-height:220px!important;padding:20px!important;gap:12px!important;overflow:hidden!important;transform:none!important}
+#scene #cards .card .party,#scene #cards .card .name,#scene #cards .card .slogan,#scene #cards .card .source,#scene #cards .card .ticker{position:relative!important;inset:auto!important;display:block!important;float:none!important;clear:both!important;width:100%!important;max-width:100%!important;min-height:0!important;max-height:none!important;writing-mode:horizontal-tb!important;text-orientation:mixed!important;transform:none!important;white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important;line-height:1.35!important;margin:0!important;letter-spacing:normal!important;animation:none!important}
+#scene #cards .card .name{font-size:clamp(20px,2.5vw,31px)!important;font-weight:900!important}
+#scene #cards .card .slogan{font-size:clamp(24px,3.3vw,46px)!important;line-height:1.2!important;font-weight:950!important;letter-spacing:-.8px!important;color:#252833!important}
+#scene #cards .card .source{font-size:11px!important;margin-top:auto!important}
+#scene #next{position:relative!important;inset:auto!important;display:block!important;margin:5px 5% 35px auto!important;width:max-content!important;max-width:90%!important;z-index:25!important}
+#cityview main{min-height:0!important}
+@media(max-width:720px){
+ #scene #cards{gap:9px!important;padding:14px 12px 15px!important}
+ #scene #cards .card{min-height:180px!important;padding:13px!important;gap:8px!important;border-radius:16px!important}
+ #scene #cards .card .party{font-size:10px!important}
+ #scene #cards .card .name{font-size:19px!important}
+ #scene #cards .card .slogan{font-size:clamp(19px,5.4vw,28px)!important;line-height:1.2!important}
+ #scene #cards .card .source{font-size:10px!important}
+ #scene #next{margin:12px 12px 25px auto!important}
+}
+</style>
+<script id="v14-unified-city-research">
+(function(){
+const cityCodes={'臺北':'臺北','新北':'新北','桃園':'桃園','臺中':'臺中','臺南':'臺南','高雄':'高雄','屏東':'屏東','屏東市':'屏東市'};
+const research={};
+let poll=null,deep=null,media=null,ready=null;
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const get=()=>ready||(ready=Promise.all(['poll-research-20261018.json','city-deep-research.json','media-observations-2026.json'].map(n=>fetch('./'+n).then(r=>r.ok?r.json():null).catch(()=>null))).then(([p,d,m])=>{poll=p;deep=d;media=m}));
+const names=['行銷橫切面','候選人與政見','民調與事件','媒體與內容','城市發展'];
+const originalRender=render;
+function pollPanel(city){const studies=(poll?.polls||[]).filter(p=>p.city===city);if(!studies.length)return '<section class="analysisBlock"><h3>民調資料</h3><p>目前尚無可核實的正式公開民調。不能以網路投票或政治評論代替。</p></section>';
+return '<section class="analysisBlock"><h3>民調對比｜調查方法分流</h3><p>各份民調依機構、委託方、調查期間獨立列示；不將不同機構的結果串成同一趨勢。</p>'+studies.map(p=>'<article class="study"><div class="studyTop"><b>'+esc(p.pollster)+'</b><span>'+esc(p.dates)+'</span></div><small>'+esc(p.question)+' · '+esc(p.method)+' · 樣本 '+esc(p.sample)+' · 委託：'+esc(p.commissioner)+'</small>'+Object.entries(p.results).map(([name,value],i)=>'<div class="measure"><span>'+esc(name)+'</span><div class="track"><div style="width:'+Math.min(100,Number(value))+'%;background:'+(i%2?'#8a9ec2':'#e58e70')+'"></div></div><b>'+Number(value).toFixed(1)+'%</b></div>').join('')+'<p class="note">'+esc(p.notes)+'</p></article>').join('')+'</section>'}
+function candidatesPanel(city){const r=deep?.regions?.find(x=>x.city===city);if(!r)return '<p>候選人資料整理中。</p>';return '<section class="analysisBlock"><h3>候選人政策對照</h3>'+r.candidates.map(p=>'<article class="study"><h4>'+esc(p.name)+'</h4><p><b>切入需求：</b>'+esc(p.need)+'</p><p><b>政策回應：</b>'+esc(p.details)+'</p><p><b>行銷主張：</b>'+esc(p.marketing)+'</p></article>').join('')+'</section>'}
+function mediaPanel(city){const people=(media?.observations||[]).filter(p=>p.city===city);return '<section class="analysisBlock"><h3>媒體傳播觀察</h3>'+(people.length?people.map(p=>'<article class="study"><h4>'+esc(p.candidate)+'</h4><div class="measure"><span>跨平台提及</span><div class="track"><div style="width:'+Math.min(100,(p.mentions||0)/500)+'%"></div></div><b>'+Number(p.mentions||0).toLocaleString()+'</b></div><p>發文數：'+esc(p.posts??'未收錄')+'；FB平均留言：'+esc(p.fbAvgComments??'未收錄')+'</p></article>').join(''):'<p>尚無同口徑可核實的社群監測資料，不填入推估互動率。</p>')+'</section>'}
+function cityPanel(city){const r=deep?.regions?.find(x=>x.city===city);return '<section class="analysisBlock"><h3>城市發展與選民需求</h3>'+(r?.eras||[]).map(e=>'<article class="study"><h4>'+esc(e.period)+'</h4><p>'+esc(e.summary)+'</p></article>').join('')+'</section>'}
+function show(){const city=C[selected][0],root=document.getElementById('content');document.getElementById('cityTitle').textContent=city;const tabs=document.getElementById('tabs');tabs.replaceChildren();names.forEach((label,i)=>{const b=document.createElement('button');b.textContent='╱ '+label;b.className=tab===i?'active':'';b.onclick=()=>{tab=i;show()};tabs.append(b)});
+let body=tab===0?'<section class="analysisBlock"><h3>'+esc(city)+'｜行銷橫切面</h3><p>從城市問題與候選人品牌定位切入，再交叉觀察政策承諾、傳播內容及民調。數據反映不同面向，不直接推論選票因果。</p></section>'+candidatesPanel(city)+pollPanel(city):tab===1?candidatesPanel(city):tab===2?pollPanel(city):tab===3?mediaPanel(city):cityPanel(city);
+root.innerHTML=body;
+}
+render=function(){const root=document.getElementById('content');root.innerHTML='<p class="loading">正在整合城市分析與民調…</p>';get().then(show).catch(()=>originalRender())};
+const originalEnter=enter;enter=function(){originalEnter();tab=0;render()};
+})();
+</script>
+<style id="v14-research-css">
+#cityview .content{overflow:auto!important;overscroll-behavior:contain}
+.analysisBlock{margin-bottom:24px;max-width:100%;line-height:1.75}.analysisBlock>h3{font-size:clamp(22px,3vw,34px);margin:0 0 12px}.analysisBlock>p{color:#70717a;font-size:13px}.analysisBlock .study{border:1px solid #e9e1da;border-radius:16px;padding:17px;background:#fff;margin:10px 0;min-width:0}.analysisBlock .study h4{margin:0 0 8px;font-size:18px}.analysisBlock .study p{font-size:13px;line-height:1.8;margin:8px 0}.analysisBlock .studyTop{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}.analysisBlock .studyTop span,.analysisBlock small{font-size:11px;color:#89868b}.analysisBlock .measure{display:flex;align-items:center;gap:10px;font-size:12px;margin:10px 0}.analysisBlock .measure>span{width:85px;flex:none}.analysisBlock .measure>b{width:65px;text-align:right}.analysisBlock .track{flex:1;min-width:20px;height:13px;border-radius:8px;background:#f0ebe6;overflow:hidden}.analysisBlock .track>div{height:100%;border-radius:8px;background:#e58e70}.analysisBlock .note{font-size:11px;color:#89858a}
+@media(max-width:720px){#cityview main{display:block!important;overflow:auto!important;height:calc(100dvh - 60px)!important}#cityview .side{width:100%!important;max-width:none!important;padding:15px!important}#cityview .tabs{display:flex!important;overflow-x:auto!important;flex-wrap:nowrap!important;gap:6px!important}#cityview .tabs button{flex:none!important;white-space:nowrap!important}#cityview .content{padding:16px!important;height:auto!important;overflow:visible!important}.analysisBlock .study{padding:13px}}
+</style></html>
