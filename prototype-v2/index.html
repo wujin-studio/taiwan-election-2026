@@ -795,4 +795,42 @@ const foot=document.createElement('p');foot.style.cssText='font-size:11px;color:
  const previousOpen=openCity;
  openCity=function(i){const c=C[i];document.querySelectorAll('.mapstage .metro').forEach(path=>path.classList.remove('lift'));const shape=[...document.querySelectorAll('.mapstage .metro')].find(path=>path.__data__?.properties?.id===c[1]);if(shape)shape.classList.add('lift');previousOpen(i)};
 })();
+</script><style id="layout-repair-v12">
+/* Keep navigation off full-screen transitions. */
+body:has(.scene.on) #editorialOverview,body:has(.cityview.on) #editorialOverview,body:has(.scene.on) #summaryTopLink,body:has(.cityview.on) #summaryTopLink,body:has(.scene.on) #overviewNav,body:has(.cityview.on) #overviewNav{display:none!important}
+#homeCompare{position:fixed!important;top:82px!important;bottom:auto!important;left:auto!important;right:14px!important;width:min(350px,31vw)!important;max-height:calc(100dvh - 110px)!important;z-index:10!important}
+#homeCompare.collapsed{width:auto!important;max-height:none!important;padding:10px 13px!important}
+#homeCompare.collapsed .head{margin:0!important}
+#homeCompare.collapsed .head a{display:none!important}
+#homeCompare.collapsed h2{font-size:13px!important}
+#homeCompare .scroll{overscroll-behavior:contain}
+.scene{overflow-y:auto!important}
+.scene .cards{height:auto!important;min-height:0!important;max-height:calc(100dvh - 220px)!important;overflow-y:auto!important;align-content:flex-start!important;align-items:stretch!important;padding-bottom:20px!important}
+.scene .card{height:auto!important;min-height:210px!important;max-height:none!important;flex:1 1 220px!important;justify-content:flex-start!important;gap:14px!important}
+.scene .card .name,.scene .card .party,.scene .card .slogan,.scene .card .source{position:static!important;max-width:100%!important;overflow-wrap:break-word!important;word-break:normal!important}
+.scene .card .slogan{font-size:clamp(27px,3.3vw,53px)!important;line-height:1.2!important;letter-spacing:-1px!important;animation:none!important}
+.scene .card .source{margin-top:auto!important}
+.scene .next{position:sticky!important;display:block!important;width:max-content!important;max-width:90%!important;margin:12px 5% 20px auto!important;right:auto!important;bottom:12px!important;z-index:100!important}
+@media(max-width:750px){
+ #homeCompare{top:105px!important;right:8px!important;left:auto!important;bottom:auto!important;width:min(235px,65vw)!important;max-height:48dvh!important}
+ #homeCompare.collapsed{top:110px!important;right:9px!important;width:auto!important;max-width:65vw!important;max-height:none!important}
+ #homeCompare .head{flex-wrap:wrap}
+ #homeCompare .head a{font-size:10px}
+ #homeCompare .head h2{font-size:13px}
+ .scene .cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;max-height:none!important;overflow:visible!important;padding:12px 14px 8px!important}
+ .scene .card{width:auto!important;min-width:0!important;min-height:190px!important;padding:14px!important;gap:9px!important}
+ .scene .card .name{font-size:clamp(16px,4.3vw,23px)!important;writing-mode:horizontal-tb!important}
+ .scene .card .party{font-size:11px!important;writing-mode:horizontal-tb!important}
+ .scene .card .slogan{font-size:clamp(22px,5.4vw,35px)!important;line-height:1.2!important;letter-spacing:-.7px!important;writing-mode:horizontal-tb!important}
+ .scene .card .source{font-size:10px!important;line-height:1.4!important}
+ .scene .next{position:sticky!important;bottom:12px!important;margin:14px 15px 20px auto!important;padding:14px 22px!important}
+ .scene h2{margin-top:12px!important}
+}
+</style>
+<script id="layout-behavior-v12">
+(function(){
+ const compare=document.getElementById('homeCompare');
+ if(compare){compare.classList.add('collapsed');const b=document.getElementById('collapseCompare');if(b)b.textContent='展開 ＋';}
+ const style=document.createElement('style');style.textContent='body:has(.scene.on) #homeCompare,body:has(.cityview.on) #homeCompare{display:none!important}';document.head.append(style);
+})();
 </script></html>
