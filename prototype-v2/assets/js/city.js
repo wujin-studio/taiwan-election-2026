@@ -15,7 +15,7 @@ const c1=c=>c.palette[0]==='#ffffff'?(c.palette[1]||'#888'):(c.palette[0]||'#888
 const c2=c=>c.palette[1]&&c.palette[1]!=='#ffffff'?c.palette[1]+'33':'#eee';
 const cvars=c=>`--c1:${c1(c)};--c2:${c2(c)}`;
 
-const TABS=[['marketing','行銷橫切面'],['mix','整合比對'],['chain','數據→需求→口號'],['people-cand','候選人'],['eras','城市年代'],['demo','人口結構'],['media','媒體布局'],['polls','民調與事件'],['compare','橫向比較']];
+const TABS=[['marketing','行銷橫切面'],['mix','整合比對'],['viz3d','3D 分析'],['chain','數據→需求→口號'],['people-cand','候選人'],['eras','城市年代'],['demo','人口結構'],['media','媒體布局'],['polls','民調與事件'],['compare','橫向比較']];
 const ORDER=['taipei','new-taipei','taoyuan','taichung','tainan','kaohsiung','pingtung','pingtung-city'];
 
 app.innerHTML=`
@@ -333,6 +333,116 @@ RENDER.mix=async el=>{
   paths.on('click',(e,d)=>sel(d.properties.name)).on('keydown',(e,d)=>{if(e.key==='Enter')sel(d.properties.name)});
   el.addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(b&&el.contains(b)&&!b.closest('.bars')){sel(b.dataset.d)}if(e.target.closest('[data-clear]'))sel(null)});
   const top=front.flatMap(f=>f.d)[0];sel(R.parent?'屏東市':null);
+};
+
+/* ================= 3D 分析（Three.js，延遲載入） ================= */
+function loadThree(){return window.THREE?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement('script');s.src='assets/vendor/three.min.js';s.onload=res;s.onerror=()=>rej(new Error('3D 函式庫載入失敗'));document.head.appendChild(s)})}
+RENDER.viz3d=async el=>{
+  el.innerHTML=`<div class="dash-h"><div><h2 class="h-l">3D 分析</h2><p class="note">拖曳可以旋轉；點板塊或柱子看數值與來源。高度和數值成線性比例、從 0 起算，旁邊的刻度標示實際數字。立體透視會讓遠近看起來不同，請以標示的數字為準。</p></div>
+   <div class="v3-ctl"><div class="seg" role="group" aria-label="視圖"><button aria-pressed="true" data-v="map">行政區立體</button><button aria-pressed="false" data-v="mtx">需求矩陣</button></div>
+   <div class="seg" role="group" aria-label="高度代表" id="v3h"><button aria-pressed="true" data-h="pop">高度＝人口</button><button aria-pressed="false" data-h="hit">高度＝候選人提及</button></div></div></div>
+  <div class="v3"><div class="v3-stage" id="v3s"><div class="v3-load">正在載入 3D…</div><div class="v3-lb" id="v3lb"></div>
+     <div class="v3-btn"><button class="pill" data-z="in" aria-label="放大">＋</button><button class="pill" data-z="out" aria-label="縮小">－</button><button class="pill" data-z="reset">重設視角</button></div><div class="v3-scale" id="v3scale"></div></div>
+   <aside class="dc v3-side" id="v3side"></aside></div>
+  <details class="v3-tbl"><summary>以表格檢視同一份數據（無障礙／核對用）</summary><div id="v3tbl" class="scroll-x"></div></details>`;
+  try{await loadThree();if(!document.createElement('canvas').getContext('webgl'))throw new Error('此裝置不支援 WebGL')}catch(err){el.querySelector('.v3-load').textContent=err.message+'，請改看「整合比對」頁籤的 2D 地圖。';return}
+  const host=el.querySelector('#v3s'),W=()=>host.clientWidth,H=()=>host.clientHeight;
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;host.prepend(renderer.domElement);
+  const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,.1,500);cam.up.set(0,0,1);
+  scene.add(new THREE.HemisphereLight(0xfffaf0,0xd6c8b4,1.0));const sun=new THREE.DirectionalLight(0xffffff,1.5);sun.position.set(-12,-18,30);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-20,right:20,top:20,bottom:-20,near:1,far:90});scene.add(sun);
+  const ground=new THREE.Mesh(new THREE.PlaneGeometry(120,120),new THREE.ShadowMaterial({opacity:.16}));ground.receiveShadow=true;scene.add(ground);
+  const root=new THREE.Group();scene.add(root);
+  let view='map',hmode='pop',rotZ=-.35,tilt=.78,dist=36,targets=[],picks=[],labels=[],selName=null;
+  const ds=R.districts||[],pop=Object.fromEntries(ds.map(d=>[d.name,d.pop]));
+  const items=majors.flatMap(c=>[...c.record.map(x=>({c,kind:'政績',x})),...c.pledges.map(x=>({c,kind:'政見',x}))]).map(o=>({...o,d:tagD(o.x.text+(o.x.stage||''))}));
+  const front=(R.frontier||[]).map(f=>({...f,d:(f.districts||[]).map(x=>(ds.find(d=>short(d.name)===x||d.name===x)||{}).name).filter(Boolean)}));
+  const hits=Object.fromEntries(ds.map(d=>[d.name,items.filter(o=>o.d.includes(d.name)).length+front.filter(f=>f.d.includes(d.name)).length]));
+  const geo=await (await fetch(`data/geo/towns-${R.county}.geojson`)).json();
+  const pj=d3.geoMercator().fitExtent([[-11,-11],[11,11]],geo),P=([lo,la])=>{const [x,y]=pj([lo,la]);return new THREE.Vector2(x,-y)};
+  const shapes=g=>(g.type==='Polygon'?[g.coordinates]:g.coordinates).map(r=>{const s=new THREE.Shape(r[0].map(P));r.slice(1).forEach(h=>s.holes.push(new THREE.Path(h.map(P))));return s});
+  const MAXH=5.2,clear=()=>{while(root.children.length){const o=root.children.pop();o.traverse(m=>{m.geometry&&m.geometry.dispose();m.material&&m.material.dispose&&m.material.dispose()})}targets=[];picks=[];labels=[]};
+  const lerp=(a,b,k)=>a+(b-a)*k,ease=k=>1-Math.pow(1-k,3);
+  function lab(text,v3,cls=''){labels.push({text,v3,cls})}
+  function buildMap(){
+    clear();const vals=hmode==='pop'?pop:hits,mx=Math.max(1,...Object.values(vals));
+    const col=d3.scaleLinear([0,mx],hmode==='pop'?['#f3e4d4','#b4471f']:['#eef1f4','#2f4456']);
+    geo.features.forEach(f=>{const n=f.properties.name,v=vals[n]??0,h=Math.max(.04,v/mx*MAXH);
+      const geom=new THREE.ExtrudeGeometry(shapes(f.geometry),{depth:1,bevelEnabled:false,curveSegments:1});
+      const m=new THREE.Mesh(geom,new THREE.MeshStandardMaterial({color:col(v),roughness:.75}));m.castShadow=m.receiveShadow=true;m.scale.z=.001;m.userData={name:n,v,h};
+      const e=new THREE.LineSegments(new THREE.EdgesGeometry(geom,30),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.75}));m.add(e);
+      root.add(m);picks.push(m);targets.push({o:m,to:h});
+      const [cx,cy]=d3.geoPath(pj).centroid(f);m.userData.c=new THREE.Vector3(cx,-cy,h);});
+    // frontier pillars
+    const KC={'產業':0xc2562e,'交通':0x6b7d8e,'能源':0xc9a227,'土地':0x8ba387,'科技':0xa497c6,'觀光':0xe2457f};
+    front.forEach(f=>f.d.forEach((dn,j)=>{const m=picks.find(p=>p.userData.name===dn);if(!m)return;const base=m.userData.h,pl=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,1.6,12),new THREE.MeshStandardMaterial({color:KC[f.kind]||0xc2562e}));
+      pl.rotation.x=Math.PI/2;pl.position.set(m.userData.c.x+j*.28,m.userData.c.y,base+.8);pl.userData={front:f,dn};pl.castShadow=true;root.add(pl);picks.push(pl);
+      const cap=new THREE.Mesh(new THREE.SphereGeometry(.26,16,12),pl.material);cap.position.set(pl.position.x,pl.position.y,base+1.7);cap.userData={front:f,dn};root.add(cap);picks.push(cap)}));
+    const top=[...ds].sort((a,b)=>(vals[b.name]||0)-(vals[a.name]||0)).slice(0,6);
+    top.forEach(d=>{const m=picks.find(p=>p.userData.name===d.name);if(m)lab(`${short(d.name)} ${hmode==='pop'?fmt(vals[d.name]):vals[d.name]+'項'}`,m.userData.c,'top')});
+    if(R.parent){const m=picks.find(p=>p.userData.name==='屏東市');if(m)lab('屏東市',m.userData.c,'me')}
+    el.querySelector('#v3scale').innerHTML=scaleHTML(mx,hmode==='pop'?'人':'項');
+    tableMap(vals);side(null);
+  }
+  function buildMtx(){
+    clear();const n=R.needs.length,m=majors.length,gx=3.3,gy=3.6,ox=-(n-1)*gx/2,oy=(m-1)*gy/2;
+    const okEv=x=>(x.evidence||[]).some(e=>e.status==='verified');
+    const base=new THREE.Mesh(new THREE.BoxGeometry(n*gx+1.4,m*gy+1.4,.15),new THREE.MeshStandardMaterial({color:0xf1ebe0}));base.position.z=-.08;base.receiveShadow=true;root.add(base);
+    R.needs.forEach((nd,i)=>{majors.forEach((c,j)=>{const sig=[hitM(c,nd).length>0,!!(R.matrix[c.id]||{})[nd.id],okEv(nd)],cnt=sig.filter(Boolean).length,h=Math.max(.05,cnt/3*MAXH*.8);
+      const bx=new THREE.Mesh(new THREE.BoxGeometry(1.7,1.7,1),new THREE.MeshStandardMaterial({color:new THREE.Color(c1(c)).lerp(new THREE.Color('#ffffff'),cnt?0:.85),roughness:.6}));
+      bx.position.set(ox+i*gx,oy-j*gy,0);bx.scale.z=.001;bx.castShadow=bx.receiveShadow=true;bx.userData={cell:{c,nd,sig,cnt},h};root.add(bx);picks.push(bx);targets.push({o:bx,to:h,box:true});
+      if(cnt)lab(`${cnt}/3`,new THREE.Vector3(ox+i*gx,oy-j*gy,h+.3),'val')});
+      lab(nd.label.length>8?nd.label.slice(0,8)+'…':nd.label,new THREE.Vector3(ox+i*gx,-oy-gy*.75,0),'colh sm')});
+    majors.forEach((c,j)=>lab(c.name,new THREE.Vector3(ox-gx*.85,oy-j*gy,0),'row big'));
+    el.querySelector('#v3scale').innerHTML=scaleHTML(3,'個訊號');
+    tableMtx();side(null);
+  }
+  function scaleHTML(mx,u,f=1){const steps=[0,.25,.5,.75,1];return `<b>高度刻度</b>${steps.reverse().map(s=>`<span>${u==='人'?fmt(Math.round(mx*s)):(mx*s).toFixed(mx<=5?(Number.isInteger(mx*s)?0:2):0)} ${u}</span>`).join('')}<em>線性・從 0 起算</em>`}
+  function tableMap(vals){el.querySelector('#v3tbl').innerHTML=`<table class="cmpt"><thead><tr><th>行政區</th><th>人口（2025 年底）</th><th>候選人政績政見＋建設提及</th></tr></thead><tbody>${[...ds].sort((a,b)=>b.pop-a.pop).map(d=>`<tr><td>${esc(d.name)}</td><td>${fmt(d.pop)}</td><td>${hits[d.name]}</td></tr>`).join('')}</tbody></table>`}
+  function tableMtx(){el.querySelector('#v3tbl').innerHTML=`<table class="cmpt"><thead><tr><th>需求</th>${majors.map(c=>`<th>${esc(c.name)}</th>`).join('')}</tr></thead><tbody>${R.needs.map(n=>`<tr><td>${esc(n.label)}</td>${majors.map(c=>{const s=[hitM(c,n).length>0,!!(R.matrix[c.id]||{})[n.id],(n.evidence||[]).some(e=>e.status==='verified')];return `<td>${s.filter(Boolean).length}/3（口號${s[0]?'✓':'—'} 政見${s[1]?'✓':'—'} 數據${s[2]?'✓':'—'}）</td>`}).join('')}</tr>`).join('')}</tbody></table>`}
+  function side(x){
+    const sd=el.querySelector('#v3side');
+    if(view==='mtx'){
+      if(!x){sd.innerHTML=`<h3>需求矩陣</h3><p class="note">每根柱子是一位候選人對一項需求的回應：口號字面有提到、政見有對應、背後數據已核實，各算 1 個訊號，最高 3。</p><ul class="v3-rank">${majors.map(c=>{const t=R.needs.reduce((a,n)=>a+[hitM(c,n).length>0,!!(R.matrix[c.id]||{})[n.id]].filter(Boolean).length,0);return `<li style="${cvars(c)}"><i></i><b>${esc(c.name)}</b>口號＋政見訊號 <span class="num">${t}</span> / ${R.needs.length*2}</li>`}).join('')}</ul>`;return}
+      const {c,nd,sig}=x;sd.innerHTML=`<h3>${esc(c.name)} × ${esc(nd.label)}</h3><ul class="v3-sig"><li class="${sig[0]?'on':''}">口號：${sig[0]?esc(hitM(c,nd).join('、')):'未提及'}</li><li class="${sig[1]?'on':''}">政見：${esc((R.matrix[c.id]||{})[nd.id]||'尚未查到')}</li><li class="${sig[2]?'on':''}">數據：${(nd.evidence||[]).map(e=>esc(e.text)+' '+st(e.status)+srcs(e.src)).join('<br>')}</li></ul>`;return}
+    if(x&&x.front){const f=x.front;sd.innerHTML=`<h3>${esc(f.name)}</h3><p><span class="stage">${esc(f.kind)}</span>${esc(f.stage)}</p><p>${esc(f.detail)}</p><p>${st(f.status)}${srcs(f.src)}</p><p class="note">位置：${f.d.map(short).join('、')}</p>`;return}
+    const name=x?x.name:null;selName=name;picks.forEach(p=>{if(p.userData.name)p.material.emissive=new THREE.Color(p.userData.name===name?0x3a1a0c:0x000000)});
+    if(!name){const tot=ds.reduce((a,d)=>a+d.pop,0);sd.innerHTML=`<h3>${esc(R.name)}</h3><p><span class="num" style="font-size:30px">${fmt(tot)}</span> 人（${ds.length} 區）${st('verified')}${srcs(['ris-048'])}</p><p class="note">點任一板塊看該區人口、建設，以及候選人哪些政績政見提到這一區。柱子是發展前沿據點。</p>`;return}
+    const rel=items.filter(o=>o.d.includes(name)),fr=front.filter(f=>f.d.includes(name)),p=pop[name],tot=ds.reduce((a,d)=>a+d.pop,0);
+    sd.innerHTML=`<h3>${esc(name)}</h3><p><span class="num" style="font-size:30px">${fmt(p)}</span> 人｜占 ${(p/tot*100).toFixed(1)}% ${st('verified')}${srcs(['ris-048'])}</p>
+     ${fr.length?`<h4>建設與產業</h4>${fr.map(f=>`<div class="fr"><i style="background:#c2562e"></i><b>${esc(f.name)}</b><span>${esc(f.stage)}</span></div>`).join('')}`:''}
+     <h4>候選人提到這一區 ${rel.length} 項</h4>${majors.map(c=>{const r=rel.filter(o=>o.c===c);return `<div class="v3-c" style="${cvars(c)}"><b>${esc(c.name)}</b>「${esc(sloganText(c))}」<ul>${r.map(o=>`<li><span class="k">${o.kind}</span>${esc(o.x.text)} ${st(o.x.status)}${srcs(o.x.src)}</li>`).join('')||'<li class="dim">尚未查到直接提及</li>'}</ul></div>`}).join('')}`;
+  }
+  // camera & render
+  function place(){cam.position.set(Math.sin(rotZ)*Math.sin(tilt)*dist,-Math.cos(rotZ)*Math.sin(tilt)*dist,Math.cos(tilt)*dist);cam.lookAt(0,view==='map'?-1.2:0,view==='map'?1.2:1.2)}
+  const v=new THREE.Vector3(),lbBox=el.querySelector('#v3lb');
+  function draw(){place();renderer.render(scene,cam);const used=[];lbBox.innerHTML=labels.map(l=>{v.copy(l.v3);v.z=l.v3.z*(l.cls==='top'||l.cls==='me'?growK:1);v.project(cam);if(v.z>=1)return '';const x=(v.x+1)/2*W(),y=(1-v.y)/2*H();
+   if(l.cls==='top'||l.cls==='me'){const w=l.text.length*12+16;if(used.some(u=>Math.abs(u.x-x)<(u.w+w)/2&&Math.abs(u.y-y)<26))return '';used.push({x,y,w})}
+   return `<span class="v3l ${l.cls}" style="transform:translate(${x}px,${y}px) translate(-50%,-120%)">${esc(l.text)}</span>`}).join('')}
+  function fitDist(){const a=W()/H();return view==='map'?44*Math.pow(Math.max(1,1.45/a),.85):27*Math.max(1,1.75/a)}
+  function size(){renderer.setSize(W(),H(),false);cam.aspect=W()/H();cam.updateProjectionMatrix();draw()}
+  let growK=0,raf=0;
+  function grow(){growK=0;const t0=performance.now(),ms=EC.reduced()?1:1100;cancelAnimationFrame(raf);const st0=targets.map(t=>t.o.scale.z);
+    const step=t=>{const k=Math.min(1,(t-t0)/ms),e=ease(k);growK=e;targets.forEach((tg,i)=>{tg.o.scale.z=Math.max(.001,lerp(st0[i]>.002?st0[i]:0,tg.to,e));if(tg.box)tg.o.position.z=tg.o.scale.z/2});
+      picks.forEach(p=>{if(p.userData.front){const base=(picks.find(q=>q.userData.name===p.userData.dn)||{userData:{h:0}}).userData.h*e;p.position.z=p.geometry.type==='SphereGeometry'?base+1.7:base+.8}});draw();if(k<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
+  function build(){view==='map'?buildMap():buildMtx();el.querySelector('#v3h').style.visibility=view==='map'?'visible':'hidden';dist=fitDist();tilt=view==='map'?.78:.88;rotZ=view==='map'?-.35:0;grow()}
+  // interaction: drag rotate (horizontal), vertical drag tilts on mouse; touch keeps page scroll
+  let drag=null;const cv=renderer.domElement;cv.style.touchAction='pan-y';
+  cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,r:rotZ,t:tilt,moved:false,touch:e.pointerType!=='mouse'}});
+  addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)>4||Math.abs(dy)>4)drag.moved=true;rotZ=drag.r-dx*.008;if(!drag.touch)tilt=Math.min(1.25,Math.max(.25,drag.t-dy*.005));draw()});
+  addEventListener('pointerup',e=>{if(drag&&!drag.moved)pick(e);drag=null});
+  cv.addEventListener('wheel',e=>{e.preventDefault();dist=Math.min(90,Math.max(14,dist*(1+Math.sign(e.deltaY)*.08)));draw()},{passive:false});
+  const ray=new THREE.Raycaster(),pt=new THREE.Vector2();
+  function pick(e){const r=cv.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return;pt.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pt,cam);const h=ray.intersectObjects(picks,false)[0];
+    if(!h){side(null);draw();return}const u=h.object.userData;if(view==='mtx'&&u.cell)side(u.cell);else if(u.front)side({front:u.front});else if(u.name)side({name:u.name});draw()}
+  el.querySelector('.v3-btn').onclick=e=>{const b=e.target.closest('[data-z]');if(!b)return;if(b.dataset.z==='in')dist=Math.max(14,dist*.85);else if(b.dataset.z==='out')dist=Math.min(90,dist*1.18);else{rotZ=-.35;tilt=view==='map'?.78:1.0;dist=fitDist()}draw()};
+  el.querySelectorAll('.v3-ctl .seg')[0].onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));view=b.dataset.v;build()};
+  el.querySelector('#v3h').onclick=e=>{const b=e.target.closest('[data-h]');if(!b)return;b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));hmode=b.dataset.h;
+    const vals=hmode==='pop'?pop:hits,mx=Math.max(1,...Object.values(vals)),col=d3.scaleLinear([0,mx],hmode==='pop'?['#f3e4d4','#b4471f']:['#eef1f4','#2f4456']);
+    targets.forEach(t=>{const n=t.o.userData.name;t.to=Math.max(.04,(vals[n]??0)/mx*MAXH);t.o.userData.h=t.to;t.o.material.color.set(col(vals[n]??0));t.o.userData.c.z=t.to});
+    labels=[];[...ds].sort((a,b)=>(vals[b.name]||0)-(vals[a.name]||0)).slice(0,6).forEach(d=>{const m=picks.find(p=>p.userData.name===d.name);if(m)lab(`${short(d.name)} ${hmode==='pop'?fmt(vals[d.name]):vals[d.name]+'項'}`,m.userData.c,'top')});
+    el.querySelector('#v3scale').innerHTML=scaleHTML(mx,hmode==='pop'?'人':'項');grow()};
+  el.querySelector('.v3-load').remove();addEventListener('resize',size);size();build();
+  if(R.parent)side({name:'屏東市'});
 };
 
 /* ================= 數據 → 需求 → 口號（交叉應證） ================= */
