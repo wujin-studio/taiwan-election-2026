@@ -880,4 +880,29 @@ const originalEnter=enter;enter=function(){originalEnter();tab=0;render()};
 #cityview .content{overflow:auto!important;overscroll-behavior:contain}
 .analysisBlock{margin-bottom:24px;max-width:100%;line-height:1.75}.analysisBlock>h3{font-size:clamp(22px,3vw,34px);margin:0 0 12px}.analysisBlock>p{color:#70717a;font-size:13px}.analysisBlock .study{border:1px solid #e9e1da;border-radius:16px;padding:17px;background:#fff;margin:10px 0;min-width:0}.analysisBlock .study h4{margin:0 0 8px;font-size:18px}.analysisBlock .study p{font-size:13px;line-height:1.8;margin:8px 0}.analysisBlock .studyTop{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}.analysisBlock .studyTop span,.analysisBlock small{font-size:11px;color:#89868b}.analysisBlock .measure{display:flex;align-items:center;gap:10px;font-size:12px;margin:10px 0}.analysisBlock .measure>span{width:85px;flex:none}.analysisBlock .measure>b{width:65px;text-align:right}.analysisBlock .track{flex:1;min-width:20px;height:13px;border-radius:8px;background:#f0ebe6;overflow:hidden}.analysisBlock .track>div{height:100%;border-radius:8px;background:#e58e70}.analysisBlock .note{font-size:11px;color:#89858a}
 @media(max-width:720px){#cityview main{display:block!important;overflow:auto!important;height:calc(100dvh - 60px)!important}#cityview .side{width:100%!important;max-width:none!important;padding:15px!important}#cityview .tabs{display:flex!important;overflow-x:auto!important;flex-wrap:nowrap!important;gap:6px!important}#cityview .tabs button{flex:none!important;white-space:nowrap!important}#cityview .content{padding:16px!important;height:auto!important;overflow:visible!important}.analysisBlock .study{padding:13px}}
-</style></html>
+</style><script id="v15-city-lens">(function(){
+const previousRender=render;
+const occupations={
+'臺北':[['金融、專業服務','內湖、南港、信義產業聚落'],['公部門、醫療與教育','首都行政與醫學中心'],['商業與零售服務','東西區商圈']],
+'新北':[['製造與技術職','土城、五股、新莊'],['通勤型服務與專業職','雙北共同生活圈'],['商業零售','板橋、新莊、中和']],
+'桃園':[['製造與技術職','工業區與半導體封測'],['物流與航空服務','機場與航空城'],['服務業','人口移入帶動']],
+'臺中':[['精密機械與製造','工具機、智慧機械'],['半導體技術職','中科聚落'],['零售餐飲服務','都會商圈']],
+'臺南':[['半導體與科技職','南科'],['傳統製造','永康、安南等'],['農漁與觀光服務','溪北與濱海']],
+'高雄':[['重工業與製造','鋼鐵、石化、金屬'],['半導體技術職','楠梓與橋頭'],['港埠物流與服務','高雄港與亞灣']],
+'屏東':[['農林漁牧','農業與沿海養殖'],['觀光服務','墾丁、東港、小琉球'],['科技與製造','農科、屏科']],
+'屏東市':[['公務、醫療、教育','縣治中心'],['零售與服務','市區商圈'],['科技通勤職','周邊園區']]};
+const needs={
+'臺北':['房價與青年居住','內科通勤與捷運','高齡照顧與老屋更新'],
+'新北':['跨河通勤','老屋都更','在地工作與托育'],
+'桃園':['捷運與公車','青年住宅與學校','工業環境與污染'],
+'臺中':['交通壅塞與捷運','空氣品質','山海屯資源落差'],
+'臺南':['南科住房與交通','淹水與排水','溪北高齡化'],
+'高雄':['青年高薪就業','產業轉型與空污','軌道及住宅供給'],
+'屏東':['人口外流與就業','醫療與高齡照顧','農漁轉型與交通'],
+'屏東市':['停車與舊城更新','高鐵及園區配套','托育與公共空間']};
+const escape=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function extra(city){return '<section class="analysisBlock"><h3>市民職業結構與需求</h3><p>目前先呈現可追溯的產業與職業聚落，尚未取得各縣市同年度、同分類的官方職業比例，因此不以推估百分比充當統計。</p><div class="lensGrid">'+(occupations[city]||[]).map(([job,where])=>'<article class="study"><h4>'+escape(job)+'</h4><p>'+escape(where)+'</p><small>定性聚落觀察｜職業比例待官方資料</small></article>').join('')+'</div><h3>選民需求 × 政策回應</h3><div class="lensGrid">'+(needs[city]||[]).map((n,i)=>'<article class="study"><small>城市議題 '+String(i+1).padStart(2,'0')+'</small><h4>'+escape(n)+'</h4><p>比較候選人的政策承諾、執行紀錄與媒體論述；需求強度尚需民調或行政統計佐證。</p></article>').join('')+'</div></section>'}
+const originalShow=window.show;
+if(typeof originalShow==='function'){window.show=function(){originalShow();const city=C[selected][0],root=document.getElementById('content');if(tab===0||tab===4)root.insertAdjacentHTML('beforeend',extra(city));};}
+})();</script>
+<style id="v15-lens-css">.lensGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lensGrid .study{margin:0!important}.lensGrid h4{overflow-wrap:anywhere}@media(max-width:650px){.lensGrid{grid-template-columns:1fr}}</style></html>
