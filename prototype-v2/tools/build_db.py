@@ -57,6 +57,8 @@ S = {
  'ris-11509': ('民國115年9月戶口統計資料分析', '內政部戶政司', '2026-10-08', 'https://www.ris.gov.tw/info-liferay/app/channel/newsDetail/26278263'),
  'dgbas-occ': ('人力資源調查統計年報：就業者之職業－按縣市別', '行政院主計總處', None, 'https://www.stat.gov.tw/'),
  'nlsc-towns': ('鄉鎮市區界線（經 dkaoster/taiwan-atlas 轉製，MIT）', '內政部國土測繪中心', None, 'https://github.com/dkaoster/taiwan-atlas'),
+ 'mol-23': ('勞動統計年報 表2-3 人力資源概況－按地區分（114年平均）', '勞動部（資料來源：主計總處人力資源調查）', '2025', 'https://statdb.mol.gov.tw/html/year/year14/32030.pdf'),
+ 'tpe-occ': ('臺北市統計年報 表35 臺北市就業人口之職業', '臺北市政府主計處（資料來源：主計總處人力資源調查統計年報）', '2025', 'https://www-ws.gov.taipei/001/Upload/367/relfile/48245/8011538/7db72b4a-9bb8-40ce-9ea9-329731d1f539.pdf'),
  'user': ('使用者 2026/10/17–18 整理之研究筆記（尚未逐條比對原文）', '使用者提供', '2026-10-18', None),
  'user-img': ('使用者提供之圖片檔（來源網址與授權待補）', '使用者提供', '2026-10-18', None),
  'editorial': ('編輯依公開史料整理；尚待逐條附原始出處', '本站編輯', '2026-10-18', None),
@@ -705,12 +707,100 @@ R = [
         ERA(2023, '交通', '高鐵屏東站規劃（六塊厝）')],
  ),
 ]
+
+# ------------------------------------------------------------------ labour (MOL table 2-3, 2025 annual average, 千人)
+LABOR_SRC = {'src': ['mol-23'], 'status': V, 'year': 2025, 'unit': '千人'}
+LABOR = {  # pop15, labour force, employed, unemployed, not in LF, LFPR %, unemployment %
+ 'taipei': (2163,1181,1141,40,982,54.6,3.4), 'new-taipei': (3580,2148,2076,72,1431,60.0,3.4), 'taoyuan': (2007,1242,1200,41,765,61.9,3.3),
+ 'taichung': (2469,1515,1463,52,954,61.4,3.4), 'tainan': (1626,997,963,34,629,61.3,3.4), 'kaohsiung': (2387,1397,1352,45,990,58.5,3.2),
+ 'pingtung': (687,414,401,14,273,60.3,3.3), 'national': (20238,12028,11626,403,8210,59.43,3.35)}
+LABOR = {k: dict(zip(['pop15','lf','emp','unemp','nlf','lfpr','ur'], v)) for k, v in LABOR.items()}
+OCC_GROUPS = [('mgr','主管及監督人員'),('pro','專業人員'),('tech','技術員及助理專業人員'),('clerk','事務支援人員'),('svc','服務及銷售工作人員'),('agri','農林漁牧業生產人員'),('craft','技藝、機械操作及基層勞力')]
+OCC = {'taipei': {'year': 2025, 'total': 1141, 'status': V, 'src': ['tpe-occ'], 'partial': True,
+                  'values': {'mgr': (100, 8.76), 'pro': (277, 24.28)},
+                  'note': '臺北市統計年報表 35 的 PDF 只能可靠讀出前兩類；其餘五類待取得主計總處原表後補上'}}
+
+# ------------------------------------------------------------------ development frontier (projects that create new needs)
+FR = lambda name, stage, detail, status=U, src='user', kind='產業': {'name': name, 'stage': stage, 'detail': detail, 'kind': kind, 'status': status, 'src': [src] if isinstance(src, str) else src}
+FRONTIER = {
+ 'taipei': [FR('北士科 輝達台灣總部', '建照申請中', 'T17/T18 地上權已簽約；7/15 申請建照，預計 2030 年進駐約 4,000 人', V, 'bnext-tpe'),
+            FR('北士科臨時／永久變電所', '規劃中', '臨時變電所約 20 個月完工，永久所地下化', V, 'bnext-tpe', '能源'),
+            FR('捷運六線齊發', '施工中', '多條捷運路線同時施工', V, 'bnext-tpe', '交通'),
+            FR('自駕巴士沙盒', '試行中', '2026 動物園 → 2027 北士科 → 2028 擴大', V, 'bnext-tpe', '交通'),
+            FR('松山機場遷移', '倡議', '約 300 公頃土地重整（候選人主張）', U, 'user', '土地')],
+ 'new-taipei': [FR('淡海新市鎮／科學城', '開發中', '新市鎮人口導入與產業用地', U, 'user', '土地'), FR('捷運環狀線', '部分通車', '第一階段 2020 通車，後續路段施工', U, 'editorial', '交通'),
+                FR('林口新市鎮', '開發中', '機捷沿線住宅與產業', U, 'editorial', '土地')],
+ 'taoyuan': [FR('桃園航空城', '延宕中', '第三跑道等進度遭對手批評', V, 'udn-huang', '交通'), FR('捷運綠線', '施工中', '延伸中壢段流標 9 次、預算 97→255 億元（對手指稱）', V, 'udn-huang', '交通'),
+             FR('龍潭科學園區三期', '候選人主張', '黃世杰政見', V, 'udn-huang'), FR('桃竹苗大矽谷', '中央政策', '科技廊帶串連', V, 'udn-huang')],
+ 'taichung': [FR('智慧製造／機器人園區', '候選人主張', '江啟臣「台中智造」', V, 'cna-tc'), FR('中部科學園區', '營運中', '2003 年設立', U, 'editorial'),
+              FR('臺中火力發電廠', '營運中', '空品議題來源（何欣純主張以氣換煤）', U, 'user', '能源')],
+ 'tainan': [FR('南部科學園區先進製程', '營運中', '晶圓製造聚落擴張', U, 'editorial'), FR('臺南捷運藍線', '規劃施工', '陳亭妃主張再加深綠線、紅線', V, 'udn-chen-traffic', '交通'),
+            FR('鐵路地下化', '施工中', '市區交通縫合', V, 'udn-chen-traffic', '交通')],
+ 'kaohsiung': [FR('楠梓 台積電晶圓 22 廠', 'P1 量產／P2–P5 陸續', '先進製程晶圓製造；園區 182.57 公頃', V, 'kcg-nanzi'), FR('半導體 S 廊帶', '推動中', '楠梓、路竹、橋頭、亞灣分工', V, 'kcg-s'),
+               FR('亞灣 AI 產業聚落', '候選人主張', '賴瑞隆：腹地、電力、人才', V, 'cna-khh-ai'), FR('楠梓園區聯外交通', '規劃中', '155.91 億元', V, 'kcg-nanzi', '交通')],
+ 'pingtung': [FR('半導體 S 廊帶延伸', '候選人主張', '周春米政見', U, 'user'), FR('旭海短期火箭發射場', '規劃中', '太空產業', U, 'user', '科技'),
+              FR('高鐵延伸屏東', '規劃中', '六塊厝站', U, 'editorial', '交通')],
+ 'pingtung-city': [FR('高鐵屏東站', '規劃中', '六塊厝，鄰近屏東市', U, 'editorial', '交通'), FR('勝利星村', '營運中', '眷村再生商圈', U, 'editorial', '觀光')],
+}
+
+# ------------------------------------------------------------------ needs: evidence (city data → need) + slogan keywords (need → slogan)
+E = lambda t, st=V, *src: {'text': t, 'status': st, 'src': list(src)}
+NEED_X = {
+ 'taipei': {'housing': (['土地重整','安居','安'], [E('戶籍人口 2,439,507，12 區中大安區最多（28.2 萬）', V, 'ris-048')]),
+            'commute': (['順','交通','通勤'], [E('內湖、南港科技園區通勤，雙方都提出專門政見', V, 'bnext-tpe')]),
+            'ai': (['AI','科技','輝達','安可'], [E('輝達總部 2030 年預計進駐約 4,000 人', V, 'bnext-tpe')]),
+            'youth': (['青年','順'], [E('15–64 歲人口占 63.52%，全國最低', V, 'ris-11509'), E('勞參率 54.6%，七縣市最低', V, 'mol-23')]),
+            'aging': (['安','照顧','陪伴'], [E('65 歲以上占 24.86%，全國最高', V, 'ris-11509')])},
+ 'new-taipei': {'commute': (['世界級','交通','30分鐘'], [E('勞動力 214.8 萬人，七縣市最多', V, 'mol-23')]),
+                'newtown': (['創新局','淡海','林口'], [E('淡海、林口新市鎮開發中', U, 'editorial')]),
+                'care': (['溫暖','照顧','慧'], [E('勞參率 60.0%', V, 'mol-23')]),
+                'renewal': (['世界級','都更'], [E('板橋、新莊、中和、三重各區人口皆逾 38 萬', V, 'ris-048')]),
+                'identity': (['新北','世界級','創新'], [E('戶籍人口 404 萬，全國最多', V, 'ris-048')])},
+ 'taoyuan': {'rail': (['動起來','前進'], [E('捷運綠線延伸段流標 9 次（對手陣營指稱）', V, 'udn-huang')]),
+             'housing': (['善良','安居'], [E('人口年增 0.25%，全國第二；9 月淨遷入 1,060 人，全國最多', V, 'ris-11509')]),
+             'tech': (['世界','矽谷','前進'], [E('勞參率 61.9%，七縣市最高', V, 'mol-23')]),
+             'health': (['心','健康','醫'], [E('挑戰者提出第二醫學中心', V, 'udn-huang')]),
+             'school': (['善良'], [E('人口持續移入', V, 'ris-11509')])},
+ 'taichung': {'traffic': (['旗艦','交通','Way'], [E('勞動力 151.5 萬人', V, 'mol-23')]),
+              'air': (['生活','綠'], [E('中火位於市境，候選人提出以氣換煤', U, 'user')]),
+              'mfg': (['智造','旗艦'], [E('工具機與精密機械聚落', U, 'editorial')]),
+              'wage': (['旗艦','布局全球'], [E('就業者 146.3 萬人', V, 'mol-23')]),
+              'balance': (['欣','屯區','海線'], [E('區人口差距大：北屯 31.7 萬、和平 1.0 萬', V, 'ris-048')])},
+ 'tainan': {'transit': (['七彩','路路相通'], [E('37 個行政區，人口最少的龍崎區 3,234 人', V, 'ris-048')]),
+            'birth': (['5000','津貼','幸福'], [E('粗出生率 2.99‰，全國倒數第二', V, 'ris-11509')]),
+            'flood': (['韌性'], [E('2018 年 0823 水災', U, 'editorial')]),
+            'tourism': (['400','觀光'], [E('臺南 400 年城市紀年', U, 'editorial')]),
+            'tech': (['南科','科技'], [E('南科先進製程擴張', U, 'editorial')])},
+ 'kaohsiung': {'chip': (['崛起','國際','雄心'], [E('楠梓台積電 22 廠 P1–P5', V, 'kcg-nanzi')]),
+               'youth': (['崛起','國際'], [E('失業率 3.2%，七縣市最低', V, 'mol-23')]),
+               'traffic': (['海港','交通'], [E('楠梓園區聯外交通 155.91 億元', V, 'kcg-nanzi')]),
+               'legacy': (['凸','海港','傳產'], [E('鋼鐵石化港口產業轉型', U, 'editorial')]),
+               'balance': (['世界','五區','38'], [E('38 區：鳳山 35.3 萬、茂林 1,846 人', V, 'ris-048')])},
+ 'pingtung': {'outflow': (['希望','亮起來'], [E('戶籍人口 78.2 萬', V, 'ris-048')]),
+              'agri': (['亮','米'], [E('農漁業大縣', U, 'editorial')]),
+              'aging': (['未來','仁醫'], [E('粗死亡率 13.11‰，全國第三高', V, 'ris-11509')]),
+              'tech': (['晶片','亮起來'], [E('S 廊帶延伸（候選人主張）', U, 'user')]),
+              'care': (['希望','未來'], [E('粗結婚率 2.97‰，全國倒數第三', V, 'ris-11509')])},
+ 'pingtung-city': {'basic': (['安居','做事'], [E('縣治人口 19.1 萬', V, 'ris-048')]),
+                   'space': (['好生活'], [E('勝利星村等公共空間', U, 'editorial')]),
+                   'elder': (['安居','長照'], [E('屏東縣粗死亡率全國第三高', V, 'ris-11509')]),
+                   'biz': (['樂業','做事'], [E('縣治商業中心', U, 'editorial')]),
+                   'hsr': (['建設','同一隊'], [E('高鐵屏東站規劃', U, 'editorial')])},
+}
+
 for r in R:
     prefix = {'taipei': '臺北市', 'new-taipei': '新北市', 'taoyuan': '桃園市', 'taichung': '臺中市', 'tainan': '臺南市', 'kaohsiung': '高雄市', 'pingtung': '屏東縣'}.get(r['id'])
     r['districts'] = dist(prefix) if prefix else []
     r['districtSrc'] = {'src': ['ris-048'], 'date': '2025-12', 'status': V} if prefix else None
     r.setdefault('occupation', {'status': M, 'note': r.pop('occupationNote', None) or '主計總處《人力資源調查》「就業者之職業－按縣市別」原表尚未匯入（主計總處網站拒絕自動擷取，需要人工下載）；不以全國比例或產業結構推算', 'src': ['dgbas-occ']})
     r['candidates'] = [c['id'] for c in C if c['region'] == r['id']]
+    lab_key = 'pingtung' if r['id'] == 'pingtung-city' else r['id']
+    r['labor'] = dict(LABOR[lab_key], **LABOR_SRC, scope=('屏東縣（屏東市沒有市級調查）' if r['id']=='pingtung-city' else r['name']))
+    if r['id'] in OCC: r['occupation'] = OCC[r['id']]
+    r['frontier'] = FRONTIER.get(r['id'], [])
+    for n in r['needs']:
+        kw, ev = NEED_X[r['id']][n['id']]
+        n['keywords'] = kw; n['evidence'] = ev
 
 # ------------------------------------------------------------------ polls
 P = []
@@ -789,7 +879,7 @@ db = {
           'status': {V: '已核實：比對過具日期的原始報導、官方資料或陣營原圖', U: '未核實：使用者提供或編輯整理，尚待原文', M: '缺漏：查無可靠資料，不填推估值'},
           'neutrality': '本站呈現各陣營的行銷手法和公開資料，不替任何政黨或候選人宣傳；不從職業、年齡推定政治立場。口號解析是編輯詮釋，不是陣營說法。'},
  'sources': SOURCES, 'regions': R, 'candidates': C, 'polls': P, 'optIn': OPTIN, 'pollGaps': POLL_GAPS,
- 'events': EV, 'channels': [{'id': a, 'label': b} for a, b in CHANNELS], 'questionTypes': QUESTION, 'modes': MODE,
+ 'events': EV, 'laborAll': LABOR, 'laborSrc': LABOR_SRC, 'occGroups': [{'id':a,'label':b} for a,b in OCC_GROUPS], 'channels': [{'id': a, 'label': b} for a, b in CHANNELS], 'questionTypes': QUESTION, 'modes': MODE,
 }
 assert len(C) == 27, len(C)
 for c in C:

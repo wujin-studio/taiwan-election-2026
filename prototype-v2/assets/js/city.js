@@ -15,7 +15,7 @@ const c1=c=>c.palette[0]==='#ffffff'?(c.palette[1]||'#888'):(c.palette[0]||'#888
 const c2=c=>c.palette[1]&&c.palette[1]!=='#ffffff'?c.palette[1]+'33':'#eee';
 const cvars=c=>`--c1:${c1(c)};--c2:${c2(c)}`;
 
-const TABS=[['marketing','行銷橫切面'],['people-cand','候選人'],['eras','城市年代'],['demo','人口結構'],['media','媒體布局'],['polls','民調與事件'],['compare','橫向比較']];
+const TABS=[['marketing','行銷橫切面'],['chain','數據→需求→口號'],['people-cand','候選人'],['eras','城市年代'],['demo','人口結構'],['media','媒體布局'],['polls','民調與事件'],['compare','橫向比較']];
 const ORDER=['taipei','new-taipei','taoyuan','taichung','tainan','kaohsiung','pingtung','pingtung-city'];
 
 app.innerHTML=`
@@ -85,7 +85,7 @@ function spread(c){
     <div class="wide"><h4>和城市條件的對應</h4><ul class="links">${a.cityLinks.map(l=>`<li><span class="k">${esc(l.kind)}</span><span>${esc(l.text)} ${st(l.status)}${srcs(l.src)}</span></li>`).join('')}</ul></div>
     <div class="wide"><h4>證據與限制</h4><p>${esc(a.limits)}</p></div>
   </div>`:''}
-  <div class="jump"><button class="pill" data-jump="people-cand">政績與政見</button><button class="pill" data-jump="media">媒體布局</button><button class="pill" data-jump="polls">民調</button><button class="pill" data-jump="demo">人口數據</button></div>
+  <div class="jump"><button class="pill terra" data-jump="chain">用數據應證這句口號</button><button class="pill" data-jump="people-cand">政績與政見</button><button class="pill" data-jump="media">媒體布局</button><button class="pill" data-jump="polls">民調</button><button class="pill" data-jump="demo">人口數據</button></div>
   <p class="edit-note">「字義、情緒、生活情境」是編輯對文案的解讀，不代表候選人或陣營的說法，也不推論任何職業或年齡層的政治立場。</p>
   </article>`;
 }
@@ -196,6 +196,79 @@ RENDER.polls=el=>{
     .on('click',function(e,d){e.stopPropagation();EC.openPop(this,`<h4>${esc(d.pollster)}</h4><div class="meta">${esc(Q[d.question])}｜${esc(db.modes[d.mode])}｜${d.start}–${d.end}</div><p>${Object.entries(d.results).map(([id,v])=>esc(db.cand[id].name)+' '+v+'%').join('、')}</p>`)});
   svg.append('g').attr('font-size',11).attr('fill','#7c766c').call(g=>{g.append('rect').attr('x',W-230).attr('y',2).attr('width',10).attr('height',8).attr('fill','#6b7d8e');g.append('text').attr('x',W-216).attr('y',9).text('電話調查');g.append('rect').attr('x',W-150).attr('y',2).attr('width',10).attr('height',8).attr('fill','#a497c6');g.append('text').attr('x',W-136).attr('y',9).text('網路問卷')});
 };
+
+
+/* ================= 數據 → 需求 → 口號（交叉應證） ================= */
+const sloganBag=c=>[c.slogan.status!=='missing'?c.slogan.text:'',...c.subSlogans.map(x=>x.text)].join('｜');
+const hit=(c,n)=>(n.keywords||[]).filter(k=>sloganBag(c).includes(k));
+const pol=(c,n)=>(R.matrix[c.id]||{})[n.id];
+const LBL={pop15:'15 歲以上人口',lf:'勞動力',emp:'就業者',unemp:'失業者',lfpr:'勞動力參與率',ur:'失業率'};
+const SEVEN=['taipei','new-taipei','taoyuan','taichung','tainan','kaohsiung','pingtung'];
+RENDER.chain=el=>{
+  el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">數據 → 需求 → 口號</h2><p>左邊是有出處的城市數據，中間是從數據推出的城市需求，右邊是候選人。實線代表口號字面就回應了這項需求，虛線代表口號沒提但政見有對應。點任何節點看依據。</p></div>
+   <div class="seg" role="group" aria-label="連線類型"><button aria-pressed="true" data-ln="all">全部</button><button aria-pressed="false" data-ln="slogan">只看口號</button><button aria-pressed="false" data-ln="policy">只看政見</button></div></div>
+  <div class="flow" id="flow"></div>
+  <div class="sec"><div class="sec-h"><div><h3 class="h-m">口號應證表</h3><p>每格三個訊號：口號字面有提到、政見有對應、需求有已核實數據支撐。這是對照，不是評分；空白不代表候選人沒有立場。</p></div></div><div class="scroll-x">${verifyTable()}</div></div>
+  <div class="sec"><div class="sec-h"><div><h3 class="h-m">跨縣市比對</h3><p>同一個指標，把 ${esc(R.short)} 放回七個縣市裡看。長條從 0 起算；虛線是全國。</p></div>
+   <label class="sel">指標 <select id="mSel">${Object.entries({lfpr:'勞動力參與率（%）',ur:'失業率（%）',emp:'就業者（千人）',lf:'勞動力（千人）',pop15:'15 歲以上人口（千人）',popreg:'戶籍人口（人）'}).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label></div>
+   <div class="xcity" id="xcity"></div><p class="note">勞動力資料：勞動部統計年報表 2-3（主計總處人力資源調查，2025 年平均）${st('verified')}${srcs(['mol-23'])}；戶籍人口：戶政司 ODRP048（2025 年底）${srcs(['ris-048'])}。${R.parent?'屏東市沒有市級勞動力調查，這裡以屏東縣代表。':''}</p></div>
+  <div class="sec"><div class="sec-h"><div><h3 class="h-m">誰在工作、做什麼</h3><p>勞動力結構和職業結構（職業別 ≠ 產業別）。可以切換人數和百分比。</p></div><div class="seg" role="group" aria-label="單位"><button aria-pressed="true" data-u="n">人數</button><button aria-pressed="false" data-u="p">百分比</button></div></div>
+   <div class="labor" id="labor"></div><div id="occ"></div></div>
+  <div class="sec"><div class="sec-h"><div><h3 class="h-m">發展前沿</h3><p>正在發生、會製造新需求的建設與產業。依階段由左到右排列。</p></div></div><div class="front" id="front"></div></div>`;
+  drawFlow(el,'all');
+  el.querySelector('.sec-h .seg').onclick=e=>{const b=e.target.closest('[data-ln]');if(!b)return;b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));drawFlow(el,b.dataset.ln)};
+  const ms=el.querySelector('#mSel');ms.onchange=()=>drawX(el,ms.value);drawX(el,'lfpr');
+  let unit='n';const useg=el.querySelectorAll('.seg')[1];useg.onclick=e=>{const b=e.target.closest('[data-u]');if(!b)return;useg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));unit=b.dataset.u;drawLabor(el,unit)};drawLabor(el,unit);
+  drawFront(el);
+};
+function verifyTable(){
+  return `<table class="vt"><thead><tr><th scope="col">需求</th>${majors.map(c=>`<th scope="col" style="${cvars(c)}">${esc(c.name)}<div class="note">「${esc(sloganText(c))}」</div></th>`).join('')}</tr></thead><tbody>
+  ${R.needs.map(n=>{const ev=n.evidence||[],okEv=ev.some(x=>x.status==='verified');return `<tr><th scope="row">${esc(n.label)}<div class="note">${ev.map(x=>esc(x.text)+' '+st(x.status)+srcs(x.src)).join('<br>')}</div></th>${majors.map(c=>{const h=hit(c,n),p=pol(c,n);return `<td style="${cvars(c)}"><div class="sig"><span class="${h.length?'on':''}" title="口號">口號${h.length?'：'+esc(h.join('、')):''}</span><span class="${p?'on':''}" title="政見">政見${p?'：'+esc(p):''}</span><span class="${okEv?'on':''}" title="數據">數據${okEv?'已核實':'待核實'}</span></div></td>`}).join('')}</tr>`}).join('')}
+  <tr class="sum"><th scope="row">口號回應的需求數</th>${majors.map(c=>`<td style="${cvars(c)}"><b class="num">${R.needs.filter(n=>hit(c,n).length).length}</b> / ${R.needs.length}　<span class="note">政見對應 ${R.needs.filter(n=>pol(c,n)).length} 項</span></td>`).join('')}</tr></tbody></table>
+  <p class="note">「口號」訊號用關鍵詞比對主口號與次口號（例如「順」對應通勤），關鍵詞由編輯設定，屬詮釋；不推論任何族群的投票傾向。</p>`;
+}
+function drawFlow(el,mode){
+  const box=el.querySelector('#flow'),W=Math.max(box.clientWidth,320),narrow=W<640;
+  const ev=R.needs.flatMap(n=>(n.evidence||[]).map((e,i)=>({...e,need:n.id,id:n.id+'-'+i})));
+  const cols=narrow?[14,W*.36,W-16]:[24,W*.47,W-24],rowH=narrow?46:40;
+  const H=Math.max(ev.length,R.needs.length,majors.length)*rowH+40;
+  const y=(arr,i)=>20+(H-40)*(i+.5)/arr.length;
+  const nodesE=ev.map((e,i)=>({...e,x:cols[0],y:y(ev,i)})),nodesN=R.needs.map((n,i)=>({...n,x:cols[1],y:y(R.needs,i)})),nodesC=majors.map((c,i)=>({c,x:cols[2],y:y(majors,i)}));
+  const links=[];
+  nodesE.forEach(e=>{const n=nodesN.find(n=>n.id===e.need);links.push({a:e,b:n,kind:'ev',col:e.status==='verified'?'#8ba387':'#d9b25b'})});
+  nodesN.forEach(n=>nodesC.forEach(C=>{const h=hit(C.c,n),p=pol(C.c,n);if(h.length&&mode!=='policy')links.push({a:n,b:C,kind:'slogan',col:c1(C.c),txt:'口號關鍵詞：'+h.join('、')});else if(p&&mode!=='slogan')links.push({a:n,b:C,kind:'policy',col:c1(C.c),txt:'政見：'+p})}));
+  const curve=l=>{const x0=l.a.x+(l.kind==='ev'?6:70),x1=l.b.x-(l.kind==='ev'?70:8),m=(x0+x1)/2;return `M${x0},${l.a.y}C${m},${l.a.y} ${m},${l.b.y} ${x1},${l.b.y}`};
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="數據到需求到候選人的對應流程圖">${links.map((l,i)=>`<path class="lk ${l.kind}" d="${curve(l)}" stroke="${l.col}" style="animation-delay:${i*35}ms" ${l.txt?`data-pop="${esc(`<h4>${esc(l.a.label)} → ${esc(l.b.c.name)}</h4><p>${esc(l.txt)}</p>`)}"`:''}/>`).join('')}
+   ${nodesE.map(e=>`<g class="nd" transform="translate(${e.x},${e.y})" data-pop="${esc(`<h4>城市數據</h4><p>${esc(e.text)}</p><div class='meta'>${e.status==='verified'?'已核實':'未核實'}｜${e.src.map(s=>esc(db.sources[s].title)).join('、')}</div>`)}"><circle r="6" fill="${e.status==='verified'?'#8ba387':'#d9b25b'}"/>${narrow?'':`<text x="12" y="4" class="ev">${esc(e.text.length>24?e.text.slice(0,24)+'…':e.text)}</text>`}</g>`).join('')}
+   ${nodesN.map(n=>`<g class="nd need" transform="translate(${n.x},${n.y})" data-pop="${esc(`<h4>${esc(n.label)}</h4><p>${(n.evidence||[]).map(x=>esc(x.text)).join('<br>')}</p>`)}"><rect x="-70" y="-15" width="140" height="30" rx="15"/><text text-anchor="middle" y="5">${esc(n.label.length>9?n.label.slice(0,9)+'…':n.label)}</text></g>`).join('')}
+   ${nodesC.map(C=>`<g class="nd cand" transform="translate(${C.x},${C.y})" data-pop="${esc(`<h4>${esc(C.c.name)}</h4><p>「${esc(sloganText(C.c))}」</p>`)}"><circle r="9" fill="${c1(C.c)}"/><text x="-14" y="-12" text-anchor="end" class="cn">${esc(C.c.name)}</text><text x="-14" y="6" text-anchor="end" class="cs">${esc(sloganText(C.c).slice(0,narrow?6:12))}</text></g>`).join('')}</svg>
+   <div class="flow-key"><span><i style="background:#8ba387"></i>已核實數據</span><span><i style="background:#d9b25b"></i>未核實</span><span><b class="ln"></b>口號字面回應</span><span><b class="ln d"></b>只有政見回應</span>${narrow?'<span>點左側圓點看數據內容</span>':''}</div>`;
+}
+function drawX(el,key){
+  const box=el.querySelector('#xcity'),me=R.parent||R.id;
+  const val=id=>key==='popreg'?db.region[id].population.value:db.laborAll[id][key];
+  const rows=SEVEN.map(id=>({id,v:val(id),name:db.region[id].short})).sort((a,b)=>b.v-a.v),mx=d3.max(rows,r=>r.v),nat=key==='popreg'?null:db.laborAll.national[key];
+  const pct=key==='lfpr'||key==='ur',fmtV=v=>pct?v.toFixed(key==='ur'?1:1)+'%':fmt(v);
+  const natLine=nat!=null&&pct?`<i class="nat" style="left:${(nat/mx*100).toFixed(2)}%"></i>`:'';
+  box.innerHTML=rows.map(r=>`<div class="xr ${r.id===me?'me':''}"><span>${esc(r.name)}</span><span class="t">${r===rows[0]?natLine:''}<i style="width:${(r.v/mx*100).toFixed(2)}%"></i></span><span class="v">${fmtV(r.v)}</span></div>`).join('')+(nat!=null&&pct?`<p class="note">全國：${fmtV(nat)}</p>`:'');
+  box.querySelectorAll('.xr .t i:not(.nat)').forEach((b,i)=>{b.style.animationDelay=i*50+'ms'});
+}
+function drawLabor(el,unit){
+  const L=R.labor,box=el.querySelector('#labor');
+  const parts=[['emp','就業者','#6b7d8e'],['unemp','失業者','#c2562e'],['nlf','非勞動力','#d9d0c1']];
+  const tot=L.pop15;
+  box.innerHTML=`<div class="lab-h"><b>${esc(L.scope)}</b> 15 歲以上人口 <span class="num">${fmt(L.pop15)}</span> 千人｜勞參率 ${L.lfpr}%｜失業率 ${L.ur}% ${st(L.status)}${srcs(L.src)}</div>
+  <div class="stack">${parts.map(([k,l,c])=>`<div style="flex:${L[k]};background:${c}" data-pop="${esc(`<h4>${l}</h4><p><b>${fmt(L[k])}</b> 千人（占 15 歲以上 ${(L[k]/tot*100).toFixed(1)}%）</p><div class='meta'>2025 年平均｜勞動部統計年報表 2-3</div>`)}"><span>${l}<br>${unit==='n'?fmt(L[k])+' 千人':(L[k]/tot*100).toFixed(1)+'%'}</span></div>`).join('')}</div>`;
+  const O=R.occupation,ob=el.querySelector('#occ');
+  if(O&&O.values){const g=db.occGroups;const known=g.filter(x=>O.values[x.id]),sumK=known.reduce((s,x)=>s+O.values[x.id][0],0);
+    ob.innerHTML=`<h4 class="occ-h">就業者職業結構（${O.year}）${st(O.status)}${srcs(O.src)}</h4><div class="stack occ">${known.map((x,i)=>`<div style="flex:${O.values[x.id][0]};background:${['#2c3e50','#6b7d8e','#8ba387','#a497c6','#e7a283','#c9b27c','#c2562e'][g.indexOf(x)]}" data-pop="${esc(`<h4>${x.label}</h4><p><b>${O.values[x.id][0]}</b> 千人（${O.values[x.id][1]}%）</p>`)}"><span>${esc(x.label)}<br>${unit==='n'?O.values[x.id][0]+' 千人':O.values[x.id][1]+'%'}</span></div>`).join('')}<div class="unk" style="flex:${O.total-sumK}"><span>其餘五類待匯入<br>${unit==='n'?fmt(O.total-sumK)+' 千人':((O.total-sumK)/O.total*100).toFixed(1)+'%'}</span></div></div><p class="note">${esc(O.note)}</p>`;
+  }else ob.innerHTML=`<div class="gap" style="margin-top:14px"><b>職業人數缺漏 ${st('missing')}</b>${esc((O&&O.note)||'')}。原表到手後，這裡會顯示七類職業的人數與百分比，並和城市發展前沿逐項對照。</div>`;
+}
+function drawFront(el){
+  const B=[['倡議／主張',/倡議|主張|中央政策/],['規劃',/規劃|推動|開發/],['施工／延宕',/施工|延宕|申請|試行|部分/],['營運',/營運|量產/]];
+  const items=R.frontier||[];const bucket=f=>{const i=B.findIndex(b=>b[1].test(f.stage));return i<0?1:i};
+  el.querySelector('#front').innerHTML=items.length?B.map((b,i)=>`<div class="fcol"><h4>${b[0]}</h4>${items.filter(f=>bucket(f)===i).map(f=>`<article><span class="fk">${esc(f.kind)}</span><b>${esc(f.name)}</b><p>${esc(f.stage)}｜${esc(f.detail)}</p>${st(f.status)}${srcs(f.src)}</article>`).join('')||'<p class="note">—</p>'}</div>`).join(''):'<div class="gap"><b>尚未整理發展前沿</b></div>';
+}
 
 RENDER.compare=el=>{
   const rows=[
