@@ -62,11 +62,78 @@ function latestPhone(c){const ps=polls.filter(p=>p.mode==='phone'&&vote(p)&&p.re
 const RENDER={};
 
 RENDER.marketing=el=>{
-  el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">行銷橫切面</h2><p>先看口號本身：字面意思、情緒、品牌承諾，再看它對應到哪些城市條件，最後連到政見、媒體和數據。字義與情緒是編輯詮釋，不是陣營說法；有出處的事實都附「源」。</p></div></div>
-  <div class="spreads">${majors.map(spread).join('')}</div>
-  ${matrix()}
-  ${minors.length?`<div class="sec"><h3 class="h-m">其他參選人</h3><p class="note">已完成登記；目前沒有看到正式口號或系統性的競選文宣報導。</p><div class="minors">${minors.map(c=>`<div><b>${esc(c.name)}</b>${party(c.party)}<p class="note" style="margin:.4em 0 0">${c.identity.map(x=>esc(x.text)).join('；')}</p></div>`).join('')}</div></div>`:''}`;
+  const M=majors.map(c=>{const ch=new Set(c.tactics.map(t=>t.ch));return {c,
+    slogNeeds:R.needs.filter(n=>hitM(c,n).length).length,polNeeds:R.needs.filter(n=>(R.matrix[c.id]||{})[n.id]).length,
+    pV:c.pledges.filter(p=>p.status==='verified').length,pU:c.pledges.filter(p=>p.status!=='verified').length,
+    rec:c.record.length,ch:ch.size,evt:c.timeline.length,vis:c.visuals.length,
+    mentions:c.metrics?c.metrics.mentions:null,neg:c.metrics?c.metrics.sentiment[2]:null,
+    poll:latestPhoneM(c),online:latestOnlineM(c)}});
+  el.innerHTML=`<div class="dash-h"><div><h2 class="h-l">行銷橫切面</h2><p class="note">${majors.length} 位主要參選人並排比對；圖表都來自本站資料庫的比對結果。點候選人看完整口號解析。</p></div>
+    ${minors.length?`<button class="pill" data-minors>另 ${minors.length} 位參選人</button>`:''}</div>
+  <div class="dash">
+    <section class="dc heads" aria-label="候選人主口號">${M.map(m=>headCard(m)).join('')}</section>
+    <section class="dc insight" aria-label="比對結論"><h3>比對結論</h3>${insight(M)}<p class="note">由下方圖表的數據自動彙整，非陣營說法；不推論任何族群的投票傾向。</p></section>
+    <section class="dc heat" aria-label="口號與需求對應熱圖"><div class="dc-h"><h3>口號 × 城市需求</h3><span class="legend3"><i class="s"></i>口號字面（候選人色）<i class="p"></i>政見<i class="d"></i>數據已核實</span></div>${heat()}</section>
+    <section class="dc power" aria-label="行銷力道對照"><div class="dc-h"><h3>行銷布局對照</h3><span class="note">每列各自以最大值為滿格，從 0 起算</span></div>${power(M)}</section>
+    <section class="dc pulse" aria-label="民調與聲量"><div class="dc-h"><h3>民調與聲量快照</h3><button class="lnk" data-jump="polls">全部民調</button></div>${pulse(M)}</section>
+  </div>
+  <aside class="drawer" id="drawer" aria-hidden="true"><div class="dw-in"><button class="pill dw-x" data-close>關閉</button><div id="dwBody"></div></div></aside><div class="dw-scrim" data-close></div>`;
+  el.addEventListener('click',e=>{
+    const o=e.target.closest('[data-open]');if(o){openDrawer(el,db.cand[o.dataset.open]);return}
+    if(e.target.closest('[data-minors]')){openDrawer(el,null);return}
+    if(e.target.closest('[data-close]'))closeDrawer(el);
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer(el)});
+  requestAnimationFrame(()=>el.querySelector('.dash').classList.add('go'));
 };
+const hitM=(c,n)=>(n.keywords||[]).filter(k=>[c.slogan.status!=='missing'?c.slogan.text:'',...c.subSlogans.map(x=>x.text)].join('｜').includes(k));
+const latestPhoneM=c=>polls.filter(p=>p.mode==='phone'&&p.question==='vote'&&p.results[c.id]!=null).sort((a,b)=>b.end.localeCompare(a.end))[0];
+const latestOnlineM=c=>polls.filter(p=>p.mode!=='phone'&&p.question==='vote'&&p.results[c.id]!=null).sort((a,b)=>b.end.localeCompare(a.end))[0];
+function headCard(m){const c=m.c,none=c.slogan.status==='missing';
+  return `<button class="hc" style="${cvars(c)}" data-open="${c.id}" aria-label="看${esc(c.name)}完整解析">
+   ${c.photo?`<img src="${c.photo.file}" alt="" loading="lazy">`:`<span class="mono">${esc(c.name[0])}</span>`}
+   <span class="hc-t"><span class="hc-n">${esc(c.name)} ${party(c.party)}${c.incumbent?'<em>現任</em>':''}</span>
+   <span class="hc-s ${none?'none':''}">${esc(none?'未見正式口號':c.slogan.text)}</span>
+   <span class="hc-m">${st(c.slogan.status)}<span class="hc-go">完整解析</span></span></span></button>`}
+function insight(M){
+  const L=[];const by=k=>[...M].sort((a,b)=>b[k]-a[k]);
+  const tot=R.needs.length;
+  M.forEach(m=>{const hits=R.needs.filter(n=>hitM(m.c,n).length).map(n=>n.label);
+    L.push(`<b>${esc(m.c.name)}</b>的口號字面回應 <b class="num">${m.slogNeeds}</b>/${tot} 項需求${hits.length?`（${hits.map(esc).join('、')}）`:''}；政見對應 ${m.polNeeds} 項。`)});
+  const none=R.needs.filter(n=>M.every(m=>!hitM(m.c,n).length&&!(R.matrix[m.c.id]||{})[n.id])).map(n=>n.label);
+  const onlyPol=R.needs.filter(n=>M.some(m=>(R.matrix[m.c.id]||{})[n.id])&&M.every(m=>!hitM(m.c,n).length)).map(n=>n.label);
+  if(onlyPol.length)L.push(`口號都沒提、但政見有處理的需求：${onlyPol.map(esc).join('、')}。`);
+  if(none.length)L.push(`<span class="warn">雙方口號與政見都尚未查到對應：${none.map(esc).join('、')}。</span>`);
+  const chM=by('ch');if(M.length>1&&chM[0].ch!==chM[1].ch)L.push(`已收錄的媒體渠道：${esc(chM[0].c.name)} ${chM[0].ch} 種、${esc(chM[1].c.name)} ${chM[1].ch} 種。`);
+  const mm=M.filter(m=>m.mentions!=null);if(mm.length>1){const s=[...mm].sort((a,b)=>b.mentions-a.mentions);L.push(`社群聲量（10/5–11）：${esc(s[0].c.name)} ${fmt(s[0].mentions)} 篇，是 ${esc(s[1].c.name)} 的 ${(s[0].mentions/s[1].mentions).toFixed(1)} 倍；聲量不等於支持。`)}
+  const pp=M.filter(m=>m.poll);if(pp.length>1&&pp[0].poll===pp[1].poll){const p=pp[0].poll,s=[...pp].sort((a,b)=>p.results[b.c.id]-p.results[a.c.id]),gap=p.results[s[0].c.id]-p.results[s[1].c.id];const age=Math.round((Date.now()-new Date(p.end))/864e5);L.push(`最新電話民調（${esc(p.pollster)}，委託／出資：${esc(p.commissioner)}，${p.end}）：${esc(s[0].c.name)} 領先 ${gap.toFixed(1)} 個百分點${p.margin&&gap<=2*p.margin?'，在兩倍誤差範圍內':''}${age>60?`<span class="warn">；這份調查距今 ${age} 天，不能代表現況</span>`:''}。${M.some(m=>m.online)?'網路問卷結果另列，不能和電話民調直接比較。':''}`)}
+  else if(!pp.length)L.push(`本選區沒有可以引用的電話民調。`);
+  return `<ul>${L.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+}
+function heat(){
+  const okEv=n=>(n.evidence||[]).some(x=>x.status==='verified');
+  return `<div class="hm" style="--n:${majors.length}"><div class="hm-r hm-hd"><span></span>${majors.map(c=>`<span style="${cvars(c)}"><i></i>${esc(c.name)}</span>`).join('')}</div>
+  ${R.needs.map((n,i)=>`<div class="hm-r" style="--i:${i}"><span class="hm-n" data-pop="${esc(`<h4>${esc(n.label)}</h4><p>${(n.evidence||[]).map(x=>esc(x.text)).join('<br>')}</p>`)}">${esc(n.label)}</span>${majors.map(c=>{const h=hitM(c,n),p=(R.matrix[c.id]||{})[n.id];
+    return `<span class="hm-c" style="${cvars(c)}" data-pop="${esc(`<h4>${esc(c.name)}｜${esc(n.label)}</h4><p>口號：${h.length?esc(h.join('、')):'未提及'}<br>政見：${p?esc(p):'尚未查到'}<br>數據：${okEv(n)?'已核實':'待核實'}</p>`)}"><i class="s ${h.length?'on':''}"></i><i class="p ${p?'on':''}"></i><i class="d ${okEv(n)?'on':''}"></i><small>${p?esc(p.length>14?p.slice(0,14)+'…':p):''}</small></span>`}).join('')}</div>`).join('')}</div>`;
+}
+function power(M){
+  const rows=[['口號回應需求','slogNeeds','項'],['政見對應需求','polNeeds','項'],['已核實政見','pV','項'],['未核實政見','pU','項'],['已完成政績','rec','項'],['媒體渠道','ch','種'],['品牌時間軸事件','evt','則'],['主視覺原圖','vis','張']];
+  return `<div class="pw">${rows.map(([l,k,u],ri)=>{const mx=Math.max(1,...M.map(m=>m[k]));return `<div class="pw-r"><span class="pw-l">${l}</span><span class="pw-b">${M.map((m,ci)=>`<span class="pw-bar" style="${cvars(m.c)}"><i style="--w:${(m[k]/mx*100).toFixed(1)}%;--d:${ri*60+ci*30}ms"></i><b>${m[k]}${u}</b></span>`).join('')}</span></div>`}).join('')}</div>
+  <div class="pw-key">${M.map(m=>`<span style="${cvars(m.c)}"><i></i>${esc(m.c.name)}</span>`).join('')}</div>`;
+}
+function pulse(M){
+  const p=M.find(m=>m.poll)?.poll,o=M.find(m=>m.online)?.online;
+  const bars=(poll,lab)=>poll?`<div class="pu"><div class="pu-h">${lab}｜${esc(poll.pollster)} ${poll.end.slice(5).replace('-','/')} ${st(poll.status)}${srcs(poll.src)}</div>${M.filter(m=>poll.results[m.c.id]!=null).map(m=>{const v=poll.results[m.c.id];return `<div class="pu-r" style="--pc:${m.c.party.color}"><span>${esc(m.c.name)}</span><span class="pu-t"><i style="--w:${v}%"></i>${poll.margin?`<s style="left:${Math.max(0,v-poll.margin)}%;width:${2*poll.margin}%"></s>`:''}</span><b>${v}%</b></div>`}).join('')}<div class="note">${esc(poll.method)}｜n=${fmt(poll.sample)}｜${poll.margin?'±'+poll.margin:'誤差不適用'}</div></div>`:'';
+  const mm=M.filter(m=>m.mentions!=null);
+  return (bars(p,'電話民調・投票支持')||`<div class="gap"><b>電話民調缺漏</b>${esc(db.pollGaps[R.id]||'本選區沒有電話民調')}</div>`)+bars(o,'網路問卷（非機率）')+
+   (mm.length?`<div class="pu"><div class="pu-h">社群聲量 10/5–11（提及篇數）${srcs(mm[0].c.metrics.src)}</div>${mm.map(m=>`<div class="pu-r" style="--pc:${c1(m.c)}"><span>${esc(m.c.name)}</span><span class="pu-t"><i style="--w:${(m.mentions/Math.max(...mm.map(x=>x.mentions))*100).toFixed(1)}%"></i></span><b>${fmt(m.mentions)}</b></div>`).join('')}<div class="note">負面情緒占比：${mm.map(m=>esc(m.c.name)+' '+m.neg+'%').join('、')}（AI 分類）</div></div>`:'');
+}
+function openDrawer(el,c){
+  const d=el.querySelector('#drawer');
+  el.querySelector('#dwBody').innerHTML=c?spread(c):`<h3 class="h-m">其他參選人</h3><p class="note">已完成登記；目前沒有看到正式口號或系統性的競選文宣報導。</p><div class="minors">${minors.map(c=>`<div><b>${esc(c.name)}</b>${party(c.party)}<p class="note" style="margin:.4em 0 0">${c.identity.map(x=>esc(x.text)).join('；')}</p></div>`).join('')}</div>`;
+  d.classList.add('open');d.setAttribute('aria-hidden','false');el.querySelector('.dw-scrim').classList.add('on');document.body.style.overflow='hidden';d.querySelector('.dw-in').scrollTop=0;d.querySelector('.dw-x').focus();
+}
+function closeDrawer(el){const d=el.querySelector('#drawer');if(!d||!d.classList.contains('open'))return;d.classList.remove('open');d.setAttribute('aria-hidden','true');el.querySelector('.dw-scrim').classList.remove('on');document.body.style.overflow=''}
 function spread(c){
   const a=c.analysis,none=c.slogan.status==='missing',vis=c.visuals;
   return `<article class="spread" style="${cvars(c)}">
@@ -85,7 +152,7 @@ function spread(c){
     <div class="wide"><h4>和城市條件的對應</h4><ul class="links">${a.cityLinks.map(l=>`<li><span class="k">${esc(l.kind)}</span><span>${esc(l.text)} ${st(l.status)}${srcs(l.src)}</span></li>`).join('')}</ul></div>
     <div class="wide"><h4>證據與限制</h4><p>${esc(a.limits)}</p></div>
   </div>`:''}
-  <div class="jump"><button class="pill terra" data-jump="chain">用數據應證這句口號</button><button class="pill" data-jump="people-cand">政績與政見</button><button class="pill" data-jump="media">媒體布局</button><button class="pill" data-jump="polls">民調</button><button class="pill" data-jump="demo">人口數據</button></div>
+  <div class="jump"><button class="pill terra" data-close data-jump="chain">用數據應證這句口號</button><button class="pill" data-jump="people-cand">政績與政見</button><button class="pill" data-jump="media">媒體布局</button><button class="pill" data-jump="polls">民調</button><button class="pill" data-jump="demo">人口數據</button></div>
   <p class="edit-note">「字義、情緒、生活情境」是編輯對文案的解讀，不代表候選人或陣營的說法，也不推論任何職業或年齡層的政治立場。</p>
   </article>`;
 }
