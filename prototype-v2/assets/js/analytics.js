@@ -1,6 +1,6 @@
 /* Google Analytics 4 — 只在正式網域載入；填入評估 ID 即啟用 */
 (function(){
-  const GA_ID='';            // ← 填入 G-XXXXXXXXXX
+  const GA_ID='G-8XGKPEX940';
   const PROD_HOSTS=['taiwan-election-2026.onrender.com'];
   const on=GA_ID&&PROD_HOSTS.includes(location.hostname);
   window.dataLayer=window.dataLayer||[];
