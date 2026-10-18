@@ -750,4 +750,49 @@ const foot=document.createElement('p');foot.style.cssText='font-size:11px;color:
 #editorialOverview{position:fixed;right:16px;top:16px;z-index:10050;display:inline-flex;align-items:center;gap:8px;border-radius:25px;padding:10px 16px;background:#fff4e9;border:1px solid #e7c8b4;color:#a64f35;font:800 13px "Noto Sans TC","PingFang TC",sans-serif;text-decoration:none;box-shadow:0 5px 22px #493e341c}
 #editorialOverview:hover{background:#fce6d6}
 @media(max-width:760px){#editorialOverview{top:auto;bottom:14px;right:12px;background:#dc7857;color:white;border:0;padding:12px 16px;box-shadow:0 8px 25px #a96b4e55}}
-</style><a id="editorialOverview" href="./overview.html" aria-label="檢視八個選區27位候選人完整行銷比較表">全區27位候選人｜統整表 ↗</a></html>
+</style><a id="editorialOverview" href="./overview.html" aria-label="檢視八個選區27位候選人完整行銷比較表">全區27位候選人｜統整表 ↗</a><style id="home-compare-v11">
+#homeCompare{position:absolute;left:clamp(12px,2vw,32px);right:clamp(12px,2vw,32px);bottom:20px;z-index:9;background:#fffefbf2;border:1px solid #e7dcd1;border-radius:20px;box-shadow:0 18px 60px #38352f26;backdrop-filter:blur(18px);padding:13px 16px;max-height:min(40vh,370px);display:flex;flex-direction:column}
+#homeCompare h2{font-size:17px;letter-spacing:-.4px;margin:0}
+#homeCompare .head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}
+#homeCompare .head a{font-size:11px;font-weight:900;color:#bd694c;text-decoration:none}
+#homeCompare .scroll{overflow:auto;min-height:0}
+#homeCompare table{width:100%;border-collapse:collapse;font-size:11px}
+#homeCompare th{text-align:left;color:#9c7a6b;font-weight:900;background:#faf6f1;position:sticky;top:0;padding:8px 7px}
+#homeCompare td{border-top:1px solid #ede8e2;padding:8px 7px;vertical-align:middle;line-height:1.4}
+#homeCompare tr[data-city]{cursor:pointer}
+#homeCompare tr[data-city]:hover{background:#fff0e7}
+#homeCompare td strong{font-size:12px}
+#homeCompare .slogan{font-size:12px!important;letter-spacing:0!important;line-height:1.35!important;animation:none!important;text-shadow:none!important;transform:none!important}
+#homeCompare .hint{font-size:10px;color:#86858a;margin-top:5px}
+#homeCompare .minimize{background:#f4ede7;border:0;border-radius:20px;font-size:11px;padding:6px 10px}
+#homeCompare.collapsed{max-height:none;width:max-content;right:auto;bottom:15px}
+#homeCompare.collapsed .scroll,#homeCompare.collapsed .hint{display:none}
+.mapstage .metro{transition:filter .35s,fill .35s,transform .55s;transform-box:fill-box;transform-origin:center;will-change:transform}
+.mapstage .metro.lift{fill:#ed8e69!important;transform:translate(-5px,-13px) scale(1.075);filter:drop-shadow(0px 5px 0px #ca7255) drop-shadow(0px 11px 6px #754f4d66)}
+#mapFocus{position:absolute;right:20px;top:16px;background:#fffdf8ec;border:1px solid #e9ded5;border-radius:15px;padding:10px 15px;z-index:8;pointer-events:none;opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;font-weight:900}
+#mapFocus.on{opacity:1;transform:none}
+@media(min-width:751px){.home{grid-template-columns:31% 69%}.intro{padding:7vh 3vw}.intro h1{font-size:clamp(35px,4.2vw,65px)}#homeCompare{max-height:43vh}}
+@media(max-width:750px){#homeCompare{left:9px;right:9px;bottom:78px;max-height:32vh;padding:10px}#homeCompare th:nth-child(3),#homeCompare td:nth-child(3){display:none}#homeCompare td{padding:7px 5px}#homeCompare .slogan{font-size:11px!important}#homeCompare.collapsed{bottom:70px}#mapFocus{top:105px;right:9px}}
+</style>
+<div id="mapFocus" aria-live="polite"></div>
+<section id="homeCompare" aria-label="全區候選人競選口號比較表">
+ <div class="head"><h2>全區候選人｜口號對比</h2><div><a href="./overview.html">完整27位總表 ↗</a> <button type="button" class="minimize" id="collapseCompare">收合 −</button></div></div>
+ <div class="scroll"><table><thead><tr><th>城市</th><th>候選人／政黨</th><th>競選主口號</th><th>點擊</th></tr></thead><tbody id="homeCompareRows"></tbody></table></div>
+ <div class="hint">點擊候選人列，對應城市板塊浮起，進入全螢幕口號轉場。首頁直接列出所有候選人。</div>
+</section>
+<script>
+(function(){
+ const root=document.getElementById('homeCompare'),tbody=document.getElementById('homeCompareRows'),focus=document.getElementById('mapFocus');
+ const cityNames={臺北:'臺北市',新北:'新北市',桃園:'桃園市',臺中:'臺中市',臺南:'臺南市',高雄:'高雄市',屏東:'屏東縣',屏東市:'屏東市'};
+ C.forEach((c,i)=>c[3].forEach((p,j)=>{
+  const tr=document.createElement('tr');tr.dataset.city=i;tr.dataset.candidate=j;tr.tabIndex=0;
+  const values=[j===0?(cityNames[c[0]]||c[0]):'',p[0]+'｜'+p[1],p[2]?.[0]||'正式口號待查','切入 ↗'];
+  values.forEach((v,k)=>{const td=document.createElement('td');if(k===2){const b=document.createElement('strong');b.className='slogan';b.textContent=v;td.append(b)}else td.textContent=v;tr.append(td)});
+  const select=()=>{document.querySelectorAll('.mapstage .metro').forEach(path=>path.classList.remove('lift'));const shape=document.querySelector('.mapstage .metro[data-id="'+c[1]+'"]')||[...document.querySelectorAll('.mapstage .metro')].find(path=>path.__data__?.properties?.id===c[1]);if(shape)shape.classList.add('lift');focus.textContent=(cityNames[c[0]]||c[0])+' · '+p[0];focus.classList.add('on');setTimeout(()=>{openCity(i);focus.classList.remove('on')},520)};
+  tr.onclick=select;tr.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select()}};tbody.append(tr);
+ }));
+ const collapse=document.getElementById('collapseCompare');collapse.onclick=()=>{root.classList.toggle('collapsed');collapse.textContent=root.classList.contains('collapsed')?'展開 ＋':'收合 −'};
+ const previousOpen=openCity;
+ openCity=function(i){const c=C[i];document.querySelectorAll('.mapstage .metro').forEach(path=>path.classList.remove('lift'));const shape=[...document.querySelectorAll('.mapstage .metro')].find(path=>path.__data__?.properties?.id===c[1]);if(shape)shape.classList.add('lift');previousOpen(i)};
+})();
+</script></html>
