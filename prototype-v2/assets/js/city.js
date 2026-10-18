@@ -4,7 +4,8 @@ const {esc,st,srcs,party,item,fmt}=EC;
 const app=document.getElementById('app');
 let db;try{db=await EC.loadDB()}catch(e){app.innerHTML=`<p class="panel">${esc(e.message)}</p>`;return}
 const qs=new URLSearchParams(location.search);
-const R=db.region[qs.get('r')]||db.region.taipei;
+const R=db.region[qs.get('r')]||db.region[EC.storedRegion()]||db.region.taipei;
+let cutFlag=qs.get('cut')==='1';try{if(sessionStorage.getItem('ec-cut')==='1'){cutFlag=true;sessionStorage.removeItem('ec-cut')}}catch(e){}
 const cands=R.candidates.map(id=>db.cand[id]);
 const majors=cands.filter(c=>c.major),minors=cands.filter(c=>!c.major);
 const polls=db.polls.filter(p=>p.region===R.id);
@@ -29,7 +30,7 @@ app.innerHTML=`
 <nav class="tabs" role="tablist" aria-label="分析頁籤">${TABS.map(([id,l],i)=>`<button role="tab" id="t-${id}" aria-controls="p-${id}" aria-selected="false" data-tab="${id}">${l}</button>`).join('')}</nav>
 ${TABS.map(([id])=>`<section class="panel" role="tabpanel" id="p-${id}" aria-labelledby="t-${id}" hidden></section>`).join('')}
 <footer class="panel note" style="padding-top:0">${esc(db.meta.neutrality)}　資料更新：${db.meta.asOf}｜版本 ${EC.BUILD}</footer>`;
-document.getElementById('rsel').onchange=e=>location.href=`city.html?r=${e.target.value}`;
+document.getElementById('rsel').onchange=e=>EC.goCity(e.target.value);
 
 /* ---------------- tab routing (hash; back button works) */
 const rendered={};
@@ -216,7 +217,7 @@ RENDER.compare=el=>{
 select(location.hash.slice(1)||'marketing',false);
 
 /* arrival: the second half of the cut */
-if(qs.get('cut')==='1'&&!EC.reduced()){
+if(cutFlag&&!EC.reduced()){
   history.replaceState(null,'',`city.html?r=${R.id}${location.hash}`);
   const W=innerWidth,H=innerHeight,d=Math.tan(11*Math.PI/180)*W/2;
   const a=document.createElement('div');a.className='arrive';

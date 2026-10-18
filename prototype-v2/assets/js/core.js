@@ -52,5 +52,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
 addEventListener('scroll',()=>closePop(),{passive:true});
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const daysTo=d=>Math.ceil((new Date(d+'T00:00:00+08:00')-Date.now())/864e5);
-window.EC={BUILD,loadDB,esc,fmt,st,srcs,party,item,openPop,closePop,reduced,daysTo,get db(){return DB}};
+/* remember the target region when following any city link (fallback if a host strips ?r=) */
+function rememberRegion(href){try{const m=/[?&]r=([a-z-]+)/.exec(href||'');if(m)sessionStorage.setItem('ec-region',m[1])}catch(e){}}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href*="city.html"]');if(a)rememberRegion(a.getAttribute('href'))},true);
+function goCity(id,extra=''){rememberRegion('?r='+id);location.href='city.html?r='+id+extra}
+function storedRegion(){try{return sessionStorage.getItem('ec-region')}catch(e){return null}}
+window.EC={goCity,storedRegion,BUILD,loadDB,esc,fmt,st,srcs,party,item,openPop,closePop,reduced,daysTo,get db(){return DB}};
 })();

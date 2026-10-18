@@ -231,8 +231,8 @@ addEventListener('popstate',()=>{if(!tk.hidden&&!location.hash)closeTk(true)});
 /* the cut: blade line across, then two halves slide apart */
 function cut(){
   clearTimeout(timer);clearInterval(subTimer);if(tk.querySelector('.half'))return;
-  const r=curRegion,url=`city.html?r=${r.id}&cut=1`;
-  if(reduced()){location.href=url;return}
+  const r=curRegion,go=()=>{try{sessionStorage.setItem('ec-cut','1')}catch(e){}EC.goCity(r.id,'&cut=1')};
+  if(reduced()){go();return}
   const card=tk.querySelector('.tk-card');tk.querySelector('.tk-ctrl')?.remove();
   const W=innerWidth,H=innerHeight,d=Math.tan(11*Math.PI/180)*W/2;
   tk.insertAdjacentHTML('afterbegin',`<div class="cut-reveal"><b>${esc(r.name)}</b></div>`);
@@ -242,7 +242,7 @@ function cut(){
     top.style.clipPath=`polygon(0 0,${W}px 0,${W}px ${H/2-d}px,0 ${H/2+d}px)`;bot.style.clipPath=`polygon(0 ${H/2+d}px,${W}px ${H/2-d}px,${W}px ${H}px,0 ${H}px)`;
     card.replaceWith(top);tk.appendChild(bot);
     requestAnimationFrame(()=>requestAnimationFrame(()=>{const nx=Math.sin(11*Math.PI/180),ny=Math.cos(11*Math.PI/180),m=Math.max(W,H)*.75;top.style.transform=`translate(${-nx*m}px,${-ny*m}px)`;bot.style.transform=`translate(${nx*m}px,${ny*m}px)`;tk.querySelector('.cutline').style.opacity=0}));
-    setTimeout(()=>location.href=url,640);
+    setTimeout(go,640);
   },340);
 }
 
