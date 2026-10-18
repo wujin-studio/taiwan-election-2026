@@ -777,7 +777,7 @@ const foot=document.createElement('p');foot.style.cssText='font-size:11px;color:
 <div id="mapFocus" aria-live="polite"></div>
 <section id="homeCompare" aria-label="全區候選人競選口號比較表">
  <div class="head"><h2>全區候選人｜口號對比</h2><div><a href="./overview.html">完整27位總表 ↗</a> <button type="button" class="minimize" id="collapseCompare">收合 −</button></div></div>
- <div class="scroll"><table><thead><tr><th>城市</th><th>候選人／政黨</th><th>競選主口號</th><th>點擊</th></tr></thead><tbody id="homeCompareRows"></tbody></table></div>
+ <div class="scroll"><table><thead><tr><th>城市</th><th>候選人／政黨與口號</th><th>點擊</th></tr></thead><tbody id="homeCompareRows"></tbody></table></div>
  <div class="hint">點擊候選人列，對應城市板塊浮起，進入全螢幕口號轉場。首頁直接列出所有候選人。</div>
 </section>
 <script>
@@ -787,7 +787,7 @@ const foot=document.createElement('p');foot.style.cssText='font-size:11px;color:
  C.forEach((c,i)=>c[3].forEach((p,j)=>{
   const tr=document.createElement('tr');tr.dataset.city=i;tr.dataset.candidate=j;tr.tabIndex=0;
   const values=[j===0?(cityNames[c[0]]||c[0]):'',p[0]+'｜'+p[1],p[2]?.[0]||'正式口號待查','切入 ↗'];
-  values.forEach((v,k)=>{const td=document.createElement('td');if(k===2){const b=document.createElement('strong');b.className='slogan';b.textContent=v;td.append(b)}else td.textContent=v;tr.append(td)});
+  values.forEach((v,k)=>{if(k===2){const b=document.createElement('strong');b.className='slogan';b.textContent=v;tr.lastElementChild.append(document.createElement('br'),b);return;}const td=document.createElement('td');td.textContent=v;tr.append(td)});
   const select=()=>{document.querySelectorAll('.mapstage .metro').forEach(path=>path.classList.remove('lift'));const shape=document.querySelector('.mapstage .metro[data-id="'+c[1]+'"]')||[...document.querySelectorAll('.mapstage .metro')].find(path=>path.__data__?.properties?.id===c[1]);if(shape)shape.classList.add('lift');focus.textContent=(cityNames[c[0]]||c[0])+' · '+p[0];focus.classList.add('on');setTimeout(()=>{openCity(i);focus.classList.remove('on')},520)};
   tr.onclick=select;tr.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select()}};tbody.append(tr);
  }));
@@ -833,4 +833,4 @@ body:has(.scene.on) #editorialOverview,body:has(.cityview.on) #editorialOverview
  if(compare){compare.classList.add('collapsed');const b=document.getElementById('collapseCompare');if(b)b.textContent='展開 ＋';}
  const style=document.createElement('style');style.textContent='body:has(.scene.on) #homeCompare,body:has(.cityview.on) #homeCompare{display:none!important}';document.head.append(style);
 })();
-</script></html>
+</script><style id="compact-home-table-v13">#homeCompare table{table-layout:fixed}#homeCompare th:first-child,#homeCompare td:first-child{width:23%}#homeCompare th:nth-child(2),#homeCompare td:nth-child(2){width:58%}#homeCompare th:last-child,#homeCompare td:last-child{width:19%}#homeCompare .slogan{display:inline-block!important;color:#bb6045!important;font-weight:900!important;margin-top:4px!important;overflow-wrap:anywhere!important}#homeCompare td{word-break:normal!important;overflow-wrap:anywhere!important}@media(max-width:750px){#homeCompare th:nth-child(3),#homeCompare td:nth-child(3){display:table-cell!important}#homeCompare.collapsed{width:auto!important}}</style></html>
