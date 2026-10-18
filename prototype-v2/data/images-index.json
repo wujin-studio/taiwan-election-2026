@@ -369,6 +369,76 @@
    "source_url": null,
    "rights": "未確認：使用者提供",
    "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/chang-sango-2022.jpg",
+   "subject": "張善政",
+   "kind": "2022 競選網站「善願」",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/chiang-chi-chen-qicheng.jpg",
+   "subject": "江啟臣",
+   "kind": "官方主視覺",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/li-szu-chuan-doer.jpg",
+   "subject": "李四川",
+   "kind": "形象主視覺（含媒體浮水印）",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/shen-future-soon.jpg",
+   "subject": "沈伯洋",
+   "kind": "官方主視覺",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/huang-moving.jpg",
+   "subject": "黃世杰",
+   "kind": "官方主視覺",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/ko-youzhi.jpg",
+   "subject": "柯志恩",
+   "kind": "首張看板上架海報（2025-10-25）",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
+  },
+  {
+   "file": "(2026-10-18 對話上傳)",
+   "published": "assets/img/visuals/lai-merch.jpg",
+   "subject": "賴瑞隆",
+   "kind": "競選周邊小物照片",
+   "identification": "圖中文字直接標示人名，或由使用者指定",
+   "source_url": null,
+   "rights": "未確認：使用者提供",
+   "status": "unverified"
   }
  ],
  "missingPortraits": [
@@ -384,5 +454,5 @@
   "王肇民",
   "洪方隆"
  ],
- "note": "檔名不代表人物；所有對應均經目視比對。原始主視覺缺：李四川、張善政、黃世杰、江啟臣、蘇清泉、周佳琪、梁育慈。"
+ "note": "原始主視覺仍缺：蘇清泉、周佳琪、梁育慈（張善政只有 2022 年素材）。"
 }

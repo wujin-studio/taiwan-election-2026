@@ -73,6 +73,7 @@ RENDER.marketing=el=>{
     ${minors.length?`<button class="pill" data-minors>另 ${minors.length} 位參選人</button>`:''}</div>
   <div class="dash">
     <section class="dc heads" aria-label="候選人主口號">${M.map(m=>headCard(m)).join('')}</section>
+    <section class="dc vs" aria-label="對決面板">${versus(M)}</section>
     <section class="dc chainx" aria-label="一眼看懂行銷鏈">${chainStrip()}</section>
     <section class="dc insight" aria-label="比對結論"><h3>比對結論</h3>${insight(M)}<p class="note">由下方圖表的數據自動彙整，非陣營說法；不推論任何族群的投票傾向。</p></section>
     <section class="dc heat" aria-label="口號與需求對應熱圖"><div class="dc-h"><h3>口號 × 城市需求</h3><span class="legend3"><i class="s"></i>口號字面（候選人色）<i class="p"></i>政見<i class="d"></i>數據已核實</span></div>${heat()}</section>
@@ -105,6 +106,33 @@ function chainStrip(){
      <div class="chx-s"><small>用什麼說</small><div class="chg">${groups.map(g=>`<span style="--cc:${CHGC[g]}">${g}</span>`).join('')||'<span class="note">尚未收錄</span>'}</div></div>
      <div class="chx-s"><small>反應如何</small><p>${esc(fb)}</p>${so.im?`<p class="note">InfoMiner，方法未公開</p>`:''}</div></div>`}).join('')}</div>`;
 }
+function versus(M){
+  if(M.length<2)return '<p class="note">本選區只有一位主要參選人，不做對照。</p>';
+  const [A,B]=M,grp=c=>new Set(c.tactics.map(t=>CHG[t.ch]).filter(Boolean)).size;
+  const pA=A.poll,pB=B.poll,samePoll=pA&&pB&&pA===pB;
+  const rows=[
+    ['口號回應的城市需求',A.slogNeeds,B.slogNeeds,'項',`口號或次口號的字面，命中本站整理的 ${R.needs.length} 項城市需求的數量（關鍵詞比對，屬編輯詮釋）`],
+    ['政見對應的城市需求',A.polNeeds,B.polNeeds,'項','有公開政見處理到的城市需求數'],
+    ['已核實的政見',A.pV,B.pV,'項','比對過原始報導的政見數'],
+    ['使用的通路類型',grp(A.c),grp(B.c),'類','社群、影音、實體、戶外、周邊、二創、新聞等類型，本站已收錄的數量'],
+    ['主視覺素材',A.vis,B.vis,'張','本站已入庫的主視覺、看板、周邊照片'],
+  ];
+  const imA=A.c.social?.im,imB=B.c.social?.im;
+  if(imA&&imB){rows.push(['7 日社群聲量',imA.vol7,imB.vol7,'則','InfoMiner 7 日聲量；聲量不等於支持，監測方法未公開'],['好感淨值',imA.net,imB.net,'%','InfoMiner 正面減負面比例；監測方法未公開'])}
+  if(samePoll)rows.push(['最新電話民調（投票支持）',pA.results[A.c.id],pB.results[B.c.id],'%',`${pA.pollster}｜${pA.start}–${pA.end}｜n=${pA.sample}｜±${pA.margin}｜委託：${pA.commissioner}`]);
+  const f=(v,u)=>(u==='%'&&v>0&&rows.find(r=>r[0]==='好感淨值')&&false?'+':'')+(Number.isInteger(v)?fmt(v):v)+u;
+  return `<div class="dc-h"><h3>正面對決</h3><span class="note">中線往左是 ${esc(A.c.name)}、往右是 ${esc(B.c.name)}；每列各自以較大的一方為滿格。點列名看定義</span></div>
+  <div class="vsx" style="--ca:${c1(A.c)};--cb:${c1(B.c)}">
+   <div class="vs-hd"><div class="vs-p a">${A.c.photo?`<img src="${A.c.photo.file}" alt="">`:''}<b>${esc(A.c.name)}</b></div><span class="vs-mid">VS</span><div class="vs-p b"><b>${esc(B.c.name)}</b>${B.c.photo?`<img src="${B.c.photo.file}" alt="">`:''}</div></div>
+   ${rows.map(([l,a,b,u,def],i)=>{const mx=Math.max(Math.abs(a),Math.abs(b),1e-9),wa=Math.abs(a)/mx*100,wb=Math.abs(b)/mx*100,sg=v=>l==='好感淨值'&&v>0?'+':'';
+     return `<div class="vs-r" style="--d:${i*80}ms"><span class="vs-v a ${a>b?'lead':''}">${sg(a)}${Number.isInteger(a)?fmt(a):a}<small>${u}</small></span>
+       <span class="vs-bar a"><i class="${a<0?'neg':''}" style="--w:${wa}%"></i></span>
+       <button class="vs-l" data-pop="${esc(`<h4>${esc(l)}</h4><p>${esc(def)}</p>`)}">${esc(l)}</button>
+       <span class="vs-bar b"><i class="${b<0?'neg':''}" style="--w:${wb}%"></i></span>
+       <span class="vs-v b ${b>a?'lead':''}">${sg(b)}${Number.isInteger(b)?fmt(b):b}<small>${u}</small></span></div>`}).join('')}
+  </div>`;
+}
+
 const hitM=(c,n)=>(n.keywords||[]).filter(k=>[c.slogan.status!=='missing'?c.slogan.text:'',...c.subSlogans.map(x=>x.text)].join('｜').includes(k));
 const latestPhoneM=c=>polls.filter(p=>p.mode==='phone'&&p.question==='vote'&&p.results[c.id]!=null).sort((a,b)=>b.end.localeCompare(a.end))[0];
 const latestOnlineM=c=>polls.filter(p=>p.mode!=='phone'&&p.question==='vote'&&p.results[c.id]!=null).sort((a,b)=>b.end.localeCompare(a.end))[0];
