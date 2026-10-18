@@ -89,7 +89,7 @@ body.home{overflow:hidden}
 .tk-dots i.on{background:var(--terra)}
 .tk-dots.light i{background:#ffffff55}.tk-dots.light i.on{background:#fff}
 .tk-btns{display:flex;gap:8px}
-.tk-btns .pill{background:#fffffff2;border-color:transparent}
+.tk-btns .pill{background:#fffffff2;border-color:#23211d26}
 .tk-btns .pill.solid{background:var(--ink);color:#fff}
 /* the cut */
 .cutline{position:absolute;inset:0;z-index:8;pointer-events:none}
