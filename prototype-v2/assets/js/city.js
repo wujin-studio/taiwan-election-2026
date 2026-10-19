@@ -28,6 +28,7 @@ app.innerHTML=`
   </div>
   <svg class="mini" id="mini" role="img" aria-label="${esc(R.name)}行政區界"></svg>
 </section>
+<section class="verdict" id="verdict" aria-labelledby="vd-h"></section>
 <nav class="tabs" role="tablist" aria-label="分析頁籤">${TABS.map(([id,l],i)=>`<button role="tab" id="t-${id}" aria-controls="p-${id}" aria-selected="false" data-tab="${id}">${l}</button>`).join('')}</nav>
 ${TABS.map(([id])=>`<section class="panel" role="tabpanel" id="p-${id}" aria-labelledby="t-${id}" hidden></section>`).join('')}
 <footer class="panel note" style="padding-top:0">${esc(db.meta.neutrality)}　資料更新：${db.meta.asOf}｜版本 ${EC.BUILD}｜本站使用 Google Analytics 匿名統計瀏覽情形</footer>`;
@@ -602,6 +603,28 @@ RENDER.compare=el=>{
   el.innerHTML=`<div class="sec-h"><div><h2 class="h-l">候選人橫向比較</h2><p>同一套欄位並排，數字只在同一份調查或同一份監測報告裡比較。</p></div></div>
   <div class="scroll-x"><table class="cmpt"><thead><tr><th></th>${majors.map(c=>`<th style="${cvars(c)};border-top:6px solid var(--c1)">${esc(c.name)}<br>${party(c.party)}</th>`).join('')}</tr></thead><tbody>${rows.map(([l,f])=>`<tr><th scope="row">${l}</th>${majors.map(c=>`<td>${f(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 };
+
+/* ---------------- 行銷判讀（頁首） */
+(function verdict(){
+  const V=window.EC_VERDICT,el=document.getElementById('verdict');if(!V||!el)return;
+  const LV={aud:['受眾契合','點名了誰、給他什麼'],city:['城市需求','對到有數據的城市需求'],self:['自我表述','只在形容自己的程度']};
+  const word={aud:['低','中','高'],city:['低','中','高'],self:['低','中','高（講爽的）']};
+  const meter=(k,v)=>{if(!v)return `<div class="vd-m na"><span class="vd-l">${LV[k][0]}</span><span class="vd-bar"><i></i><i></i><i></i></span><b>—</b></div>`;
+    return `<div class="vd-m ${k}" data-lv="${v[0]}"><span class="vd-l">${LV[k][0]}<small>${LV[k][1]}</small></span><span class="vd-bar">${[1,2,3].map(i=>`<i class="${i<=v[0]?'on':''}"></i>`).join('')}</span><b>${word[k][v[0]-1]}</b><p>${esc(v[1])}</p></div>`};
+  const srcOf=c=>[...new Set([...(c.slogan.src||[]),...c.pledges.flatMap(p=>p.src||[]),...c.tactics.flatMap(t=>t.src||[])])].filter(x=>x!=='user'&&x!=='editorial');
+  const card=c=>{const v=V.cand[c.id];if(!v)return '';
+    const pN=R.needs.filter(n=>(R.matrix[c.id]||{})[n.id]).length;
+    return `<article class="vd-c" style="${cvars(c)}">
+      <header>${photo(c,'vd-ph')}<div><div class="vd-n">${esc(c.name)} ${party(c.party)}</div><div class="vd-s">${c.slogan.status==='missing'?'<span class="note">未見正式口號</span>':'「'+esc(c.slogan.text)+'」'} ${st(c.slogan.status)}</div><div class="vd-t">${esc(v.type)}</div></div></header>
+      <dl><dt>看到了什麼</dt><dd>${esc(v.saw)}</dd><dt>口號說了什麼</dt><dd>${esc(v.slogan)}</dd></dl>
+      <div class="vd-ms">${meter('aud',v.aud)}${meter('city',v.city)}${meter('self',v.self)}</div>
+      <p class="vd-cnt">本站比對：${R.needs.length} 項城市需求中，主要政見對到 <b>${pN}</b> 項（口號是否對到，以上方判讀為準） ${srcs(srcOf(c))}</p>
+    </article>`};
+  el.innerHTML=`<div class="vd-h"><p class="eyebrow">行銷判讀</p><h2 id="vd-h">${esc(V.regions[R.id]||'')}</h2>
+    <p class="note">編輯判讀，非事實陳述。同一套尺規套用到每位主要參選人：「受眾契合」看口號和主政見有沒有點名誰會得到什麼；「城市需求」看有沒有對到下方頁籤裡有數據支撐的需求；「自我表述」越高，代表口號越只在形容候選人自己（講爽的），選民拿不到可檢驗的承諾。</p></div>
+    <div class="vd-g" style="--n:${majors.length}">${majors.map(card).join('')}</div>
+    ${minors.length?`<p class="note vd-mi">其他 ${minors.length} 位參選人未見正式口號或系統性文宣，不納入判讀。</p>`:''}`;
+})();
 
 select(location.hash.slice(1)||'marketing',false);
 

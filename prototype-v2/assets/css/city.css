@@ -560,3 +560,33 @@ details.optin summary{cursor:pointer;font-weight:800}
   .vs-v{font-size:17px}
   .vs-p{font-size:16px}.vs-p img{width:42px;height:52px}
 }
+
+/* 行銷判讀 */
+.verdict{padding:clamp(18px,3vw,34px) var(--gut) clamp(22px,3vw,36px);background:var(--ink);color:#f3eee5}
+.verdict .vd-h{max-width:1100px}
+.verdict .eyebrow{display:inline-block;font:800 12px/1 var(--sans);letter-spacing:.12em;background:var(--terra);color:#fff;padding:6px 10px;border-radius:999px;margin:0 0 12px}
+.verdict h2{font:900 clamp(21px,2.6vw,32px)/1.4 var(--serif);margin:0 0 10px;text-wrap:balance}
+.verdict .note{color:#bdb5a8}
+.vd-g{display:grid;grid-template-columns:repeat(min(var(--n),3),minmax(0,1fr));gap:16px;margin-top:20px}
+.vd-c{background:#fff;color:var(--ink);border-radius:20px;padding:18px;border-top:8px solid var(--c1);min-width:0}
+.vd-c header{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;margin-bottom:12px}
+.vd-ph{width:64px;height:78px;border-radius:12px;overflow:hidden;background:var(--paper-2);display:grid;place-items:center;font:900 26px/1 var(--serif);color:var(--mute)}
+.vd-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 15%}.vd-ph small{display:none}
+.vd-n{font:900 22px/1.2 var(--serif)}
+.vd-s{font:900 17px/1.4 var(--sans);margin:4px 0}
+.vd-t{display:inline-block;font:800 12.5px/1 var(--sans);padding:6px 10px;border-radius:8px;background:var(--c2);color:var(--ink);border:1.5px solid var(--c1)}
+.vd-c dl{margin:0 0 12px;font-size:14px;line-height:1.65}
+.vd-c dt{font:800 12px/1 var(--sans);color:var(--terra);margin:10px 0 4px;letter-spacing:.06em}
+.vd-c dd{margin:0}
+.vd-ms{display:grid;gap:10px;border-top:1px solid var(--rice);padding-top:12px}
+.vd-m{display:grid;grid-template-columns:minmax(0,1fr) 70px auto;gap:4px 10px;align-items:center;font-size:13px}
+.vd-m .vd-l{font-weight:800}.vd-m .vd-l small{display:block;font-weight:500;font-size:11px;color:var(--mute);white-space:nowrap}
+.vd-bar{display:flex;gap:3px}.vd-bar i{flex:1;height:10px;border-radius:3px;background:#ebe5db}
+.vd-m.aud .vd-bar i.on,.vd-m.city .vd-bar i.on{background:#2f8f6b}
+.vd-m.self .vd-bar i.on{background:var(--terra)}
+.vd-m b{font-size:13px}
+.vd-m p{grid-column:1/-1;margin:0;color:var(--ink-2);font-size:13px;line-height:1.6}
+.vd-m.na{opacity:.55}
+.vd-cnt{margin:12px 0 0;font-size:12.5px;color:var(--mute)}
+.vd-mi{margin-top:12px}
+@media (max-width:980px){.vd-g{grid-template-columns:1fr}}
