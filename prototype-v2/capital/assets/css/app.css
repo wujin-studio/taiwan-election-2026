@@ -293,3 +293,7 @@ img{max-width:100%;display:block}
 .vd-mt p{grid-column:1/-1;margin:0;font-size:13.5px;color:#d9d3cb;line-height:1.6}
 .vd-ft{margin:14px 0 0;font-size:13.5px;color:#d9d3cb}.vd-ft b{color:var(--o3)}
 @media (max-width:820px){.vd-grid,.vd-meters{grid-template-columns:1fr}}
+
+.home-btn{flex:none;text-decoration:none;font:900 14px/1 var(--sans);background:var(--o);color:#fff;padding:11px 16px;border-radius:999px;border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);white-space:nowrap}
+.home-btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+@media (max-width:1100px){.ports a{padding:9px 8px;font-size:13px}}
