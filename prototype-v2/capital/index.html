@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><script src="../assets/js/gate.js?b=v21"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>首都選戰洋流</title>
+<meta name="description" content="1994–2026 台北市長選舉：歷屆票數潮汐、2026 對決、洋流行銷拆解與認知作戰證據分級。引用網路公開資料，僅供分析參考。">
+<meta name="theme-color" content="#ee5a1f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/app.css?b=v21">
+</head>
+<body>
+
+<div class="ticker top" aria-hidden="true"><div class="tk-track" id="tkTop"></div></div>
+
+<header class="bar">
+  <a class="logo" href="#hero"><span class="ring">首</span><span class="ring">都</span><b>選戰洋流</b></a>
+  <nav class="ports" aria-label="章節">
+    <a href="#tide"><i>01</i>潮汐史</a><a href="#duel"><i>02</i>2026 對決</a><a href="#current"><i>03</i>洋流專區</a><a href="#ops"><i>04</i>暗流</a><a href="#log"><i>05</i>航海日誌</a><a href="../"><i>↩</i>選戰切一刀</a>
+  </nav>
+</header>
+
+<main>
+<!-- HERO -->
+<section id="hero" class="hero">
+  <canvas id="sea" aria-hidden="true"></canvas>
+  <svg class="skyline" viewBox="0 0 520 220" aria-hidden="true"><path d="M0 220V170h30v-20h18v20h22v-40h14v40h20v-30h26v30h12v-55h16v55h18v-25h20v25h14V120h10V96h6V60h4V30l3-24 3 24v30h4v36h6v24h10v100h16v-50h24v50h20v-36h18v36h22v-60h12v60h18v-28h30v28h20v-44h16v44h22v-20h32v20h30v50z" fill="#fff"/></svg>
+  <svg class="pier" viewBox="0 0 300 200" aria-hidden="true"><path d="M0 200V96h40v-10h18v10h60l40-28h22v28h60v104z" fill="#fff"/><path d="M196 84h40v18h-40zM206 70h20v14h-20z" fill="#111"/><path d="M204 76c30 6 52 22 70 48" stroke="#fff" stroke-width="5" fill="none"/></svg>
+  <div class="hero-in">
+    <p class="kicker">THE CAPITAL CURRENT <span class="waves3" aria-hidden="true"></span> 1994 → 2026</p>
+    <h1><span class="h-ring"><span class="ring">台</span><span class="ring">北</span></span><span class="h-big">選戰洋流</span></h1>
+    <p class="sub">八屆市長選舉的票數潮汐、2026 雙強對決、「洋流」行銷拆解，以及認知作戰的證據分級。</p>
+    <div class="hero-meta">
+      <div class="dday"><b id="dday">—</b><span>天後投票<br>2026.11.28</span></div>
+      <a class="btn" href="#tide">開始航行 ↓</a>
+    </div>
+  </div>
+  <div class="disc">本站內容引用網路公開資料，中立呈現各陣營手法，僅供分析參考；每筆資料標示「已核實／未核實／缺漏」，點「源」可看出處。</div>
+</section>
+
+<div class="wave-sep" data-from="o" data-to="c"></div>
+
+<!-- 01 TIDE -->
+<section id="tide" class="sec cream">
+  <header class="sh"><p class="no">01</p><div><h2>潮汐史 <small>1994–2022</small></h2><p class="lede">把八屆市長選舉的票數疊成一片海：每一層是一個陣營，厚度是得票數，層上數字是得票率。浪往哪裡湧，就是台北民意的流向。</p></div></header>
+  <div class="tide-wrap"><div id="stream" class="chart"></div><div class="legend" id="campLegend"></div></div>
+  <div class="buoys" id="buoys" role="tablist" aria-label="選擇年份"></div>
+  <article class="year" id="yearPanel" aria-live="polite"></article>
+  <div class="two">
+    <figure class="card"><figcaption>投票率</figcaption><div id="turnout" class="chart sm"></div><p class="note" id="turnNote"></p></figure>
+    <figure class="card"><figcaption>勝負差距（票）</figcaption><div id="margin" class="chart sm"></div><p class="note">2018 年差距約 3,254 票，是八屆中最接近的一次。</p></figure>
+  </div>
+</section>
+
+<div class="wave-sep" data-from="c" data-to="w"></div>
+
+<!-- 02 DUEL -->
+<section id="duel" class="sec white">
+  <header class="sh"><p class="no">02</p><div><h2>2026 對決</h2><p class="lede">現任連任對上立委挑戰。先看口號回應了哪些城市需求，再看民調和社群聲量兩組數字為什麼不一樣。</p></div></header>
+  <div class="vs" id="vs"></div>
+  <div class="others" id="others"></div>
+  <h3 class="h3">城市需求 × 雙方政見</h3>
+  <div class="needs" id="needs"></div>
+  <div class="two">
+    <figure class="card"><figcaption>投票支持度（電話民調）</figcaption><div id="poll" class="chart sm"></div><p class="note" id="pollNote"></p></figure>
+    <figure class="card"><figcaption>社群聲量與情緒（QSearch）</figcaption><div id="social" class="chart sm"></div><p class="note" id="socNote"></p></figure>
+  </div>
+  <figure class="card wide"><figcaption>12 區戶籍人口（2025 年底）</figcaption><div id="dist" class="chart"></div><p class="note" id="distNote"></p></figure>
+</section>
+
+<div class="wave-sep" data-from="w" data-to="o"></div>
+
+<!-- 03 CURRENT -->
+<section id="current" class="sec orange">
+  <header class="sh"><p class="no">03</p><div><h2>洋流專區</h2><p class="lede">「台北大洋流」不是一張海報，而是一套把線上熱度導到街頭的流程。這一區拆解它的品牌、動員設計、政策交鋒和破圈路徑。</p></div></header>
+
+  <h3 class="h3 inv">品牌：從「順」到「洋流」</h3>
+  <div class="gallery" id="gallery"></div>
+  <div class="brandkit">
+    <div><b>色</b><span>高彩度橘＋黑＋白，海浪用白色粗條紋；台灣島用青色波紋。</span></div>
+    <div><b>字</b><span>粗黑圓角字、圓圈框字（台・北），英文斜體字帶 FUTURE SOON → THE TAIPEI CURRENT。</span></div>
+    <div><b>語</b><span>船員、艦隊、航向、大洋流號、小水滴：把支持者變成「同船的人」。</span></div>
+    <div><b>人</b><span>漫畫風 IP 人物、手語「順」、布偶奔奔抱抱，降低政治人物的距離感。</span></div>
+  </div>
+
+  <h3 class="h3 inv">和過去的選戰哪裡不一樣</h3>
+  <div class="diff" id="diff"></div>
+
+  <h3 class="h3 inv">線上 → 線下：一道洋流怎麼流</h3>
+  <div class="flow" id="flow"><canvas id="flowCv" aria-hidden="true"></canvas><ol id="flowList"></ol></div>
+  <div class="two">
+    <figure class="card"><figcaption>船員證累積人數</figcaption><div id="growth" class="chart sm"></div><p class="note">只標出媒體報導的三個時間點，中間的線是連線，不代表每日數字。</p></figure>
+    <figure class="card"><figcaption>車掃路段認領 vs 目標</figcaption><div id="claim" class="chart sm"></div><p class="note" id="claimNote"></p></figure>
+  </div>
+
+  <h3 class="h3 inv">航線圖：6/21 → 10/18</h3>
+  <div class="tl-key" id="tlKey"></div>
+  <div class="timeline" id="timeline" tabindex="0" aria-label="事件時間軸，可左右捲動"></div>
+
+  <h3 class="h3 inv">政策交鋒：AI 廊帶 ⇄ 創新街區 ⇄ 社子島</h3>
+  <div class="rounds" id="rounds"></div>
+
+  <h3 class="h3 inv">破圈：上誰的節目</h3>
+  <p class="lede inv">由內到外：越外圈，越是候選人「不在自己主場」的平台。圈層是本站依節目形式與主持人的公開身分排列，不代表觀眾的政治立場。</p>
+  <div class="sonar-wrap"><svg id="rings" viewBox="0 0 600 600" role="img" aria-label="訪談破圈圖"></svg><div class="iv" id="iv"></div></div>
+
+  <h3 class="h3 inv">2018 韓流 vs 2026 洋流</h3>
+  <div class="han" id="han"></div>
+
+  <h3 class="h3 inv">驗證：聲量會變成選票嗎？</h3>
+  <div class="verify" id="verify"></div>
+</section>
+
+<div class="wave-sep" data-from="o" data-to="n"></div>
+
+<!-- 04 OPS -->
+<section id="ops" class="sec navy">
+  <header class="sh"><p class="no">04</p><div><h2>暗流：認知作戰 <small>證據分級</small></h2><p class="lede">海面下的流。這一區只整理有出處的資料，並依證據強度分成 A／B／C；官方數字也只是「發布機關的說法」。</p></div></header>
+  <div class="grades" id="grades"></div>
+  <div class="ops-grid">
+    <div class="sonar"><canvas id="sonar" aria-hidden="true"></canvas><p class="note">聲納圖：每個亮點是一筆資料，顏色代表證據等級。</p></div>
+    <figure class="card dark"><figcaption>國安局公布的數量（不同期間，不可直接比較）</figcaption><div id="opsBars" class="chart sm"></div></figure>
+  </div>
+  <div class="ops-list" id="opsList"></div>
+  <div class="gap" id="gap"></div>
+  <div class="tips" id="tips"></div>
+</section>
+
+<div class="wave-sep" data-from="n" data-to="c"></div>
+
+<!-- 05 LOG -->
+<section id="log" class="sec cream">
+  <header class="sh"><p class="no">05</p><div><h2>航海日誌</h2><p class="lede">資料狀態、方法與全部出處。</p></div></header>
+  <div class="legend-st" id="stLegend"></div>
+  <ol class="srcs" id="srcList"></ol>
+  <p class="note">中立原則：本站呈現各陣營的行銷手法與公開數據，不替任何政黨或候選人宣傳，也不依職業或年齡推定政治立場。站內配色採用使用者指定的「洋流」視覺風格；資料圖中的陣營色（藍、綠、青）只用來區分資料。資料更新：<span id="asof"></span></p>
+</section>
+</main>
+
+<div class="ticker bottom" aria-hidden="true"><div class="tk-track rev" id="tkBot"></div></div>
+<div class="pop" id="pop" role="dialog" aria-label="資料來源" hidden></div>
+
+<script src="assets/vendor/d3.min.js"></script>
+<script src="../assets/js/analytics.js?b=v21"></script>
+<script src="assets/js/data.js?b=v21"></script>
+<script src="assets/js/app.js?b=v21"></script>
+</body>
+</html>
